@@ -1,0 +1,1 @@
+È un **database a grafo**. Invece di tabelle o documenti, organizza i dati come **nodi e relazioni**. Ideale per rappresentare **reti complesse di connessioni**, come reti sociali o percorsi clinici.

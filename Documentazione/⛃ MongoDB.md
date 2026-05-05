@@ -1,0 +1,1 @@
+È un **database NoSQL** (come [[⛃ Redis]] ma non va sulla RAM. A differenza dei database relazionali, non usa tabelle ma salva i dati come **documenti JSON**. Più flessibile per dati non strutturati o che cambiano spesso.

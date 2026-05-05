@@ -1,0 +1,56 @@
+Ecco l'elenco di tutti i servizi usati dai server di TA:
+
+
+- [[🌐 Apache HTTP Server]]
+- [[🔐 SSH]]
+- [[🚢FTP|📨 vsftpd (FTP)]]
+- [[🧹 Apache htcacheclean]]
+- [[🔔Alertmanager]]
+- [[🛡️ AppArmor]]
+- [[📒Auditd]]
+- [[🎖️Certbot Renew]]
+- [[🕰️ Chronyd]]
+- [[🫙Containerd]]
+- [[🫙 Docker]]
+- [[🚫Fail2Ban]]
+- [[[ELK STACK| FileBeat]]
+- [[🦊Ecosistema Git#Gitaly| Gititaly]]
+-  [[🦊Ecosistema Git#GitLab Exporter |Gitlab Exporter]]
+- [[🦊Ecosistema Git#GitLab KAS (Kubernetes Agent Server) | GitLab KAS]]
+- [[🦊Ecosistema Git#GitLab Rails - Puma|GitLab Rails - Puma]]
+- [[🦊Ecosistema Git#GitLab Workhorse|GitLab Workhorse]]
+- [[🚦HAProxy]]
+- [[🏥HAPI FHIR]]
+- [[🕴️Jenkins]]
+- [[🔐 Keycloak]]
+- [[ELK STACK - Elastic Stack| Logstash]]
+- [[⛃ MariaDB]]
+- [[⛃ Microsoft SQL Server]]
+- [[⛃ MongoDB]]
+- [[📮Mosquitto]]
+- [[⛃ MySQL]]
+- [[⛃ MySQL#MySQL X Protocol|MySQL X Protocol]]
+- [[⛃Neo4j 🕸️]]
+- [[🌐 Nginx]]
+- [[📊 Node Exporter]]
+- [[👀 NRPE - (Nagios Remote Plugin Executor)| NRPE]]
+- [[🛡️OpenVAS (GSAD, GVMD, ospd, Notus Scanner)]]
+- [[⛃ PostgreSQL]]
+- [[📧 Postfix]]
+- [[👀 Prometheus]]
+- [[⛃ Redis]]
+- [[⛃ Redis#🗣️ Redis Exporter |🗣️ Redis Exporter]]
+- [[☎️RPC Bind]]
+- [[📦Snapd]]
+- Spring Boot (ASL NA3 Order Entry Gesan)
+- SSSD
+- StrongSwan (Charon)
+- UFW
+- [[☕WildFly]]
+- [[👀Zabbix#Zabbix Agent|👀Zabbix Agent]]
+- [[👀Zabbix#Zabbix Proxy|Zabbix Proxy]]
+- [[👀Zabbix#Zabbix Server|Zabbix Server]]
+- Docker Registry
+- Kafka (Edge Gateway)
+- CKG (Clinical Knowledge Graph)
+
