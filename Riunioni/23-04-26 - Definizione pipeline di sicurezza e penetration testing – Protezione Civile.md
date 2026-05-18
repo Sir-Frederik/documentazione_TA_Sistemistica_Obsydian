@@ -15,7 +15,7 @@ Effettuare attività di **penetration testing** entro 10 giorni, definendo una c
     
 3. Controllo infrastruttura e aggiornamento pacchetti dell’[[Container#^113a42 | immagine]] /container
     
-4. **Penetration testing** finale con strumenti come [[🛡️OpenVAS (GSAD, GVMD, ospd, Notus Scanner)|OpenVas]]
+4. **Penetration testing** finale con strumenti come [[🛡️OpenVAS|OpenVas]]
     
 
 ---

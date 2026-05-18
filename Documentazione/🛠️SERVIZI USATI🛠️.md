@@ -34,7 +34,7 @@ Ecco l'elenco di tutti i servizi usati dai server di TA:
 - [[🌐 Nginx]]
 - [[📊 Node Exporter]]
 - [[👀 NRPE - (Nagios Remote Plugin Executor)| NRPE]]
-- [[🛡️OpenVAS (GSAD, GVMD, ospd, Notus Scanner)]]
+- [[🛡️OpenVAS]]
 - [[⛃ PostgreSQL]]
 - [[📧 Postfix]]
 - [[👀 Prometheus]]

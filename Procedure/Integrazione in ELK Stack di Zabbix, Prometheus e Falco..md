@@ -8,6 +8,7 @@ Falco        ──→ ┘
 Il punto centrale è **Logstash** o ancora meglio [[ELK STACK - Elastic Stack#📤Filebeat| Filebeat]] che fa da collettore e normalizzatore prioma di inviare tutto ad [[ELK STACK - Elastic Stack#🤓Elasticsearch| Elasticsearch]] 
 ## [[👀 Prometheus]]
 
+
 Prometheus non produce log, ma **==metriche==**. Filebeat non sa fare scraping delle metriche di Pr.
 Quindi la strategia consiste nell'usare **Metricbeat** oppure **Prometheus Alertmanager**.
 

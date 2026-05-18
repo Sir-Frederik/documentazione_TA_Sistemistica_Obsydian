@@ -10,3 +10,6 @@ E' la popolare piattaforma per la gestione dei [[container]]. Permette di creare
 Dato che i container sono temporanei, Docker offre soluzioni per **persistere i dati**.
 
 Quando si hanno **molti container** da gestire su più macchine, Docker da solo non basta. Entra in gioco **[[Kubernetes]]**.
+
+## INSTALLAZIONE
+Per installarlo, vai [[Installazione del Docker|qui]]
