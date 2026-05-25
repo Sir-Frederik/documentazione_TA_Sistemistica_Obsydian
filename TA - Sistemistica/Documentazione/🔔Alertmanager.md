@@ -1,0 +1,1 @@
+E' uno strumento che si occupa di gestire gli **avvisi/allarmi** proveniente da sistemi di monitoraggio come [[👀 Prometheus]]. TI avvisa tramite Email, Slack, PagerDuty e Webhook (integrazioni personalizzate).

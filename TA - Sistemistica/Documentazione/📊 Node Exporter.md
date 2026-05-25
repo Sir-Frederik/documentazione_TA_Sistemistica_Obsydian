@@ -1,0 +1,1 @@
+ È l'**exporter** che raccoglie le metriche di sistema di un server Linux (CPU, RAM, disco...) e le espone a [[👀 Prometheus]]

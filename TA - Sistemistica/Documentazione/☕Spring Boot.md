@@ -1,0 +1,2 @@
+È un **framework Java** per sviluppare applicazioni web e microservizi in modo rapido. 
+**(ASL NA3 Order Entry Gesan)** indica che in questo contesto è usato per una specifica applicazione gestionale sanitaria.

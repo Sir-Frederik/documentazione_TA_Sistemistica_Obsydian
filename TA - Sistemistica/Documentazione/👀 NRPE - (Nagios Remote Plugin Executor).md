@@ -1,0 +1,2 @@
+È un componente di **Nagios**, un sistema di monitoraggio. Permette di eseguire **controlli di monitoraggio** su server remoti. 
+È simile concettualmente agli exporter di [[👀 Prometheus]], ma per l'ecosistema Nagios.

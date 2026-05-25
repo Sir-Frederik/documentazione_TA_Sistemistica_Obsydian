@@ -1,0 +1,51 @@
+{
+  "collapse-filter": false,
+  "search": "",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": false,
+  "showOrphans": true,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "path:Procedure/OWASP  ",
+      "color": {
+        "a": 1,
+        "rgb": 16124284
+      }
+    },
+    {
+      "query": "path:Documentazione  ",
+      "color": {
+        "a": 1,
+        "rgb": 5431378
+      }
+    },
+    {
+      "query": "path:Riunioni  ",
+      "color": {
+        "a": 1,
+        "rgb": 267515
+      }
+    },
+    {
+      "query": "path:Procedure  ",
+      "color": {
+        "a": 1,
+        "rgb": 16711744
+      }
+    }
+  ],
+  "collapse-display": false,
+  "showArrow": false,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1,
+  "lineSizeMultiplier": 1,
+  "collapse-forces": false,
+  "centerStrength": 0.518713248970312,
+  "repelStrength": 10,
+  "linkStrength": 1,
+  "linkDistance": 250,
+  "scale": 0.9428201961676187,
+  "close": true
+}

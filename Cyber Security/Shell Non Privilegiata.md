@@ -1,0 +1,1 @@
+E' una shell della macchina bersaglio 🎯che non ha tutti i privilegi per proseguire le azioni ed è quindi **limitata**. SI ottiene durante la fase di [[3) Exploitation]].

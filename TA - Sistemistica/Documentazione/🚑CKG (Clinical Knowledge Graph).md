@@ -1,0 +1,1 @@
+È un **grafo della conoscenza clinica**. Organizza e connette dati medici complessi (patologie, farmaci, sintomi, pazienti...) in una struttura a grafo per supportare la **ricerca clinica** e le **decisioni mediche**.

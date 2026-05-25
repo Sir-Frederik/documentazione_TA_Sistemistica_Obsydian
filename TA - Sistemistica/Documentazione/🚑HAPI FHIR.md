@@ -1,0 +1,1 @@
+È una **libreria Java** per la sanità digitale. Implementa lo standard **FHIR** (Fast Healthcare Interoperability Resources), che è un protocollo standard per lo **scambio di dati sanitari** tra sistemi diversi (cartelle cliniche, ospedali, laboratori...).

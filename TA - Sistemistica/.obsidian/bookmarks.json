@@ -1,0 +1,65 @@
+{
+  "items": [
+    {
+      "type": "file",
+      "ctime": 1776073335047,
+      "path": "I Servizi usati.md",
+      "title": "I Servizi usati"
+    },
+    {
+      "type": "file",
+      "ctime": 1776090049807,
+      "path": "TO DO.md"
+    },
+    {
+      "type": "file",
+      "ctime": 1776092318610,
+      "path": "Vedere i  Servizi del server.md"
+    },
+    {
+      "type": "file",
+      "ctime": 1776261093423,
+      "path": "13-04-26 Impostazione obiettivi documentazioni e manutenzione server..md"
+    },
+    {
+      "type": "file",
+      "ctime": 1776334009851,
+      "path": "🚫Fail2Ban.md"
+    },
+    {
+      "type": "file",
+      "ctime": 1776951263081,
+      "path": "23-04-26 - Definizione pipeline di sicurezza e penetration testing – Protezione Civile.md"
+    },
+    {
+      "type": "file",
+      "ctime": 1777024497547,
+      "path": "Mappare i collegamenti tra i server.md"
+    },
+    {
+      "type": "file",
+      "ctime": 1777381990066,
+      "path": "Documentazione/🛠️SERVIZI Presenti nei server.md"
+    },
+    {
+      "type": "file",
+      "ctime": 1777385853796,
+      "path": "Procedure/Integrazione in ELK Stack di Zabbix, Prometheus e Falco.md"
+    },
+    {
+      "type": "file",
+      "ctime": 1777388367763,
+      "path": "Riunioni/28-04-26 Aggiornamento – Catena di sicurezza applicativa.md"
+    },
+    {
+      "type": "file",
+      "ctime": 1777969671721,
+      "path": "Documentazione/🚨Falco.md"
+    },
+    {
+      "type": "file",
+      "ctime": 1777989807622,
+      "path": "Procedure/Collegare i Progetti ai Server.md"
+    }
+  ]
+}

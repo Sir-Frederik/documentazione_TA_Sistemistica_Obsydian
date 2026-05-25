@@ -1,0 +1,1 @@
+ un servizio che gestisce l'**autenticazione degli utenti** su Linux, permettendo di collegarsi a directory centralizzate come **Active Directory** o **LDAP** per gestire gli accessi.

@@ -1,0 +1,2 @@
+È un **firewall per Linux** pensato per essere semplice da usare. 
+È un'interfaccia semplificata per **iptables** (il firewall nativo di Linux) e permette di gestire quali connessioni di rete sono permesse o bloccate.

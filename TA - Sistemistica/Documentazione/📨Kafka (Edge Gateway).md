@@ -1,0 +1,2 @@
+**Apache Kafka** è una piattaforma di **messaggistica distribuita** ad alte prestazioni. Gestisce enormi flussi di dati in tempo reale. 
+In questo contesto **Edge Gateway** indica che è usato come punto di raccolta e smistamento dei dati provenienti dalla periferia della rete

@@ -1,0 +1,1 @@
+Un **Docker Registry** è un sistema di archiviazione e distribuzione lato server per le **immagini Docker**.

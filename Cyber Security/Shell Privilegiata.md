@@ -1,0 +1,1 @@
+Si ottiene durante la fase di  [[4) Privilege Escalation]] ed è una shell che ha pieno potere sulla macchina bersaglio.

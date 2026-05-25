@@ -1,0 +1,313 @@
+{
+  "main": {
+    "id": "03287b7c5fb71472",
+    "type": "split",
+    "children": [
+      {
+        "id": "aebee3b583197718",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "378304be0eed2a43",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Privilege Escalation.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Privilege Escalation"
+            }
+          },
+          {
+            "id": "84a6adda48175842",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Shell Privilegiata.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Shell Privilegiata"
+            }
+          },
+          {
+            "id": "e6e1b03770ff9d99",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Wireshark 🦈.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "Wireshark 🦈"
+            }
+          },
+          {
+            "id": "c7885a17aaa40f7c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Zenmap ☯️.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "Zenmap ☯️"
+            }
+          },
+          {
+            "id": "a6bc6e9b212d4cb0",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Scapy 🐍.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "Scapy 🐍"
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "3d442d1bbd06b02c",
+    "type": "split",
+    "children": [
+      {
+        "id": "ead1f530ee678841",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9e8a532042add3d6",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "byCreatedTime",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Esplora risorse"
+            }
+          },
+          {
+            "id": "5117aab37a915424",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "protocollo",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Ricerca"
+            }
+          },
+          {
+            "id": "fdd49882d90978c4",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Segnalibri"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "right": {
+    "id": "af563a677bf873c8",
+    "type": "split",
+    "children": [
+      {
+        "id": "d31d9ab2586cb2d4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6c47d056f7f0366a",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Scapy 🐍.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Riferimenti a Scapy 🐍"
+            }
+          },
+          {
+            "id": "9fdb6c2b8c9179a3",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Scapy 🐍.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Collegamenti in uscita da Scapy 🐍"
+            }
+          },
+          {
+            "id": "f5cecd22478d4999",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etichette"
+            }
+          },
+          {
+            "id": "fc0ca358d5d2d3ac",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Tutte le proprietà"
+            }
+          },
+          {
+            "id": "60b36fb19dc18e17",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "ARP.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Struttura di ARP"
+            }
+          }
+        ],
+        "currentTab": 2
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Apri selezione rapida": false,
+      "graph:Apri vista grafo": false,
+      "canvas:Crea nuova lavagna": false,
+      "daily-notes:Apri nota del giorno": false,
+      "templates:Inserisci modello": false,
+      "command-palette:Apri riquadro comandi": false,
+      "bases:Crea nuova Base": false
+    }
+  },
+  "active": "a6bc6e9b212d4cb0",
+  "lastOpenFiles": [
+    "Pasted image 20260525164502.png",
+    "Protocollo ICMP.md",
+    "Scapy 🐍.md",
+    "Protocollo UDP.md",
+    "Protocollo TCP.md",
+    "Protocollo IP.md",
+    "Protocollo.md",
+    "Modello.md",
+    "Modello ISO - OSI.md",
+    "Protocollo ARP.md",
+    "Zenmap ☯️.md",
+    "Pasted image 20260525151733.png",
+    "Pasted image 20260525151447.png",
+    "Wireshark 🦈.md",
+    "Pasted image 20260525123304.png",
+    "Pasted image 20260525122950.png",
+    "Pasted image 20260525122427.png",
+    "Ingegneria sociale.md",
+    "Formazione.md",
+    "Shell Privilegiata.md",
+    "Shell Non Privilegiata.md",
+    "Catch The Flag - CTF 🚩.md",
+    "Metodologia CTF 🚩.md",
+    "Pasted image 20260525114307.png",
+    "Pasted image 20260521170604.png",
+    "ARP.md",
+    "Pasted image 20260521165853.png",
+    "4) Privilege Escalation.md",
+    "3) Exploitation.md",
+    "2) Enumerazione.md",
+    "1) Scansione.md",
+    "Pivoting.md",
+    "Pasted image 20260521164428.png",
+    "Metodologia.md",
+    "Pasted image 20260521164304.png",
+    "Tipologia di attacchi.md"
+  ]
+}
