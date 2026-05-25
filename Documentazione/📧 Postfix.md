@@ -1,1 +1,0 @@
-È un **server di posta elettronica** (MTA - Mail Transfer Agent). Si occupa di **ricevere e inviare email**. Molto usato sui server Linux per gestire le email di sistema.

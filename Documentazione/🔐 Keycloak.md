@@ -1,1 +1,0 @@
-Sistema di **gestione delle identità e degli accessi** (IAM). Fornisce funzionalità come **Single Sign-On (SSO)**, ovvero la possibilità di autenticarsi una volta sola per accedere a più applicazioni diverse.

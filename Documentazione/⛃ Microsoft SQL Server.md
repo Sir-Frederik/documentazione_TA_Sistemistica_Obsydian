@@ -1,1 +1,0 @@
-È il **database relazionale** di Microsoft. Funziona come MariaDB e MySQL ma è un prodotto **commerciale** ed è molto diffuso in ambienti aziendali Windows.

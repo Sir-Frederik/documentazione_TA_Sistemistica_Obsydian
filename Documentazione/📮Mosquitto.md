@@ -1,2 +1,0 @@
-È un **Broker MQTT**, un protocollo di messaggistica leggero molto usato nell'**IoT (Internet of Things)**. 
-**Gestisce la comunicazione** tra dispositivi, ricevendo e smistando i **messaggi** tra mittenti e destinatari.
