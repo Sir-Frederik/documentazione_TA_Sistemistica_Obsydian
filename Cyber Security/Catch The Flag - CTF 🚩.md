@@ -1,3 +1,7 @@
+---
+tags:
+  - ProcessiDiAttacco
+---
 E' un [[Tipologia di attacchi |tipologia di attacco]] in cui un gruppo di persone cerca delle **vulnerabilità** di un sistema informatico. 
 
 1. **[[1) Scansione]]** -> Facile

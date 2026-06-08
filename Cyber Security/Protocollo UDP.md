@@ -1,3 +1,7 @@
+---
+tags:
+  - Protocollo
+---
 Il **User Datagram Protocol (UDP)** ==è un protocollo di trasporto di rete== che punta tutto sulla **velocità e sulla leggerezza**, sacrificando l'affidabilità.
 
 A differenza del [[Protocollo TCP|TCP]], l'UDP è un protocollo **non orientato alla connessione** (*connectionless*): invia i dati direttamente al destinatario senza verificare se questo sia online o pronto a riceverli, esattamente come una normale cartolina postale.

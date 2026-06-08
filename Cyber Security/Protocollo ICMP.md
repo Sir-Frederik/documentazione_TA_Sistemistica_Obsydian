@@ -1,3 +1,7 @@
+---
+tags:
+  - Protocollo
+---
 L'Internet Control Message Protocol (ICMP) è un protocollo di rete di livello di rete utilizzato principalmente per la **diagnostica e il controllo** delle comunicazioni IP. A differenza di [[Protocollo TCP]] e [[Protocollo UDP]] non serve a trasportare dati applicativi, ma a scambiare **messaggi di servizio** tra dispositivi di rete.
 
 Si trova nel livello [[Modello ISO - OSI|Rete]] del modello ISO-OSI, e si appoggia direttamente sull' [[Protocollo IP |IP]]
@@ -17,12 +21,13 @@ Non è orientato alla connessione e non effettua alcun handshake: i messaggi ven
 
 ### Tipi di messaggio principali
 
-|Tipo|Descrizione|
-|---|---|
-|`0`|Echo Reply (risposta al ping)|
-|`3`|Destination Unreachable (host/rete irraggiungibile)|
-|`8`|Echo Request (richiesta ping)|
-|`11`|Time Exceeded (TTL scaduto)|
+| Tipo | Descrizione                                         |
+| ---- | --------------------------------------------------- |
+| `0`  | Echo Reply (risposta al ping)                       |
+| `3`  | Destination Unreachable (host/rete irraggiungibile) |
+| `8`  | Echo Request (richiesta ping)                       |
+| `11` | Time Exceeded (TTL scaduto)                         |
+
 
 ### Struttura del pacchetto
 

@@ -1,3 +1,7 @@
+---
+tags:
+  - Strumento
+---
 E' l'interfaccia grafica del tool **Nmap**. Costui è un tool di ==scansione della rete== e permette di capire quali servizi sono in ascolto su una certa macchina.
 
 Si può anche effettuare la **[[Protocollo TCP|TCP]] Connect Scan**. E' una scansione completa, in cui viene completato il **3-way handshake** e s instaura la comunicazione.

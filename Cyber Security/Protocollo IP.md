@@ -1,3 +1,7 @@
+---
+tags:
+  - Protocollo
+---
 L'Internet Protocol (IP) è un protocollo di rete fondamentale che opera al [[Modello ISO - OSI|livello di Rete]] del modello ISO-OSI. È il meccanismo base che permette di **indirizzare e instradare** i pacchetti di dati attraverso reti diverse, fino a raggiungere il destinatario.
 ![[Pasted image 20260521165853.png]]
 È un protocollo **non orientato alla connessione** e **non affidabile**: non garantisce che i pacchetti arrivino a destinazione, nell'ordine corretto, o che arrivino del tutto. Questa responsabilità viene delegata ai protocolli di livello superiore, come il [[Protocollo TCP|TCP]].

@@ -1,3 +1,7 @@
+---
+tags:
+  - ProcessiDiAttacco
+---
 E' tendenzialmente facile e non è dipendete dal SO.
 Si basa sul trovare le **porte** e i **servizi** presenti nella Macchina Bersaglio 🎯.
 Permetterà di evidenziare dove si troverà la **superficie di attacco.**

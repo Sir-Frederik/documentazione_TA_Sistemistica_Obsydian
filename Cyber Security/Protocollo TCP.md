@@ -1,3 +1,7 @@
+---
+tags:
+  - Protocollo
+---
 Il **Transmission Control Protocol (TCP)** ==è un protocollo di rete a pacchetto di livello di trasporto fondamentale per il funzionamento di Internet==. Esso trasforma il servizio di base e "instabile" del protocollo IP in una comunicazione totalmente **affidabile e orientata alla connessione** tra mittente e destinatario.
 
 E' più **lento** rispetto all' [[Protocollo UDP|UDP]], ma è molto più **affidabile**.

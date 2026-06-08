@@ -4,87 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "aebee3b583197718",
+        "id": "a18f6de8caf4df5f",
         "type": "tabs",
         "children": [
           {
-            "id": "378304be0eed2a43",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Privilege Escalation.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Privilege Escalation"
-            }
-          },
-          {
-            "id": "84a6adda48175842",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Shell Privilegiata.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Shell Privilegiata"
-            }
-          },
-          {
-            "id": "e6e1b03770ff9d99",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Wireshark 🦈.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "Wireshark 🦈"
-            }
-          },
-          {
-            "id": "c7885a17aaa40f7c",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Zenmap ☯️.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "Zenmap ☯️"
-            }
-          },
-          {
-            "id": "a6bc6e9b212d4cb0",
+            "id": "71fd3c85e87461ce",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -106,9 +30,57 @@
               "icon": "lucide-file",
               "title": "Scapy 🐍"
             }
+          },
+          {
+            "id": "e2313538461fa41d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Technitium MAC Address Changer.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "Technitium MAC Address Changer"
+            }
+          },
+          {
+            "id": "1e14f8b9c08879f9",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Penetration Testing.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "Penetration Testing"
+            }
           }
         ],
-        "currentTab": 4
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -128,7 +100,7 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "byCreatedTime",
-                "autoReveal": false
+                "autoReveal": true
               },
               "icon": "lucide-folder-closed",
               "title": "Esplora risorse"
@@ -140,7 +112,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "protocollo",
+                "query": "Mac spoofing",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -161,11 +133,12 @@
               "title": "Segnalibri"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 261.5072784423828
   },
   "right": {
     "id": "af563a677bf873c8",
@@ -243,22 +216,21 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "ARP.md",
+                "file": "Penetration Testing.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Struttura di ARP"
+              "title": "Struttura di Penetration Testing"
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -271,43 +243,44 @@
       "bases:Crea nuova Base": false
     }
   },
-  "active": "a6bc6e9b212d4cb0",
+  "active": "1e14f8b9c08879f9",
   "lastOpenFiles": [
-    "Pasted image 20260525164502.png",
-    "Protocollo ICMP.md",
+    "Senza nome 1.md",
+    "Technitium MAC Address Changer.md",
+    "Spoofing.md",
     "Scapy 🐍.md",
-    "Protocollo UDP.md",
-    "Protocollo TCP.md",
-    "Protocollo IP.md",
-    "Protocollo.md",
-    "Modello.md",
-    "Modello ISO - OSI.md",
-    "Protocollo ARP.md",
-    "Zenmap ☯️.md",
-    "Pasted image 20260525151733.png",
-    "Pasted image 20260525151447.png",
-    "Wireshark 🦈.md",
-    "Pasted image 20260525123304.png",
-    "Pasted image 20260525122950.png",
-    "Pasted image 20260525122427.png",
-    "Ingegneria sociale.md",
-    "Formazione.md",
-    "Shell Privilegiata.md",
-    "Shell Non Privilegiata.md",
-    "Catch The Flag - CTF 🚩.md",
-    "Metodologia CTF 🚩.md",
-    "Pasted image 20260525114307.png",
-    "Pasted image 20260521170604.png",
-    "ARP.md",
-    "Pasted image 20260521165853.png",
-    "4) Privilege Escalation.md",
     "3) Exploitation.md",
+    "Penetration Testing.md",
+    "OSINT.md",
+    "Exploitation.md",
+    "External Pentest.md",
+    "Senza nome.md",
+    "Protocollo ARP.md",
+    "Modello ISO - OSI.md",
+    "Protocollo UDP.md",
+    "Protocollo ICMP.md",
+    "Protocollo IP.md",
+    "Pasted image 20260526120833.png",
+    "Pasted image 20260526120749.png",
+    "Pasted image 20260526113610.png",
+    "Modello.md",
+    "Catch The Flag - CTF 🚩.md",
+    "4) Privilege Escalation.md",
     "2) Enumerazione.md",
     "1) Scansione.md",
-    "Pivoting.md",
-    "Pasted image 20260521164428.png",
-    "Metodologia.md",
-    "Pasted image 20260521164304.png",
-    "Tipologia di attacchi.md"
+    "Immagini/Screenshot 2026-04-02 170131.png",
+    "Pasted image 20260521170604.png.md",
+    "Protocollo TCP.md",
+    "Zenmap ☯️.md",
+    "Wireshark 🦈.md",
+    "Immagini/Pasted image 20260521164428.png",
+    "Immagini/Pasted image 20260525114307.png",
+    "Immagini/Pasted image 20260525123304.png",
+    "Immagini/Pasted image 20260525151447.png",
+    "Immagini/Pasted image 20260525151733.png",
+    "Protocollo.md",
+    "Immagini",
+    "Immagini/Pasted image 20260521165853.png",
+    "Ingegneria sociale.md"
   ]
 }
