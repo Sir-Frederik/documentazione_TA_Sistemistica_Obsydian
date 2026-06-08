@@ -1,4 +1,3 @@
-brun# Governance infrastrutturale, monitoraggio e sicurezza
 
 ## Obiettivo generale
 
