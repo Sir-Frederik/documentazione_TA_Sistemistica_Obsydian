@@ -56,6 +56,30 @@
             }
           },
           {
+            "id": "103122c4f66086b4",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "🚇WireGuard.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "🚇WireGuard"
+            }
+          },
+          {
             "id": "f7ac43bfb00c0b67",
             "type": "leaf",
             "state": {
@@ -104,7 +128,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -136,7 +160,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "penetra",
+                "query": "wireguard",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -157,7 +181,8 @@
               "title": "Segnalibri"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -239,13 +264,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Documentazione/🏦 SAMBA.md",
+                "file": "🚇WireGuard.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Struttura di 🏦 SAMBA"
+              "title": "Struttura di 🚇WireGuard"
             }
           }
         ],
@@ -253,7 +278,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 263.5
+    "width": 262.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -268,11 +293,12 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "39f50135709a76fb",
+  "active": "103122c4f66086b4",
   "lastOpenFiles": [
+    "Documentazione/🏦 SAMBA.md",
+    "🚇WireGuard.md",
     "Active Directory.md",
     "Analisi comparativa Samba vs alternative.md",
-    "Documentazione/🏦 SAMBA.md",
     "FreeIPA.md",
     "Documentazione/👤 SSSD.md",
     "Documentazione/SMB.md",
@@ -295,7 +321,6 @@
     "Procedure/OWASP/config.env — Guida alle Variabili.md",
     "Procedure/OWASP/Script di Routine OWASP.md",
     "Riunioni/1-04-26  Call con Alessandro- intro kubernetes.md",
-    "Riunioni/13-05-26 Governance infrastrutturale, monitoraggio e sicurezza.md",
     "26-05-26 Evoluzione infrastrutturale, sicurezza e migrazione CD.pdf",
     "Excalidraw",
     "Procedure/OWASP",
