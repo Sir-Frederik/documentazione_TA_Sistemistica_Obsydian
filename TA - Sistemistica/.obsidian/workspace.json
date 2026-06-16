@@ -13,30 +13,6 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Documentazione/SMB.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "SMB"
-            }
-          },
-          {
-            "id": "39f50135709a76fb",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
                 "file": "Documentazione/🏦 SAMBA.md",
                 "mode": "source",
                 "source": false,
@@ -56,12 +32,12 @@
             }
           },
           {
-            "id": "103122c4f66086b4",
+            "id": "78af35ccb6b65361",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "🚇WireGuard.md",
+                "file": "Documentazione/🔒BitLocker.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -76,16 +52,16 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "🚇WireGuard"
+              "title": "🔒BitLocker"
             }
           },
           {
-            "id": "f7ac43bfb00c0b67",
+            "id": "63365d69a766b33c",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Active Directory.md",
+                "file": "Procedure/Analisi comparativa Samba vs alternative.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -100,35 +76,11 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "Active Directory"
-            }
-          },
-          {
-            "id": "bc1a12ec010f9115",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "FreeIPA.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "FreeIPA"
+              "title": "Analisi comparativa Samba vs alternative"
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -160,7 +112,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "wireguard",
+                "query": "bitlocker",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -181,13 +133,11 @@
               "title": "Segnalibri"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 276.5110321044922,
-    "collapsed": true
+    "width": 276.5110321044922
   },
   "right": {
     "id": "b1590987d5b3c016",
@@ -264,13 +214,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "🚇WireGuard.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Struttura di 🚇WireGuard"
+              "title": "Struttura"
             }
           }
         ],
@@ -278,7 +227,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 262.5
+    "width": 262.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -293,15 +243,24 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "103122c4f66086b4",
+  "active": "78af35ccb6b65361",
   "lastOpenFiles": [
+    "SonarQube.md",
+    "Documentazione/🔒BitLocker.md",
+    "Tactical RMM.md",
+    "Documentazione/🧠Tactical RMM.md",
+    "Procedure/Analisi comparativa Samba vs alternative.md",
+    "Documentazione/FreeIPA.md",
+    "SAMBA.md",
+    "OSINT.md",
+    "Samba.md",
+    "Senza nome.md",
+    "Riunioni/15-06-26 Sicurezza, CI-CD e infrastruttura.md",
     "Documentazione/🏦 SAMBA.md",
-    "🚇WireGuard.md",
-    "Active Directory.md",
-    "Analisi comparativa Samba vs alternative.md",
-    "FreeIPA.md",
-    "Documentazione/👤 SSSD.md",
+    "Documentazione/🚇WireGuard.md",
     "Documentazione/SMB.md",
+    "Documentazione/Active Directory.md",
+    "Documentazione/👤 SSSD.md",
     "Procedure/Installazione del FAIL2BAN.md",
     "Procedure/Collegare i Progetti ai Server.md",
     "Procedure/Mappare i collegamenti tra i server.md",
@@ -312,15 +271,6 @@
     "Riunioni/01-06-26  Data Warehouse, multitenancy e certificazioni.md",
     "README 1.md",
     "README.md",
-    "Documentazione/📜ISO 27001.md",
-    "Documentazione/🦊Ecosistema Git.md",
-    "Documentazione/☕WildFly.md",
-    "Documentazione/👀Zabbix.md",
-    "Documentazione/🛡️OpenVAS.md",
-    "Documentazione/🛠️SERVIZI Presenti nei server.md",
-    "Procedure/OWASP/config.env — Guida alle Variabili.md",
-    "Procedure/OWASP/Script di Routine OWASP.md",
-    "Riunioni/1-04-26  Call con Alessandro- intro kubernetes.md",
     "26-05-26 Evoluzione infrastrutturale, sicurezza e migrazione CD.pdf",
     "Excalidraw",
     "Procedure/OWASP",
