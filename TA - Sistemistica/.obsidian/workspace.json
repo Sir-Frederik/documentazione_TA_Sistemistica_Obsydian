@@ -37,6 +37,30 @@
             "state": {
               "type": "markdown",
               "state": {
+                "file": "Documentazione/🧠Tactical RMM.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "🧠Tactical RMM"
+            }
+          },
+          {
+            "id": "10e6e68596bcd302",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
                 "file": "Documentazione/🔒BitLocker.md",
                 "mode": "source",
                 "source": false,
@@ -80,7 +104,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -133,7 +157,8 @@
               "title": "Segnalibri"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -214,12 +239,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "Documentazione/🔒BitLocker.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Struttura"
+              "title": "Struttura di 🔒BitLocker"
             }
           }
         ],
@@ -227,8 +253,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 262.5,
-    "collapsed": true
+    "width": 262.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -243,12 +268,12 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "78af35ccb6b65361",
+  "active": "10e6e68596bcd302",
   "lastOpenFiles": [
-    "SonarQube.md",
-    "Documentazione/🔒BitLocker.md",
-    "Tactical RMM.md",
     "Documentazione/🧠Tactical RMM.md",
+    "Documentazione/🔒BitLocker.md",
+    "SonarQube.md",
+    "Tactical RMM.md",
     "Procedure/Analisi comparativa Samba vs alternative.md",
     "Documentazione/FreeIPA.md",
     "SAMBA.md",
