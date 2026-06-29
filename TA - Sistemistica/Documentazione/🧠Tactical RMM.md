@@ -1,411 +1,115 @@
 
+**Tactical RMM** è una piattaforma open source di **Remote Monitoring & Management (RMM)** per la gestione centralizzata di endpoint Windows, Linux e macOS. Rappresenta un'alternativa gratuita a soluzioni commerciali come NinjaRMM, ConnectWise o Datto, ed è pensata per MSP e team IT interni che gestiscono flotte di macchine da remoto.
 
-> **Cos'è**: Strumento open source di **Remote Monitoring & Management (RMM)** per la gestione centralizzata di endpoint Windows, Linux e macOS. Alternativa gratuita a soluzioni commerciali come NinjaRMM, ConnectWise o Datto. Ideale per MSP e team IT interni con flotte di macchine da monitorare e gestire da remoto.
+A differenza di soluzioni come [[🏦 SAMBA]] o [[FreeIPA]], non richiede che i client siano aggiunti a un dominio, né impone requisiti specifici sull'edizione del sistema operativo.
 
 ---
-Le sue operazioni sono simili a [[🏦 SAMBA]] e [[FreeIPA]], ma non necessita di Windows Pro sui client.
+
 ## Architettura
 
-Tactical RMM è composto da diversi componenti che lavorano insieme:
+Tactical RMM è composto da diversi componenti che cooperano in un'unica installazione server:
 
 |Componente|Ruolo|
 |---|---|
-|**Django (backend)**|Cuore del sistema — serve le API per frontend e agenti|
-|**Vue.js (frontend)**|Dashboard web accessibile via browser|
+|**Django**|Backend — espone le API per il frontend e per gli agenti|
+|**Vue.js**|Frontend — dashboard web accessibile via browser|
 |**PostgreSQL**|Database principale|
 |**Redis**|Cache e message broker per Celery|
 |**Celery**|Gestione task asincroni (check, alert, patch)|
-|**NATS**|Comunicazione in tempo reale server ↔ agenti|
-|**MeshCentral**|Remote desktop, shell remota, file browser|
-|**Nginx**|Reverse proxy + TLS termination|
+|**NATS**|Canale di comunicazione in tempo reale tra server e agenti|
+|**MeshCentral**|Accesso remoto — desktop, shell, file browser|
+|**Nginx**|Reverse proxy con terminazione TLS|
 
-> ℹ️ La comunicazione tra server e agenti avviene ==tramite **NATS**. ==Gli agenti online ricevono i comandi immediatamente; quelli ==offline li eseguono alla successiva connessione.
-==
+La comunicazione tra server e agenti avviene tramite **NATS**: gli agenti online ricevono i comandi in tempo reale; quelli offline li eseguono alla successiva connessione.
+
 ---
 
-## Prerequisiti installazione
+## Prerequisiti
 
-- VM dedicata (Ubuntu 22.04 LTS o Debian 11/12)
-    
-- Minimo 4 GB RAM
-    
-- Architettura x64
-    
+Il server richiede una VM dedicata con le seguenti caratteristiche minime:
+
+- Sistema operativo: **Ubuntu 22.04 LTS** o Debian 11/12
+- RAM: almeno **4 GB**
+- Architettura: **x64**
 - Tre sottodomini DNS puntati all'IP pubblico del server
-    
 
 |Sottodominio|Uso|
 |---|---|
-|`rmm.azienda.com`|Dashboard web + comunicazione agenti|
+|`rmm.azienda.com`|Dashboard web e comunicazione agenti|
 |`api.azienda.com`|Backend API|
 |`mesh.azienda.com`|MeshCentral|
 
-> ⚠️ I tre sottodomini devono essere allo stesso livello DNS.
+> ⚠️ I tre sottodomini devono essere allo stesso livello DNS. Non sono supportate strutture wildcard che li raggruppino.
 
-### Porte firewall
-
-|Porta|Uso|
-|---|---|
-|`443/TCP`|Dashboard, API, MeshCentral|
-|`22/TCP`|SSH|
+Le porte necessarie sul firewall sono **443/TCP** (dashboard, API, MeshCentral) e **22/TCP** (SSH per amministrazione server).
 
 ---
 
-## Installazione server
+## Installazione e manutenzione
 
-```bash
-wget -O install.sh https://raw.githubusercontent.com/amidaware/tacticalrmm/master/install.sh
-chmod +x install.sh
-./install.sh
-```
+L'installazione avviene tramite uno script ufficiale da eseguire una sola volta su una VM pulita. Il processo è automatizzato e configura tutti i componenti elencati nell'architettura.
 
-> ⚠️ Lo script va eseguito una sola volta su una VM pulita.
+Gli aggiornamenti seguono la stessa logica: uno script dedicato aggiorna i componenti preservando la configurazione esistente. È buona pratica eseguire un backup prima di ogni aggiornamento.
 
----
+Il backup include database, configurazioni e certificati. Può essere pianificato automaticamente con le seguenti retention di default:
 
-## Aggiornamento
-
-```bash
-wget -N https://raw.githubusercontent.com/amidaware/tacticalrmm/master/update.sh
-chmod +x update.sh
-./update.sh
-```
-
----
-
-## Backup
-
-```bash
-wget -N https://raw.githubusercontent.com/amidaware/tacticalrmm/master/backup.sh
-chmod +x backup.sh
-./backup.sh
-```
-
-Abilitazione backup automatici:
-
-```bash
-./backup.sh --schedule
-```
-
-Retention automatica:
-
-- Giornalieri: 2 settimane
-    
-- Settimanali: 2 mesi
-    
-- Mensili: 1 anno
-    
+- **Giornalieri**: 2 settimane
+- **Settimanali**: 2 mesi
+- **Mensili**: 1 anno
 
 ---
 
 ## Funzionalità principali
 
-### Script
+### [[Libreria Script TRMM|Script]]
 
-Supporta:
-
-- PowerShell
-    
-- Batch
-    
-- Python
-    
-- Bash
-    
-- Nushell
-    
-- Deno
-    
-
-Modalità di esecuzione:
+Supporta l'esecuzione remota di script in PowerShell, Batch, Python, Bash, Nushell e Deno. Tre modalità di esecuzione disponibili:
 
 |Modalità|Comportamento|
 |---|---|
-|Wait for Output|Attende il completamento|
-|Fire and Forget|Esegue senza attendere|
-|Email Output|Invia il risultato via email|
-
----
+|Wait for Output|Attende il completamento e restituisce l'output|
+|Fire and Forget|Esegue senza attendere il risultato|
+|Email Output|Invia il risultato via email al completamento|
 
 ### Check
 
-Monitoraggio di:
-
-- CPU
-    
-- RAM
-    
-- Disco
-    
-- Servizi Windows
-    
-- Event Log
-    
-- Script personalizzati
-    
-
----
+Monitoraggio continuo di CPU, RAM, disco, servizi Windows, Event Log e script personalizzati. I check possono generare alert se superano soglie configurabili.
 
 ### Task
 
-Esecuzione pianificata di script tramite scheduler.
-
----
+Esecuzione pianificata di script tramite scheduler interno, indipendente dal Task Scheduler Windows.
 
 ### Patch Management
 
-Gestione centralizzata degli aggiornamenti Windows.
-
----
+Gestione centralizzata degli aggiornamenti Windows su tutti gli endpoint della flotta.
 
 ### Alert
 
-Notifiche tramite:
+Notifiche configurabili tramite email, SMS o webhook verso sistemi esterni.
 
-- Email
-    
-- SMS
-    
-- Webhook
-    
+### Accesso remoto (MeshCentral)
 
----
-
-### Remote Access (MeshCentral)
-
-- Desktop remoto
-    
-- Shell remota
-    
-- File browser
-    
-- Registry editor
-    
-- Event viewer
-    
-- Gestione servizi
-    
-
----
+Accesso completo alla macchina remota tramite desktop remoto, shell interattiva, file browser, registry editor, event viewer e gestione servizi. MeshCentral è integrato nativamente nella dashboard.
 
 ### Software (Chocolatey)
 
-```powershell
-choco install googlechrome -y
-choco upgrade all -y
-```
+Installazione e aggiornamento di software su endpoint Windows tramite integrazione con il package manager Chocolatey.
 
 ---
 
-# Installazione Technology Advising
+## Installazione agente
 
-## Infrastruttura
-
-|Componente|URL|
-|---|---|
-|Pannello Web|`https://ta-tactical-rmm.duckdns.org`|
-|API|`https://ta-tactical-api.duckdns.org`|
-|MeshCentral|`https://ta-tactical-mesh.duckdns.org`|
-|VM Server|OVH Frankfurt — Ubuntu 22.04 LTS — `213.32.30.52`|
-
-Client configurato:
-
-- **Technology Advising**
-    
-- Site: **Sede Principale**
-    
-- Timezone: **Europe/Rome**
-    
+L'agente viene installato su ogni endpoint tramite un PowerShell one-liner generato dalla dashboard. Il processo assegna l'agente a un client, un sito e un tipo di macchina (workstation o server). Una volta registrato, l'agente è visibile nella dashboard e inizia a inviare dati di monitoraggio.
 
 ---
 
-## Problema TLS riscontrato
+## Note operative
 
-### Errore
-
-```text
-tls: failed to verify certificate:
-certificate is valid for *.ta-tactical.duckdns.org,
-not ta-tactical-api.duckdns.org
-```
-
-### Causa
-
-Il certificato installato copriva:
-
-```text
-*.ta-tactical.duckdns.org
-```
-
-mentre Tactical RMM utilizzava:
-
-```text
-ta-tactical-rmm.duckdns.org
-ta-tactical-api.duckdns.org
-ta-tactical-mesh.duckdns.org
-```
-
-I nomi non coincidevano.
-
-### Risoluzione
-
-```bash
-sudo apt install python3-certbot-nginx -y
-
-sudo certbot --nginx \
-  -d ta-tactical-rmm.duckdns.org \
-  -d ta-tactical-api.duckdns.org \
-  -d ta-tactical-mesh.duckdns.org
-
-sudo systemctl reload nginx
-```
-
----
-
-## Installazione agente Windows
-
-1. Dashboard → **Agents → Install Agent**
-    
-2. Selezionare:
-    
-    - Client: Technology Advising
-        
-    - Site: Sede Principale
-        
-    - Type: Workstation
-        
-    - Architecture: 64-bit
-        
-3. Copiare il PowerShell one-liner generato
-    
-4. Eseguirlo come amministratore
-    
-5. Attendere la registrazione dell'agente
-    
-
----
-
-# Script Operativi
-
-## Verifica utenti locali
-
-```powershell
-Get-LocalUser | Select Name, Enabled
-```
-
-Verifica amministratori locali:
-
-```powershell
-Get-LocalGroupMember -Group "Administrators"
-```
-
----
-
-## Disabilitazione account utente
-
-Disabilita l'account e termina eventuali sessioni attive.
-
-```powershell
-param($username)
-
-Disable-LocalUser -Name $username
-
-$session = query user $username 2>$null | Select-String $username
-
-if ($session) {
-    $sessionId = ($session -split '\s+')[2]
-    logoff $sessionId /server:localhost
-}
-
-Write-Output "Account '$username' disabilitato e sessione terminata."
-```
-
-Riabilitazione:
-
-```powershell
-Enable-LocalUser -Name <username>
-```
-
----
-
-## Rimozione privilegi amministrativi
-
-```powershell
-param($username)
-
-Remove-LocalGroupMember `
-    -Group "Administrators" `
-    -Member $username
-
-Write-Output "Utente '$username' rimosso dagli Administrators."
-```
-
----
-
-## Blocco installazioni e disinstallazioni
-
-Obiettivi:
-
-- Rimuovere privilegi amministrativi
-    
-- Bloccare MSI
-    
-- Bloccare esecuzione EXE dalle cartelle utente
-    
-- Bloccare disinstallazione software
-    
-
-```powershell
-# Script completo TRMM
-# (contenuto invariato)
-```
-
-> ⚠️ Richiede riavvio per l'attivazione delle Software Restriction Policy.
-
----
-
-## Windows 11 Home e [[🔒BitLocker]]
-
-> ℹ️ Windows 11 Home non supporta BitLocker completo ma include **Device Encryption** automatica quando l'hardware soddisfa i requisiti Microsoft.
-
----
-
-## Comandi utili
-
-### Stato servizi
-
-```bash
-sudo systemctl status \
-    rmm celery celerybeat \
-    nginx nats meshcentral
-```
-
-### Riavvio servizi
-
-```bash
-sudo systemctl restart \
-    rmm celery celerybeat
-```
-
-### Verifica MeshCentral
-
-```bash
-python manage.py check_mesh
-```
-
-### Log errori
-
-```bash
-tail -f \
-/rmm/api/tacticalrmm/tacticalrmm/private/log/error.log
-```
-
-### Log accessi
-
-```bash
-tail -f \
-/rmm/api/tacticalrmm/tacticalrmm/private/log/access.log
-```
+- Utilizzare certificati multi-dominio quando i tre sottodomini sono gestiti come host DuckDNS distinti — un certificato wildcard di primo livello non li copre.
+- Testare sempre il deploy su un singolo agente prima del rollout sull'intera flotta.
+- Gli script che modificano restrizioni software (SRP, WDAC, AppLocker) possono impattare applicazioni installate in percorsi non standard — verificare su macchine di test prima del deploy.
+- Per applicazioni aziendali è preferibile l'installazione in `C:\Program Files` rispetto alle cartelle utente, che sono spesso soggette a restrizioni di esecuzione.
+- Script con timeout superiore al limite configurato restituiscono codice 98 — non indica un errore dello script ma un timeout di TRMM.
 
 ---
 
@@ -413,22 +117,8 @@ tail -f \
 
 |Problema|Possibile causa|Soluzione|
 |---|---|---|
-|Agente non si connette|DNS o firewall|Verificare porta 443|
-|Dashboard non raggiungibile|Servizi down|Riavviare rmm/nginx|
-|Remote Desktop non funziona|Problema MeshCentral|`check_mesh`|
-|Script in timeout|Script troppo lungo|Return code 98|
-|Check non ricevuti|NATS fermo|Riavviare NATS|
-
----
-
-## Note operative
-
-- Utilizzare certificati multi-dominio quando si impiegano host DuckDNS distinti.
-    
-- Testare sempre il primo agente prima del rollout.
-    
-- Gli script di restrizione software possono impedire il funzionamento di applicazioni installate in `%APPDATA%` o `%LOCALAPPDATA%`.
-    
-- Per applicazioni aziendali è preferibile l'installazione in `C:\Program Files`.
-    
-- Dopo modifiche alle Software Restriction Policy è consigliato un riavvio del sistema.
+|Agente non si connette|DNS o firewall|Verificare raggiungibilità porta 443|
+|Dashboard non raggiungibile|Servizi down|Riavviare rmm e nginx|
+|Remote desktop non funziona|Problema MeshCentral|Eseguire check_mesh dal server|
+|Script in timeout|Esecuzione troppo lunga|Codice 98 — aumentare timeout o suddividere lo script|
+|Check non ricevuti|NATS fermo|Riavviare il servizio NATS|
