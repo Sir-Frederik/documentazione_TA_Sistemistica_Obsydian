@@ -16,8 +16,33 @@
               "icon": "lucide-git-fork",
               "title": "Vista grafo"
             }
+          },
+          {
+            "id": "da89f8748426a79d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Documentazione/Tactical RRM/Gestione Sicurezza Endpoint Windows 11 via Tactical RMM.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "Gestione Sicurezza Endpoint Windows 11 via Tactical RMM"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -74,7 +99,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 276.5110321044922
+    "width": 276.5110321044922,
+    "collapsed": true
   },
   "right": {
     "id": "b1590987d5b3c016",
@@ -151,12 +177,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "Documentazione/Tactical RRM/Gestione Sicurezza Endpoint Windows 11 via Tactical RMM.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Struttura"
+              "title": "Struttura di Gestione Sicurezza Endpoint Windows 11 via Tactical RMM"
             }
           }
         ],
@@ -164,8 +191,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 432.5,
-    "collapsed": true
+    "width": 330.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -180,8 +206,15 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "a0407e5668e8bddc",
+  "active": "da89f8748426a79d",
   "lastOpenFiles": [
+    "Pasted image 20260630124050.png",
+    "Pasted image 20260630123818.png",
+    "Pasted image 20260630123705.png",
+    "Pasted image 20260630122709.png",
+    "Pasted image 20260630122700.png",
+    "Pasted image 20260630122625.png",
+    "Documentazione/Tactical RRM/Gestione Sicurezza Endpoint Windows 11 via Tactical RMM.md",
     "Documentazione/ISG — Intelligent Security Graph.md",
     "Documentazione/🔒BitLocker.md",
     "Documentazione/Tactical RRM/Libreria Script TRMM.md",
@@ -208,8 +241,6 @@
     "Samba.md",
     "Riunioni/15-06-26 Sicurezza, CI-CD e infrastruttura.md",
     "Documentazione/🏦 SAMBA.md",
-    "Documentazione/🚇WireGuard.md",
-    "Documentazione/SMB.md",
     "26-05-26 Evoluzione infrastrutturale, sicurezza e migrazione CD.pdf",
     "Excalidraw",
     "Procedure/OWASP",
