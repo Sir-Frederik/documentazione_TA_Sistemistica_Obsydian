@@ -3,6 +3,8 @@
 
 A differenza di soluzioni come [[🏦 SAMBA]] o [[FreeIPA]], non richiede che i client siano aggiunti a un dominio, né impone requisiti specifici sull'edizione del sistema operativo.
 
+[[📘Guida  personale a TRMM|Qui]] puoi trovare la guida per l'installazione di TRMM, mentre [[Libreria Script TRMM|qui]] puoi trovare la libreria degi script.
+
 ---
 
 ## Architettura

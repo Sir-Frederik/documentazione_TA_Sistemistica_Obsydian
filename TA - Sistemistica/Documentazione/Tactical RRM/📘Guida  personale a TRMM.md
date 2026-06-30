@@ -33,7 +33,7 @@ Le strade esplorate e scartate:
 |PC Pro (compilazione)|`TA-TEST` — Windows 11 Pro — utente `testf`|
 |Cartella policy|`C:\WDAC\` su entrambe le macchine|
 
-**Riferimenti WDAC — tienili a mente:**
+### Riferimenti WDAC:
 
 | Campo            | Valore                                                                   |
 | ---------------- | ------------------------------------------------------------------------ |
@@ -42,12 +42,24 @@ Le strade esplorate e scartate:
 | File .cip attivo | `C:\Windows\System32\CodeIntegrity\CiPolicies\Active\{966d1f08-...}.cip` |
 | Stato attuale    | ==Enforcement mode ✅==                                                   |
 
-**Riferimenti TRMM:**
+### Riferimenti TRMM:
 
 | Campo                  | Valore                             |
 | ---------------------- | ---------------------------------- |
 | Custom Field BitLocker | `bitlocker_recovery_key` — ID: `1` |
 
+#### 🔑 API Key
+
+Alcuni script (`BitLocker: Enable`, `BitLocker: Store Recovery Key`) devono
+comunicare con l'API di TRMM per salvare dati nei Custom Field — ad esempio
+la recovery key di BitLocker. Per farlo serve una **API Key** generata da
+TRMM, passata come parametro obbligatorio `ApiKey` allo script.
+
+==Non va mai scritta dentro lo script== — si passa come parametro al momento
+dell'esecuzione, così resta fuori dal codice salvato e non finisce per
+sbaglio in una versione condivisa o esportata.
+La trovi nelle **impostazioni** di TRMM
+La chiave si genera da: **TRMM → Settings → API Keys**.
 ---
 
 ## 🛡️ Stack di sicurezza attivo
@@ -217,7 +229,7 @@ Tutti gli script sono salvati e categorizzati in TRMM. Qui sotto trovi per ognun
 
 ### 💾 BitLocker
 
-####[[Libreria Script TRMM#BitLocker Check Status|BitLocker: Check Status]]
+#### [[Libreria Script TRMM#BitLocker Check Status|BitLocker: Check Status]]
 
 Legge lo stato di BitLocker su `C:` e suggerisce l'azione correttiva. Non salva nulla su TRMM — è solo lettura locale.
 
@@ -227,9 +239,18 @@ Legge lo stato di BitLocker su `C:` e suggerisce l'azione correttiva. Non salva 
 
 #### [[Libreria Script TRMM#BitLocker Enable|BitLocker: Enable]]
 
-Attiva BitLocker con TPM + Recovery Password e ==salva automaticamente la chiave nel Custom Field TRMM==. Gestisce tre scenari da solo: già attivo (esce subito), protezione sospesa (resume), non attivo (attivazione completa).
+Attiva BitLocker con TPM + Recovery Password e ==salva/aggiorna automaticamente la chiave nel Custom Field TRMM==. 
+Gestisce ==**quattro scenari**==: ==già **attivo**== (sincronizza comunque la chiave), ==cifratura in corso== (nessuna nuova azione di abilitazione), ==protezione sospesa== (resume), ==non attivo== (**attivazione completa**).
 
-**Quando**: primo setup su un endpoint nuovo, o per riattivare dopo una sospensione. **Parametri**: `ApiKey` _(obbligatorio)_
+Garantisce inoltre un solo protector RecoveryPassword attivo, rimuovendo automaticamente eventuali duplicati residui da tentativi precedenti.  
+
+**Quando**: primo setup su un endpoint nuovo, per riattivare dopo una sospensione, o per risincronizzare la chiave su TRMM se sospetti che sia disallineata. 
+**Parametri**: `ApiKey` (obbligatorio)
+ex: 
+```
+-ApiKey YNV################
+```
+
 
 ---
 
@@ -255,7 +276,17 @@ Estrae la Recovery Key già esistente e la sincronizza nel Custom Field TRMM, se
 
 #### [[Libreria Script TRMM#Defender Enable Controlled Folder Access|Defender: Enable Controlled Folder Access]]
 
-Abilita CFA su Windows Defender. ==Non aggiunge app alla whitelist== — quello va fatto separatamente, con il path eseguibile specifico (no wildcard).
+Abilita *CFA* su Windows Defender. ==Non aggiunge app alla whitelist== — manualmente tramite   `Add-MpPreference` `-ControlledFolderAccessAllowedApplications`   con path eseguibile specifico, senza *wildcard* (Cioè gli i caratteri jolly come gli asterischi.)
+ex:
+``` powershell
+Add-MpPreference -ControlledFolderAccessAllowedApplications "C:\Program Files\Mozilla Firefox\firefox.exe"
+```
+Questo comando dice a Windows Defender: "Firefox può scrivere nelle cartelle protette da Controlled Folder Access (Documenti, Desktop, ecc.) anche se normalmente non gliel'avresti permesso."
+
+Controllo:
+``` powershell
+(Get-MpPreference).ControlledFolderAccessAllowedApplications
+```
 
 **Quando**: setup iniziale di un endpoint.
 
@@ -263,53 +294,126 @@ Abilita CFA su Windows Defender. ==Non aggiunge app alla whitelist== — quello 
 
 #### [[Libreria Script TRMM#Defender Deploy ASR Rules|Defender: Deploy ASR Rules]]
 
-Configura le 9 ASR rules. Tre modalità disponibili: `Enable` (produzione), `AuditMode` (test), `Disable` (rimozione). Salva uno stato locale in `C:\ProgramData\TacticalRMM\asr_status.json`.
+Configura le **9 ASR rules** (Attack Surface Reduction) di Windows Defender —
+regole che bloccano vettori di attacco specifici, come macro Office
+malevole, credential stealing o esecuzione di script offuscati.
 
-**Quando**: setup iniziale, o per cambiare modalità su macchine specifiche. **Parametri**: `Mode` _(facoltativo, default `Enable`)_
+Lo script supporta tre modalità, da passare nel parametro `Mode`:
 
-> ⚠️ Il GUID `01443614-...-2ECDE92B5EBE` (regola USB) aveva un carattere extra nella versione originale — corretta nella libreria attuale.
+| Modalità    | Effetto                                  | Quando usarla                                            |
+| ----------- | ---------------------------------------- | -------------------------------------------------------- |
+| `Enable`    | Blocca attivamente — modalità produzione | Default, uso normale                                     |
+| `AuditMode` | Registra ma non blocca                   | Per testare nuove regole senza rischio di falsi positivi |
+| `Disable`   | Rimuove le regole                        | Solo se serve disattivare ASR su una macchina specifica  |
+
+Dopo l'esecuzione, lo stato configurato viene salvato in
+`C:\ProgramData\TacticalRMM\asr_status.json` — utile per verificare
+rapidamente quale modalità è attiva senza dover rileggere tutte le regole.
+
+**Quando usarlo**: al setup iniziale di un endpoint, oppure per cambiare
+modalità su una macchina specifica (es. passare in `AuditMode` per
+diagnosticare un falso positivo).
+
+**Parametri**: `Mode` _(facoltativo, default `Enable`)_
+
+> ⚠️ Il GUID `01443614-...-2ECDE92B5EBE` (regola che blocca eseguibili da
+> USB) aveva un carattere extra nella versione originale dello script —
+> la regola non veniva mai applicata. Corretta nella libreria attuale.
 
 ---
 
 ### 🔒 WDAC
 
-#### [[Libreria Script TRMM#WDAC Compile Enforcement Policy|WDAC: Compile Enforcement Policy]]
-
-Prende un XML in audit mode, rimuove la regola `Enabled:Audit Mode`, aggiorna la versione e compila il `.p7b`. È il **passo 4** del workflow.
-
-**Quando**: ogni volta che si rilascia una nuova versione della policy. **Parametri**: `SourceXml`, `OutputXml`, `OutputP7b`, `NewVersion` _(tutti obbligatori)_
-
-> ⚠️ ==Solo su TA-TEST== — il modulo ConfigCI non è disponibile su Home.
+Quattro script che coprono l'intero ciclo di vita della policy: dalla
+diagnosi di cosa manca, alla compilazione, al deploy, fino al recovery
+in caso di problemi.
 
 ---
 
 #### [[Libreria Script TRMM#WDAC Export Audit Log|WDAC: Export Audit Log]]
-Legge gli eventi WDAC con Event ID 3076 e li salva in `C:\WDAC\audit_newapps.txt`. È il **passo 2** del workflow.
 
-**Quando**: prima di raccogliere file per una nuova versione, per capire cosa è stato bloccato.
+Quando WDAC è in **audit mode**, non blocca i file sconosciuti — li lascia
+passare ma registra l'evento nel log di sistema con **Event ID 3076**. Questo
+script legge quegli eventi e li salva in un file di testo leggibile:
+`C:\WDAC\audit_newapps.txt`.
+
+È il modo per scoprire **cosa la policy attuale non copre ancora** — ogni
+eseguibile, DLL o script che è stato eseguito sulla macchina ma non è
+esplicitamente autorizzato. È il primo passo da fare prima di costruire una
+nuova versione della policy.
+
+**È il passo 2 del workflow.**
+
+**Quando usarlo**: prima di raccogliere file per una nuova versione della
+policy, per sapere esattamente cosa manca invece di indovinare.
 
 ---
 
-#### [[Libreria Script TRMM#WDAC Remove Active Policy|WDAC: Remove Active Policy]]
+#### [[Libreria Script TRMM#WDAC Compile Enforcement Policy|WDAC: Compile Enforcement Policy]]
 
-Rimuove il file `.cip` dalla cartella Active. Effettivo al riavvio successivo.
+Una volta che l'XML della nuova policy è pronto (dopo `New-CIPolicy` e
+`Merge-CIPolicy`, eseguiti manualmente — vedi [[📘Guida personale a TRMM#Fase 4 — Compilazione policy ⚙️ (TA-TEST)|Fase 4]]),
+questo script fa l'ultimo miglio: rimuove la regola `Enabled:Audit Mode`
+dall'XML — trasformando la policy da "registra soltanto" a "blocca
+attivamente" — aggiorna il numero di versione e compila il file binario
+`.p7b`, l'unico formato che `CiTool` sa effettivamente deployare.
 
-**Quando**: recovery da remoto quando la macchina è ancora avviata ma la policy ha problemi. Per boot failure già avvenuto, serve la procedura WinRE manuale.
+**È il passo 4 del workflow.**
 
-> ⚠️ Il file rimosso è ==`.cip`==, non `.p7b`. La versione originale dello script cercava `.p7b` — era completamente inerte. Ora usa il GUID esplicito.
+**Quando usarlo**: ogni volta che si rilascia una nuova versione della
+policy, dopo aver già preparato l'XML mergiato.
+
+**Parametri**: `SourceXml`, `OutputXml`, `OutputP7b`, `NewVersion`
+_(tutti obbligatori)_
+
+> ⚠️ ==Eseguibile solo su TA-TEST== — il modulo `ConfigCI`, da cui dipende
+> la compilazione, non è disponibile su Windows Home.
 
 ---
 
 #### [[Libreria Script TRMM#WDAC Deploy Policy|WDAC: Deploy Policy]]
 
-Esegue il deploy del `.p7b` via `CiTool --update-policy`, verifica la presenza del `.cip` risultante e scrive lo stato in `C:\ProgramData\TacticalRMM\wdac_state.json`. È il **passo 6** del workflow.
+Il binario `.p7b` compilato su TA-TEST non serve a nulla finché non viene
+installato sulla macchina di destinazione. Questo script fa esattamente
+questo: chiama `CiTool --update-policy` per caricare la policy, poi verifica
+che il file `.cip` risultante sia effettivamente comparso nella cartella
+`CiPolicies\Active` — non si fida solo del codice di uscita di CiTool.
 
-**Quando**: dopo aver trasferito il `.p7b` compilato sul PC via MeshCentral. **Parametri**: `PolicyPath`, `PolicyVersion` _(obbligatori)_ — `Reboot` _(switch facoltativo)_
+Se la verifica va a buon fine, scrive un piccolo file di stato in
+`C:\ProgramData\TacticalRMM\wdac_state.json` con versione e data di deploy.
+Questo file è quello che [[Libreria Script TRMM#Monitor WDAC Policy Status|Monitor: WDAC Policy Status]]
+legge per sapere se la macchina è aggiornata.
 
-> ⚠️ Il `.p7b` deve essere ==già presente sulla macchina== prima di eseguire lo script. Il trasferimento avviene via MeshCentral, separatamente.
+**È il passo 6 del workflow.**
+
+**Quando usarlo**: subito dopo aver trasferito il `.p7b` compilato sulla
+macchina target via MeshCentral.
+
+**Parametri**: `PolicyPath`, `PolicyVersion` _(obbligatori)_ —
+`Reboot` _(switch facoltativo, per riavviare automaticamente a fine deploy)_
+
+> ⚠️ Lo script non trasferisce file — il `.p7b` deve essere ==già presente==
+> sulla macchina (via MeshCentral) prima di lanciarlo.
 
 ---
 
+#### [[Libreria Script TRMM#WDAC Remove Active Policy|WDAC: Remove Active Policy]]
+
+La via di emergenza quando una policy deployata causa problemi ma la
+macchina è ancora accesa e raggiungibile da TRMM. Rimuove il file `.cip`
+dalla cartella Active — la rimozione diventa effettiva solo al riavvio
+successivo, quindi c'è tempo per valutare prima di riavviare.
+
+**Quando usarlo**: la macchina è accesa, ma qualcosa nella policy sta
+causando malfunzionamenti (app legittime bloccate, comportamenti anomali) e
+serve toglierla rapidamente da remoto. Se invece la macchina **non si avvia
+più**, questo script non è raggiungibile — serve la procedura manuale via
+WinRE (vedi [[📘Guida personale a TRMM#🚨 Recovery WDAC — boot failure|Recovery WDAC]]).
+
+> ⚠️ Il file da rimuovere è ==`.cip`==, non `.p7b`. La versione originale
+> dello script cercava il file sbagliato (`.p7b`) ed era completamente
+> inerte — non rimuoveva mai nulla. La versione attuale punta al GUID
+> esplicito della policy e funziona correttamente.
 ### 🔐 AppLocker
 
 > ℹ️ Questi script si applicano solo a TA-TEST (Windows Pro). Su Home AppLocker è inerte anche se il servizio gira. Con WDAC attivo è comunque superfluo ovunque.

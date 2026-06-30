@@ -4,59 +4,20 @@
     "type": "split",
     "children": [
       {
-        "id": "86fd523059d1ba1c",
+        "id": "d6d6f2c77e65d6f1",
         "type": "tabs",
         "children": [
           {
-            "id": "78af35ccb6b65361",
+            "id": "a0407e5668e8bddc",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Documentazione/🧠Tactical RMM.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "🧠Tactical RMM"
-            }
-          },
-          {
-            "id": "15ce9a9bdbada06a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "📘Guida  personale a TRMM.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "📘Guida  personale a TRMM"
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Vista grafo"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -88,7 +49,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "wdac",
+                "query": "libreria",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -113,8 +74,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 276.5110321044922,
-    "collapsed": true
+    "width": 276.5110321044922
   },
   "right": {
     "id": "b1590987d5b3c016",
@@ -191,13 +151,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "📘Guida  personale a TRMM.md",
                 "followCursor": false,
-                "showSearch": true,
+                "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Struttura di 📘Guida  personale a TRMM"
+              "title": "Struttura"
             }
           }
         ],
@@ -205,7 +164,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 262.5
+    "width": 432.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -220,94 +180,26 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "floating": {
-    "id": "cb3281e7c6e4cdc4",
-    "type": "floating",
-    "children": [
-      {
-        "id": "53424f79822e43d3",
-        "type": "window",
-        "children": [
-          {
-            "id": "3c2e68f88cecad1b",
-            "type": "tabs",
-            "dimension": 75.71614583333334,
-            "children": [
-              {
-                "id": "555e3087e9383b4e",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "Documentazione/Libreria Script TRMM.md",
-                    "mode": "source",
-                    "source": false,
-                    "backlinks": true,
-                    "backlinkOpts": {
-                      "collapseAll": false,
-                      "extraContext": false,
-                      "sortOrder": "alphabetical",
-                      "showSearch": false,
-                      "searchQuery": "",
-                      "backlinkCollapsed": false,
-                      "unlinkedCollapsed": true
-                    }
-                  },
-                  "icon": "lucide-file",
-                  "title": "Libreria Script TRMM"
-                },
-                "group": "03e25aff1c6f50d8"
-              }
-            ]
-          },
-          {
-            "id": "cd94f9183b13d647",
-            "type": "tabs",
-            "dimension": 24.283854166666664,
-            "children": [
-              {
-                "id": "ea1972a7d6b5810d",
-                "type": "leaf",
-                "state": {
-                  "type": "outline",
-                  "state": {
-                    "file": "Documentazione/Libreria Script TRMM.md",
-                    "followCursor": false,
-                    "showSearch": false,
-                    "searchQuery": ""
-                  },
-                  "icon": "lucide-list",
-                  "title": "Struttura di Libreria Script TRMM"
-                },
-                "group": "03e25aff1c6f50d8"
-              }
-            ]
-          }
-        ],
-        "direction": "vertical",
-        "x": 1808,
-        "y": 386,
-        "width": 604,
-        "height": 567,
-        "maximize": true,
-        "zoom": 0
-      }
-    ]
-  },
-  "active": "15ce9a9bdbada06a",
+  "active": "a0407e5668e8bddc",
   "lastOpenFiles": [
+    "Documentazione/ISG — Intelligent Security Graph.md",
+    "Documentazione/🔒BitLocker.md",
+    "Documentazione/Tactical RRM/Libreria Script TRMM.md",
+    "Documentazione/CiTool.md",
+    "Procedure/📘Guida  personale a TRMM.md",
+    "Documentazione/Tactical RRM/📘Guida  personale a TRMM.md",
+    "Documentazione/Tactical RRM/🧠Tactical RMM.md",
+    "Documentazione/Libreria.md",
+    "Documentazione/Tactical RRM",
+    "Documentazione/Nuova cartella",
     "Documentazione/Libreria Script TRMM.md",
-    "📘Guida  personale a TRMM.md",
-    "📘Guida personale a TRMM.md",
-    "Libreria.md",
-    "ISG — Intelligent Security Graph.md",
-    "CiTool.md",
     "Documentazione/🧠Tactical RMM.md",
+    "Procedure/Installazione del FAIL2BAN.md",
+    "📘Guida personale a TRMM.md",
     "Documentazione/TA_TRMM_Scripts_Obsidian.md",
     "Procedure/Analisi comparativa Samba vs alternative.md",
     "Appunti.md",
     "Procedure/Vedere i  Servizi del server.md",
-    "Documentazione/🔒BitLocker.md",
     "SonarQube.md",
     "Tactical RMM.md",
     "Documentazione/FreeIPA.md",
@@ -318,10 +210,6 @@
     "Documentazione/🏦 SAMBA.md",
     "Documentazione/🚇WireGuard.md",
     "Documentazione/SMB.md",
-    "Documentazione/Active Directory.md",
-    "Documentazione/👤 SSSD.md",
-    "Procedure/Installazione del FAIL2BAN.md",
-    "Procedure/Collegare i Progetti ai Server.md",
     "26-05-26 Evoluzione infrastrutturale, sicurezza e migrazione CD.pdf",
     "Excalidraw",
     "Procedure/OWASP",
@@ -329,8 +217,6 @@
     "Documentazione/Da Alessandro/mso364A.tmp",
     "Documentazione/Da Alessandro/cluster-pen-test.docx",
     "Documentazione/Da Alessandro/owasp_vps_ta.pdf",
-    "Documentazione/Da Alessandro/mso9FD6.tmp",
-    "Documentazione/Da Alessandro/guida_script_owasp.pdf",
-    "Documentazione/Da Alessandro/msoE573.tmp"
+    "Documentazione/Da Alessandro/mso9FD6.tmp"
   ]
 }

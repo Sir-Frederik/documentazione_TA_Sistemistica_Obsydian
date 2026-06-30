@@ -71,11 +71,12 @@ exit 0
 ```powershell
 # SCRIPT  : BitLocker: Enable
 # DESC    : Attiva BitLocker su C: con TPM + Recovery Password.
-#           Gestisce i tre stati possibili: già attivo, sospeso,
-#           non attivo. Salva la Recovery Key nel Custom Field TRMM.
+#           Gestisce i quattro stati possibili: già attivo, sospeso,
+#           cifratura in corso, non attivo. Garantisce un solo
+#           protector RecoveryPassword (rimuove eventuali duplicati)
+#           e salva/aggiorna la Recovery Key nel Custom Field TRMM.
 # PARAMS  : ApiKey (obbligatorio) — chiave API TRMM
 # ──────────────────────────────────────────────────────────────────────
-
 param(
     [Parameter(Mandatory=$true)]
     [string]$ApiKey
@@ -84,9 +85,6 @@ param(
 $rmmApi  = "https://ta-tactical-api.duckdns.org"
 $headers = @{ "X-API-KEY" = $ApiKey; "Content-Type" = "application/json" }
 
-# ─────────────────────────────────────────
-# 1. Controlla stato attuale
-# ─────────────────────────────────────────
 $vol    = Get-BitLockerVolume -MountPoint "C:" -ErrorAction Stop
 $status = $vol.ProtectionStatus
 $state  = $vol.VolumeStatus
@@ -94,29 +92,51 @@ $state  = $vol.VolumeStatus
 Write-Output "Stato attuale: $status / $state"
 
 if ($status -eq "On" -and $state -eq "FullyEncrypted") {
-    Write-Output "BitLocker già attivo. Nessuna azione necessaria."
-    exit 0
+    Write-Output "BitLocker già attivo. Verifica protector e sincronizzazione chiave..."
 }
-
-# ─────────────────────────────────────────
-# 2. Attiva o riprendi BitLocker
-# ─────────────────────────────────────────
-if ($status -eq "Off" -and $state -eq "FullyEncrypted") {
-    # Disco già cifrato, protezione soltanto sospesa
+elseif ($state -eq "EncryptionInProgress") {
+    Write-Output "Cifratura già in corso. Nessuna nuova azione di abilitazione necessaria."
+}
+elseif ($status -eq "Off" -and $state -eq "FullyEncrypted") {
     Write-Output "Disco cifrato ma protezione sospesa. Riattivazione..."
     Resume-BitLocker -MountPoint "C:"
     Write-Output "Protezione riattivata."
-} else {
-    # Prima attivazione: TPM come protettore primario + Recovery Password
+}
+else {
     Write-Output "Abilitazione BitLocker con TPM + Recovery Password..."
     Enable-BitLocker -MountPoint "C:" -TpmProtector
     Add-BitLockerKeyProtector -MountPoint "C:" -RecoveryPasswordProtector
     Write-Output "BitLocker abilitato. Cifratura disco in corso."
 }
 
-# ─────────────────────────────────────────
-# 3. Trova agent_id TRMM tramite hostname
-# ─────────────────────────────────────────
+# Garantisce un solo RecoveryPassword protector
+$vol2       = Get-BitLockerVolume -MountPoint "C:" -ErrorAction Stop
+$recoveries = $vol2.KeyProtector | Where-Object { $_.KeyProtectorType -eq "RecoveryPassword" }
+
+if ($recoveries.Count -eq 0) {
+    Write-Output "Nessun RecoveryPassword protector trovato. Creazione..."
+    Add-BitLockerKeyProtector -MountPoint "C:" -RecoveryPasswordProtector | Out-Null
+    $vol2       = Get-BitLockerVolume -MountPoint "C:" -ErrorAction Stop
+    $recoveries = $vol2.KeyProtector | Where-Object { $_.KeyProtectorType -eq "RecoveryPassword" }
+}
+elseif ($recoveries.Count -gt 1) {
+    Write-Output "Trovati $($recoveries.Count) protector RecoveryPassword. Rimozione duplicati..."
+    $toKeep   = $recoveries | Select-Object -Last 1
+    $toRemove = $recoveries | Where-Object { $_.KeyProtectorId -ne $toKeep.KeyProtectorId }
+    foreach ($p in $toRemove) {
+        Remove-BitLockerKeyProtector -MountPoint "C:" -KeyProtectorId $p.KeyProtectorId
+        Write-Output "Rimosso protector obsoleto: $($p.KeyProtectorId)"
+    }
+    $recoveries = $toKeep
+}
+
+$key = [string]($recoveries | Select-Object -First 1 -ExpandProperty RecoveryPassword)
+
+if (-not $key) {
+    Write-Output "ATTENZIONE: Recovery Password non ancora disponibile."
+    exit 3
+}
+
 $hostname = $env:COMPUTERNAME
 $agents   = Invoke-RestMethod -Uri "$rmmApi/agents/" -Headers $headers -Method Get
 $agent    = $agents | Where-Object -Property hostname -EQ -Value $hostname
@@ -127,23 +147,9 @@ if (-not $agentId) {
     exit 2
 }
 
-# ─────────────────────────────────────────
-# 4. Estrai Recovery Key e salva in TRMM
-# (Custom Field ID 1 = bitlocker_recovery_key)
-# ─────────────────────────────────────────
-$vol2   = Get-BitLockerVolume -MountPoint "C:" -ErrorAction Stop
-$keyRaw = ($vol2.KeyProtector | Where-Object -Property KeyProtectorType -EQ -Value "RecoveryPassword").RecoveryPassword
-$key    = [string]($keyRaw | Select-Object -First 1)
-
-if (-not $key) {
-    Write-Output "ATTENZIONE: BitLocker abilitato ma Recovery Password non ancora disponibile."
-    exit 3
-}
-
 $body = @{ custom_fields = @(@{ field = 1; string_value = $key }) } | ConvertTo-Json -Depth 5
 Invoke-RestMethod -Uri "$rmmApi/agents/$agentId/" -Headers $headers -Method Put -Body $body
-
-Write-Output "Chiave di ripristino salvata nel Custom Field TRMM."
+Write-Output "Chiave di ripristino salvata/aggiornata nel Custom Field TRMM."
 exit 0
 
 
@@ -277,6 +283,17 @@ exit 0
 
 
 # ──────────────────────────────────────────────────────────────────────
+```
+#### Aggiungere app nella Whitelist:
+
+``` powershell
+# Ex:
+Add-MpPreference -ControlledFolderAccessAllowedApplications "C:\Program Files\Mozilla Firefox\firefox.exe"
+
+```
+Controllo:
+``` powershell
+(Get-MpPreference).ControlledFolderAccessAllowedApplications
 ```
 
 ### Defender: Deploy ASR Rules

@@ -5,34 +5,34 @@
   "showAttachments": false,
   "hideUnresolved": false,
   "showOrphans": true,
-  "collapse-color-groups": false,
+  "collapse-color-groups": true,
   "colorGroups": [
     {
-      "query": "path:Procedure/OWASP  ",
+      "query": "path:\"Documentazione/Tactical RRM\"  ",
       "color": {
         "a": 1,
-        "rgb": 16124284
+        "rgb": 16497678
       }
     },
     {
       "query": "path:Documentazione  ",
       "color": {
         "a": 1,
-        "rgb": 5431378
+        "rgb": 1434641
       }
     },
     {
       "query": "path:Riunioni  ",
       "color": {
         "a": 1,
-        "rgb": 267515
+        "rgb": 788972
       }
     },
     {
       "query": "path:Procedure  ",
       "color": {
         "a": 1,
-        "rgb": 16711744
+        "rgb": 15208721
       }
     }
   ],
@@ -46,6 +46,6 @@
   "repelStrength": 10,
   "linkStrength": 1,
   "linkDistance": 250,
-  "scale": 0.9428201961676157,
+  "scale": 0.3421375407113167,
   "close": true
 }
