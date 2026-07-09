@@ -385,8 +385,38 @@ try {
 
 ## WDAC
 
+### WDAC: Check Policy Version
+``` powershell
+$targetGuid = "966d1f08-bcea-48c4-bc3a-6651c21e4090"
 
+$policy = CiTool --list-policies -json 2>$null |
+    ConvertFrom-Json |
+    Select-Object -ExpandProperty Policies |
+    Where-Object { $_.PolicyID -match $targetGuid }
+
+if (-not $policy) {
+    Write-Output "Policy $targetGuid NON PRESENTE su questo agent."
+    exit 0
+}
+
+# Traduce il numero grezzo (es. 2814749767106575) nel formato a.b.c.d
+$raw = [uint64]$policy.Version
+$a = ($raw -shr 48) -band 0xFFFF
+$b = ($raw -shr 32) -band 0xFFFF
+$c = ($raw -shr 16) -band 0xFFFF
+$d = $raw -band 0xFFFF
+$readable = "$a.$b.$c.$d"
+
+Write-Output "Hostname     : $env:COMPUTERNAME"
+Write-Output "PolicyID     : $($policy.PolicyID)"
+Write-Output "Versione     : $readable  (raw: $raw)"
+Write-Output "IsEnforced   : $($policy.IsEnforced)"
+Write-Output "IsAuthorized : $($policy.IsAuthorized)"
+
+exit 0
+```
 ### WDAC: Compile Enforcement Policy
+
 ```powershell
 # SCRIPT  : WDAC: Compile Enforcement Policy
 # DESC    : Partendo da un XML in audit mode, rimuove la regola
@@ -616,6 +646,46 @@ exit 0
 
 
 
+```
+
+### WDAC: Deploy Policy from URL
+
+``` powershell
+param(
+    [Parameter(Mandatory = $true)]
+    [string]$PolicyUrl
+)
+
+$dest = "C:\WDAC"
+$cipFile = Join-Path $dest "{966d1f08-bcea-48c4-bc3a-6651c21e4090}.cip"
+
+if (-not (Test-Path $dest)) {
+    New-Item -Path $dest -ItemType Directory -Force | Out-Null
+}
+
+try {
+    Invoke-WebRequest -Uri $PolicyUrl -OutFile $cipFile -UseBasicParsing -ErrorAction Stop
+} catch {
+    Write-Output "ERRORE: download fallito da $PolicyUrl - $($_.Exception.Message)"
+    exit 1
+}
+
+$size = (Get-Item $cipFile).Length
+if ($size -lt 1000) {
+    Write-Output "ERRORE: file scaricato sospetto ($size byte), probabile pagina di errore"
+    exit 1
+}
+
+$result = & CiTool --update-policy $cipFile -json 2>&1
+if ($LASTEXITCODE -ne 0) {
+    Write-Output "ERRORE: CiTool exit code $LASTEXITCODE"
+    Write-Output $result
+    exit 1
+}
+
+Write-Output "OK: policy applicata ($size byte)"
+Write-Output $result
+exit 0
 ```
 ## APPLOCKER
 
@@ -883,6 +953,89 @@ Write-Output "Privilegi rimossi e restrizioni applicate per '$Username'."
 
 ## MONITOR
 
+
+
+### Monitor: Agent Service Status
+
+``` Powershell
+$timeout = 10
+$job = Start-Job { Get-Service -Name "tacticalrmm" -ErrorAction Stop }
+$result = Wait-Job $job -Timeout $timeout
+
+if ($null -eq $result) {
+    Remove-Job $job -Force
+    Write-Output "ALERT: servizio tacticalrmm in timeout"
+    exit 1
+}
+
+try {
+    $service = Receive-Job $job -ErrorAction Stop
+} catch {
+    Remove-Job $job -Force
+    Write-Output "ALERT: servizio tacticalrmm non trovato"
+    exit 1
+}
+Remove-Job $job
+
+if ($service.Status -ne "Running") {
+    Write-Output "ALERT: tacticalrmm è $($service.Status)"
+    exit 1
+}
+
+Write-Output "OK: tacticalrmm in esecuzione"
+exit 0
+```
+### Monitor: Defender Full Status
+``` powershell
+$problems = @()
+
+# --- Defender ---
+$mp = Get-MpComputerStatus -ErrorAction SilentlyContinue
+if ($null -eq $mp) {
+    Write-Output "ALERT: impossibile leggere lo stato Defender"
+    exit 1
+}
+
+if (-not $mp.RealTimeProtectionEnabled) { $problems += "Real-Time Protection disattivata" }
+if (-not $mp.IsTamperProtected)         { $problems += "Tamper Protection disattivata" }
+if (-not $mp.AntivirusEnabled)          { $problems += "Antivirus disattivato" }
+if (-not $mp.BehaviorMonitorEnabled)    { $problems += "Behavior Monitoring disattivato" }
+if ($mp.AntivirusSignatureAge -gt 7)    { $problems += "Firme antivirus vecchie di $($mp.AntivirusSignatureAge) giorni" }
+
+$pref = Get-MpPreference
+if ($pref.MAPSReporting -eq 0)          { $problems += "Cloud protection (MAPS) disattivata" }
+
+# ASR: attese 9 regole in Block (action = 1)
+$asrBlock = 0
+for ($i = 0; $i -lt $pref.AttackSurfaceReductionRules_Ids.Count; $i++) {
+    if ($pref.AttackSurfaceReductionRules_Actions[$i] -eq 1) { $asrBlock++ }
+}
+if ($asrBlock -lt 9) { $problems += "Regole ASR in Block: $asrBlock (attese 9)" }
+
+# CFA
+if ($pref.EnableControlledFolderAccess -ne 1) { $problems += "Controlled Folder Access disattivato" }
+
+# --- BitLocker ---
+$vol = Get-BitLockerVolume -MountPoint "C:" -ErrorAction SilentlyContinue
+if ($null -eq $vol) {
+    $problems += "Impossibile leggere lo stato BitLocker su C:"
+} else {
+    if ($vol.VolumeStatus -ne "FullyEncrypted") { $problems += "BitLocker: C: e' $($vol.VolumeStatus)" }
+    if ($vol.ProtectionStatus -ne "On")         { $problems += "BitLocker: protezione $($vol.ProtectionStatus)" }
+    $rp = $vol.KeyProtector | Where-Object { $_.KeyProtectorType -eq "RecoveryPassword" }
+    if (-not $rp) { $problems += "BitLocker: nessun protector RecoveryPassword" }
+}
+
+# --- Esito ---
+if ($problems.Count -gt 0) {
+    Write-Output "ALERT ($($problems.Count) problemi):"
+    $problems | ForEach-Object { Write-Output " - $_" }
+    exit 1
+}
+
+Write-Output "OK: Defender completo (RTP, Tamper, MAPS, firme, ASR 9/9, CFA) + BitLocker attivo"
+exit 0
+```
 
 ### Monitor: Store Apps
 ```powershell

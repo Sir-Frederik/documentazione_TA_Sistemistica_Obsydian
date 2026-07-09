@@ -371,6 +371,13 @@ _(tutti obbligatori)_
 
 ---
 
+
+
+#### [[Libreria Script TRMM#WDAC Check Policy Version|WDAC Check Policy Version]]
+Script diagnostico ==da lanciare on-demand== (non come check periodico) per verificare rapidamente quale versione della policy WDAC è attiva su un agent. La versione viene decodificata dal formato interno di CiTool (numero a 64 bit compresso) al formato ==leggibile== `a.b.c.d`. Include l'hostname nell'output per identificare subito la macchina quando lo si lancia su più agent in sequenza. `IsEnforced: True` significa "policy applicata al sistema", non necessariamente "modalità enforcement" — quel dubbio va confermato con [[Anomalie e Test#Verifica audit vs enforcement|test evento 3076/3077]].
+
+
+---
 #### [[Libreria Script TRMM#WDAC Deploy Policy|WDAC: Deploy Policy]]
 
 Il binario `.p7b` compilato su TA-TEST non serve a nulla finché non viene
@@ -395,7 +402,12 @@ macchina target via MeshCentral.
 > ⚠️ Lo script non trasferisce file — il `.p7b` deve essere ==già presente==
 > sulla macchina (via MeshCentral) prima di lanciarlo.
 
----
+
+#### [[Libreria Script TRMM#WDAC Deploy Policy from URL|WDAC: Deploy Policy from Url]]
+Deploy WDAC via download HTTPS da nginx sul server OVH (`/srv/wdac/`) — sostituisce il trasferimento manuale via Mesh. 
+Aggiornare la flotta = sostituire il `.cip` sul server + rilanciare lo script (stesso GUID, versione incrementata). Il check sulla dimensione (>1000 byte) evita di applicare per errore una pagina HTML di errore. 
+==Nessun reboot richiesto== per l'aggiornamento di policy esistente.
+
 
 #### [[Libreria Script TRMM#WDAC Remove Active Policy|WDAC: Remove Active Policy]]
 
@@ -414,6 +426,7 @@ WinRE (vedi [[📘Guida personale a TRMM#🚨 Recovery WDAC — boot failure|Rec
 > dello script cercava il file sbagliato (`.p7b`) ed era completamente
 > inerte — non rimuoveva mai nulla. La versione attuale punta al GUID
 > esplicito della policy e funziona correttamente.
+> ---
 ### 🔐 AppLocker
 
 > ℹ️ Questi script si applicano solo a TA-TEST (Windows Pro). Su Home AppLocker è inerte anche se il servizio gira. Con WDAC attivo è comunque superfluo ovunque.
@@ -468,6 +481,17 @@ Rimuove un utente dagli Administrators e applica restrizioni aggiuntive: ==blocc
 
 Questi script girano via **Automation Policy** su tutta la flotta. Escono con `0` se tutto è OK, con `1` se c'è qualcosa che non va — TRMM genera un alert.
 
+
+#### [[Libreria Script TRMM#Monitor Agent Service Status|Monitor: Agent Service Status]]
+
+ Controlla lo stato del servizio agente con timeout esplicito via `Start-Job`/`Wait-Job` — evita il freeze osservato con `Get-Service` diretto su servizio hung (==anomalia A02==).
+  Ora gestisce anche il caso servizio inesistente (agente fantasma).
+   Attenzione: sui check di agenti overdue TRMM può mostrare risultati ==cached== fuorvianti.
+#### [[Libreria Script TRMM#Monitor Defender Full Status|Monitor: Defender Full Status]]
+
+Check settimanale ==cumulativo==: non si ferma al primo problema ma li elenca tutti nell'output dell'alert, così un solo giro dice cosa sistemare. Copre Defender (inclusa ==Tamper Protection== via `IsTamperProtected`, che protegge le altre impostazioni da manomissioni) e ingloba i controlli di [[Libreria Script TRMM#Monitor BitLocker Status|Monitor: BitLocker Status]] — se lo assegni, valuta di non duplicare quest'ultimo sulla stessa macchina. Soglia firme: 7 giorni, coerente con l'intervallo del check.
+
+Da assegnare come Script Check con intervallo 7 giorni (o in Automation Policy sul gruppo di test).
 #### [[Libreria Script TRMM#Monitor Store Apps|Monitor: Store Apps]]
 
 Confronta le app Microsoft Store installate con la lista autorizzata. Segnala qualsiasi app non in lista.

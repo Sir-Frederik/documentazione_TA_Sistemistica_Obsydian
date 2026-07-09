@@ -46,7 +46,7 @@ TRMM è un insieme di componenti che girano su un'unica VM server:
 | **NATS**        | Canale di comunicazione in tempo reale server ↔ agenti |
 | **MeshCentral** | Accesso remoto: desktop, shell, file browser           |
 | **Nginx**       | Reverse proxy e terminazione TLS                       |
-*Esempi schermata di Mesch Central:*
+*Esempi schermata di Mesh Central:*
 ![[Pasted image 20260630123705.png]]
 ![[Pasted image 20260630123818.png]]
 
@@ -58,6 +58,40 @@ Questo significa che un comando inviato a una macchina spenta non va perso — v
 Su ogni endpoint è installato l'**agente TRMM**, un piccolo servizio che mantiene la connessione con il server, esegue gli script richiesti e invia i dati di monitoraggio. Si installa tramite un comando PowerShell generato dalla dashboard, che associa la macchina a un client e a un sito.
 ![[Pasted image 20260630124050.png]]
 
+### Installazione di un nuovo agente
+
+L'agente si installa eseguendo sulla macchina target un comando PowerShell
+generato dalla dashboard, che incorpora già l'associazione a client, sito e
+tipo di macchina.
+
+**Procedura:**
+
+1. Dalla dashboard: **Agents → Install Agent**
+2. Selezionare i parametri di registrazione:
+   - **Client**: Technology Advising
+   - **Site**: Sede Principale
+   - **Type**: Workstation (o Server, secondo il caso)
+   - **Architecture**: 64-bit
+3. Copiare il comando PowerShell (one-liner) generato
+4. Eseguirlo sulla macchina target con **privilegi di amministratore**
+5. Attendere che l'agente compaia nella dashboard — la registrazione
+   richiede in genere meno di un minuto
+
+**Verifica:** una volta registrato, l'agente risulta online nella dashboard
+e inizia a inviare i dati di monitoraggio. Da quel momento è possibile
+eseguire script e accedere da remoto.
+
+> 💡 **Macchine cavia.** Per testare procedure e script prima del rollout è
+> buona pratica mantenere alcuni agenti dedicati al test, idealmente uno per
+> edizione (Home e Pro), così da verificare il comportamento su entrambe.
+> Tutto ciò che tocca WDAC va validato su una cavia prima di toccare le
+> macchine in produzione.
+
+> ⚠️ **Disinstallazione.** Rimuovere un agente solo dalla dashboard lascia il
+> servizio attivo sulla macchina, che continuerà a tentare la connessione.
+> Per una rimozione pulita disinstallare l'agente anche localmente
+> (Pannello di controllo o comando di uninstall) oltre a eliminarlo dalla
+> dashboard.
 ### Nostra installazione di Test
 
 |Componente|Valore|
