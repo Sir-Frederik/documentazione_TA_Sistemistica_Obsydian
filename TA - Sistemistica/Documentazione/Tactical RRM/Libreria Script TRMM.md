@@ -28,55 +28,69 @@ Per le spiegazioni, vai [[📘Guida  personale a TRMM#📜 Script Library|qui]]
 
 ### BitLocker: Check Status
 ```powershell
-# SCRIPT  : BitLocker: Check Status
-# DESC    : Verifica lo stato di BitLocker sul volume C: e indica
-#           l'azione correttiva se il disco non è protetto.
-# PARAMS  : Nessuno
-# ──────────────────────────────────────────────────────────────────────
-
 $vol = Get-BitLockerVolume -MountPoint "C:" -ErrorAction Stop
 
 $status      = $vol.ProtectionStatus
 $volumeState = $vol.VolumeStatus
 $method      = $vol.EncryptionMethod
 $pct         = $vol.EncryptionPercentage
+$protectors  = $vol.KeyProtector.KeyProtectorType
 
 Write-Output "=== BitLocker Status: C: ==="
 Write-Output "Protezione    : $status"
 Write-Output "Stato volume  : $volumeState"
 Write-Output "Metodo        : $method"
 Write-Output "Completamento : $pct%"
+Write-Output "KeyProtector  : $($protectors -join ', ')"
+
+# --- Stato TPM ---
+$tpm = Get-Tpm -ErrorAction SilentlyContinue
+if ($null -eq $tpm) {
+    Write-Output "TPM           : non rilevato"
+} else {
+    Write-Output "TPM presente  : $($tpm.TpmPresent)"
+    Write-Output "TPM pronto    : $($tpm.TpmReady)"
+}
 Write-Output ""
 
-# ─────────────────────────────────────────
-# Valutazione stato e suggerimento azione
-# ─────────────────────────────────────────
+# --- Valutazione ---
+$hasTpmProtector = $protectors -contains "Tpm"
+$hasRecovery     = $protectors -contains "RecoveryPassword"
+
 if ($status -eq "On" -and $volumeState -eq "FullyEncrypted") {
-    Write-Output "OK: BitLocker attivo e completo."
+    if (-not $hasTpmProtector) {
+        Write-Output "OK con riserva: protezione attiva ma manca il TPM protector (sblocco non automatico all'avvio). Valutare 'BitLocker: Repair TPM Protector'."
+    } else {
+        Write-Output "OK: BitLocker attivo e completo."
+    }
 } elseif ($status -eq "Off" -and $volumeState -eq "FullyEncrypted") {
-    Write-Output "ATTENZIONE: disco cifrato ma protezione sospesa. Eseguire 'BitLocker: Enable'."
+    if (-not $hasTpmProtector -and $hasRecovery) {
+        Write-Output "ATTENZIONE: disco cifrato, protezione sospesa, manca TPM protector. Eseguire 'BitLocker: Repair TPM Protector'."
+    } else {
+        Write-Output "ATTENZIONE: disco cifrato ma protezione sospesa. Eseguire 'BitLocker: Repair TPM Protector' o riprendere manualmente."
+    }
 } elseif ($volumeState -eq "FullyDecrypted") {
-    Write-Output "ATTENZIONE: BitLocker non attivo. Eseguire 'BitLocker: Enable'."
+    Write-Output "ATTENZIONE: BitLocker non attivo. Su Windows Home la cifratura va avviata manualmente da Impostazioni > Crittografia dispositivo."
 } else {
     Write-Output "ATTENZIONE: stato intermedio ($volumeState). Verificare manualmente."
 }
 
 exit 0
-
-
-# ──────────────────────────────────────────────────────────────────────
 ```
 
 ### BitLocker: Enable
 ```powershell
-# SCRIPT  : BitLocker: Enable
-# DESC    : Attiva BitLocker su C: con TPM + Recovery Password.
-#           Gestisce i quattro stati possibili: già attivo, sospeso,
-#           cifratura in corso, non attivo. Garantisce un solo
-#           protector RecoveryPassword (rimuove eventuali duplicati)
-#           e salva/aggiorna la Recovery Key nel Custom Field TRMM.
-# PARAMS  : ApiKey (obbligatorio) — chiave API TRMM
 # ──────────────────────────────────────────────────────────────────────
+# BitLocker: Enable
+# Abilita BitLocker (TPM + RecoveryPassword) e sincronizza la chiave
+# di ripristino nel Custom Field TRMM (bitlocker_recovery_key, id 1).
+#
+# PARAMS : ApiKey (obbligatorio) - API key TRMM
+# EXIT   : 0 = OK | 1 = Enable fallito | 2 = agent non trovato
+#          3 = recovery password non disponibile
+#          4 = protector fallito | 5 = upload API fallito (chiave in output)
+# ──────────────────────────────────────────────────────────────────────
+
 param(
     [Parameter(Mandatory=$true)]
     [string]$ApiKey
@@ -91,67 +105,156 @@ $state  = $vol.VolumeStatus
 
 Write-Output "Stato attuale: $status / $state"
 
+# ─────────────────────────────────────────
+# Helper: garantisce la presenza del TPM protector su volume cifrato.
+# Ritorna $true se il protector c'e' (gia' presente o aggiunto ora),
+# $false se il TPM fisico non e' utilizzabile.
+# ─────────────────────────────────────────
+function Ensure-TpmProtector {
+    $v = Get-BitLockerVolume -MountPoint "C:" -ErrorAction Stop
+    if ($v.KeyProtector.KeyProtectorType -contains "Tpm") {
+        return $true
+    }
+
+    $tpm = Get-Tpm -ErrorAction SilentlyContinue
+    if ($null -eq $tpm -or -not $tpm.TpmPresent -or -not $tpm.TpmReady) {
+        Write-Output "ATTENZIONE: TPM non presente o non pronto (Present=$($tpm.TpmPresent) Ready=$($tpm.TpmReady)). Impossibile aggiungere il TPM protector: richiede attivazione nel BIOS/UEFI."
+        return $false
+    }
+
+    try {
+        Add-BitLockerKeyProtector -MountPoint "C:" -TpmProtector -ErrorAction Stop | Out-Null
+        Write-Output "TPM protector aggiunto."
+        return $true
+    } catch {
+        Write-Output "ATTENZIONE: aggiunta TPM protector fallita: $($_.Exception.Message)"
+        return $false
+    }
+}
+
+# ─────────────────────────────────────────
+# 1. Abilitazione (idempotente per stato)
+# ─────────────────────────────────────────
 if ($status -eq "On" -and $state -eq "FullyEncrypted") {
-    Write-Output "BitLocker già attivo. Verifica protector e sincronizzazione chiave..."
+    Write-Output "BitLocker gia' attivo. Verifica protector e sincronizzazione chiave..."
 }
 elseif ($state -eq "EncryptionInProgress") {
-    Write-Output "Cifratura già in corso. Nessuna nuova azione di abilitazione necessaria."
+    Write-Output "Cifratura gia' in corso. Nessuna nuova azione di abilitazione necessaria."
 }
 elseif ($status -eq "Off" -and $state -eq "FullyEncrypted") {
-    Write-Output "Disco cifrato ma protezione sospesa. Riattivazione..."
-    Resume-BitLocker -MountPoint "C:"
+    Write-Output "Disco cifrato ma protezione sospesa. Verifica TPM protector prima del resume..."
+
+    # FIX: prima del Resume, garantisce il TPM protector.
+    # Senza un protector valido, Resume-BitLocker fallisce con 0x8031001D.
+    $tpmOk = Ensure-TpmProtector
+    if (-not $tpmOk) {
+        Write-Output "ERRORE: impossibile garantire un TPM protector valido per la riattivazione."
+        exit 4
+    }
+
+    try {
+        Resume-BitLocker -MountPoint "C:" -ErrorAction Stop | Out-Null
+    } catch {
+        Write-Output "ERRORE: riattivazione fallita: $($_.Exception.Message)"
+        exit 1
+    }
     Write-Output "Protezione riattivata."
 }
 else {
     Write-Output "Abilitazione BitLocker con TPM + Recovery Password..."
-    Enable-BitLocker -MountPoint "C:" -TpmProtector
-    Add-BitLockerKeyProtector -MountPoint "C:" -RecoveryPasswordProtector
-    Write-Output "BitLocker abilitato. Cifratura disco in corso."
+    try {
+        # SkipHardwareTest: avvia la cifratura subito, senza test pre-reboot
+        Enable-BitLocker -MountPoint "C:" -TpmProtector -SkipHardwareTest -ErrorAction Stop | Out-Null
+    } catch {
+        Write-Output "ERRORE: Enable-BitLocker fallito: $($_.Exception.Message)"
+        exit 1
+    }
+
+    # Verifica dello stato REALE prima di dichiarare successo
+    $volCheck = Get-BitLockerVolume -MountPoint "C:" -ErrorAction Stop
+    if ($volCheck.VolumeStatus -in @("EncryptionInProgress","FullyEncrypted")) {
+        Write-Output "OK: cifratura avviata (stato: $($volCheck.VolumeStatus))."
+    } else {
+        Write-Output "ERRORE: Enable-BitLocker eseguito ma stato volume inatteso: $($volCheck.VolumeStatus)."
+        exit 1
+    }
 }
 
-# Garantisce un solo RecoveryPassword protector
+# ─────────────────────────────────────────
+# 1b. Garanzia TPM protector anche per volumi gia' attivi/cifrati
+#     (copre il caso "gia' attivo" senza Tpm e post-Enable su Home)
+# ─────────────────────────────────────────
+$volTpm = Get-BitLockerVolume -MountPoint "C:" -ErrorAction Stop
+if ($volTpm.VolumeStatus -in @("FullyEncrypted","EncryptionInProgress") -and
+    $volTpm.KeyProtector.KeyProtectorType -notcontains "Tpm") {
+    Write-Output "TPM protector mancante su volume cifrato. Tentativo di aggiunta..."
+    $null = Ensure-TpmProtector
+}
+
+# ─────────────────────────────────────────
+# 2. Garantisce un solo RecoveryPassword protector
+# ─────────────────────────────────────────
 $vol2       = Get-BitLockerVolume -MountPoint "C:" -ErrorAction Stop
-$recoveries = $vol2.KeyProtector | Where-Object { $_.KeyProtectorType -eq "RecoveryPassword" }
+$recoveries = @($vol2.KeyProtector | Where-Object { $_.KeyProtectorType -eq "RecoveryPassword" })
 
 if ($recoveries.Count -eq 0) {
     Write-Output "Nessun RecoveryPassword protector trovato. Creazione..."
-    Add-BitLockerKeyProtector -MountPoint "C:" -RecoveryPasswordProtector | Out-Null
+    try {
+        Add-BitLockerKeyProtector -MountPoint "C:" -RecoveryPasswordProtector -ErrorAction Stop | Out-Null
+    } catch {
+        Write-Output "ERRORE: creazione RecoveryPassword protector fallita: $($_.Exception.Message)"
+        exit 4
+    }
     $vol2       = Get-BitLockerVolume -MountPoint "C:" -ErrorAction Stop
-    $recoveries = $vol2.KeyProtector | Where-Object { $_.KeyProtectorType -eq "RecoveryPassword" }
+    $recoveries = @($vol2.KeyProtector | Where-Object { $_.KeyProtectorType -eq "RecoveryPassword" })
 }
 elseif ($recoveries.Count -gt 1) {
     Write-Output "Trovati $($recoveries.Count) protector RecoveryPassword. Rimozione duplicati..."
     $toKeep   = $recoveries | Select-Object -Last 1
     $toRemove = $recoveries | Where-Object { $_.KeyProtectorId -ne $toKeep.KeyProtectorId }
     foreach ($p in $toRemove) {
-        Remove-BitLockerKeyProtector -MountPoint "C:" -KeyProtectorId $p.KeyProtectorId
-        Write-Output "Rimosso protector obsoleto: $($p.KeyProtectorId)"
+        try {
+            Remove-BitLockerKeyProtector -MountPoint "C:" -KeyProtectorId $p.KeyProtectorId -ErrorAction Stop | Out-Null
+            Write-Output "Rimosso protector obsoleto: $($p.KeyProtectorId)"
+        } catch {
+            Write-Output "ATTENZIONE: rimozione duplicato fallita: $($_.Exception.Message)"
+        }
     }
-    $recoveries = $toKeep
+    $recoveries = @($toKeep)
 }
 
 $key = [string]($recoveries | Select-Object -First 1 -ExpandProperty RecoveryPassword)
 
 if (-not $key) {
-    Write-Output "ATTENZIONE: Recovery Password non ancora disponibile."
+    Write-Output "ERRORE: Recovery Password non disponibile."
     exit 3
 }
 
-$hostname = $env:COMPUTERNAME
-$agents   = Invoke-RestMethod -Uri "$rmmApi/agents/" -Headers $headers -Method Get
-$agent    = $agents | Where-Object -Property hostname -EQ -Value $hostname
-$agentId  = $agent.agent_id
+# ─────────────────────────────────────────
+# 3. Sincronizzazione chiave nel Custom Field TRMM
+# ─────────────────────────────────────────
+try {
+    $hostname = $env:COMPUTERNAME
+    $agents   = Invoke-RestMethod -Uri "$rmmApi/agents/" -Headers $headers -Method Get -ErrorAction Stop
+    $agent    = $agents | Where-Object -Property hostname -EQ -Value $hostname
+    $agentId  = $agent.agent_id
 
-if (-not $agentId) {
-    Write-Output "ERRORE: agent non trovato per $hostname."
-    exit 2
+    if (-not $agentId) {
+        Write-Output "ERRORE: agent non trovato per $hostname."
+        Write-Output "RECOVERY KEY (salvare manualmente): $key"
+        exit 2
+    }
+
+    $body = @{ custom_fields = @(@{ field = 1; string_value = $key }) } | ConvertTo-Json -Depth 5
+    Invoke-RestMethod -Uri "$rmmApi/agents/$agentId/" -Headers $headers -Method Put -Body $body -ErrorAction Stop | Out-Null
+    Write-Output "OK: chiave di ripristino salvata/aggiornata nel Custom Field TRMM."
+    exit 0
 }
-
-$body = @{ custom_fields = @(@{ field = 1; string_value = $key }) } | ConvertTo-Json -Depth 5
-Invoke-RestMethod -Uri "$rmmApi/agents/$agentId/" -Headers $headers -Method Put -Body $body
-Write-Output "Chiave di ripristino salvata/aggiornata nel Custom Field TRMM."
-exit 0
-
+catch {
+    Write-Output "ERRORE: upload chiave a TRMM fallito: $($_.Exception.Message)"
+    Write-Output "RECOVERY KEY (salvare manualmente): $key"
+    exit 5
+}
 
 ```
 
@@ -483,38 +586,63 @@ exit 0
 # ──────────────────────────────────────────────────────────────────────
 ```
 
-### WDAC: Export Audit Log
+### WDAC: Export Audit Log Details
 ```powershell
-# SCRIPT  : WDAC: Export Audit Log
-# DESC    : Esporta gli eventi WDAC in audit mode (Event ID 3076)
-#           in un file di testo leggibile. Eseguire sul PC Home
-#           prima di raccogliere file per aggiornare la policy.
-# PARAMS  : Nessuno
-# ──────────────────────────────────────────────────────────────────────
+param(
+    [int]$HoursBack = 24
+)
 
-$outputPath = "C:\WDAC\audit_newapps.txt"
+$startTime = (Get-Date).AddHours(-$HoursBack)
 
-# ─────────────────────────────────────────
-# 1. Leggi log CodeIntegrity (Event ID 3076 = audit block)
-# ─────────────────────────────────────────
-$events = Get-WinEvent -LogName "Microsoft-Windows-CodeIntegrity/Operational" -ErrorAction Stop |
-    Where-Object { $_.Id -eq 3076 }
+$events = Get-WinEvent -LogName "Microsoft-Windows-CodeIntegrity/Operational" -ErrorAction SilentlyContinue |
+    Where-Object { $_.Id -eq 3076 -and $_.TimeCreated -ge $startTime }
 
 if (-not $events) {
-    Write-Output "Nessun evento 3076 trovato. Nessun file nuovo bloccato in audit mode."
+    Write-Output "Nessun evento 3076 nelle ultime $HoursBack ore su $env:COMPUTERNAME."
     exit 0
 }
 
-# ─────────────────────────────────────────
-# 2. Salva in file di testo
-# ─────────────────────────────────────────
-$events | Select-Object TimeCreated, Message | Format-List | Out-File $outputPath -Encoding UTF8
-Write-Output "Log salvato: $outputPath ($($events.Count) eventi trovati)"
+$parsed = foreach ($e in $events) {
+    [xml]$xml = $e.ToXml()
+    $data = @{}
+    foreach ($node in $xml.Event.EventData.Data) {
+        $data[$node.Name] = $node.'#text'
+    }
+    [PSCustomObject]@{
+        TimeCreated  = $e.TimeCreated
+        FileName     = $data['File Name']
+        ProcessName  = $data['Process Name']
+        SHA256       = $data['SHA256 Hash']
+        Publisher    = $data['Publisher Name']
+    }
+}
+
+$grouped = $parsed | Group-Object FileName | Sort-Object Count -Descending
+
+$lines = @()
+$lines += "=== Riepilogo audit WDAC su $env:COMPUTERNAME - ultime $HoursBack ore ==="
+$lines += "Totale eventi grezzi: $($parsed.Count)  |  File unici: $($grouped.Count)"
+$lines += ""
+
+foreach ($g in $grouped) {
+    $first = $g.Group[0]
+    $publisher = if ($first.Publisher) { $first.Publisher } else { "N/D (unsigned)" }
+    $lines += "File       : $($g.Name)"
+    $lines += "Occorrenze : $($g.Count)"
+    $lines += "Processo   : $($first.ProcessName)"
+    $lines += "SHA256     : $($first.SHA256)"
+    $lines += "Publisher  : $publisher"
+    $lines += "---"
+}
+
+$lines | Write-Output
+
+$txtPath = "C:\WDAC\audit_analysis_$($env:COMPUTERNAME)_$(Get-Date -Format 'yyyyMMdd_HHmmss').txt"
+$lines | Out-File -FilePath $txtPath -Encoding UTF8
+Write-Output ""
+Write-Output "TXT salvato: $txtPath"
 
 exit 0
-
-
-# ──────────────────────────────────────────────────────────────────────
 ```
 
 ### WDAC: Remove Active Policy
@@ -652,12 +780,23 @@ exit 0
 
 ``` powershell
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$PolicyUrl
+    [string]$PolicyUrl = "https://ta-tactical-rmm.duckdns.org/wdac/%7B966d1f08-bcea-48c4-bc3a-6651c21e4090%7D.cip"
 )
 
+# --- Come costruire un PolicyUrl diverso (solo se cambia il GUID della policy) ---
+# 1. Prendi il GUID della policy, es: {AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE}
+# 2. Sostituisci { con %7B e } con %7D (sono caratteri speciali nell'URL)
+# 3. URL finale: https://ta-tactical-rmm.duckdns.org/wdac/%7BAAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE%7D.cip
+# 4. Il file .cip con quel nome deve gia' esistere in /srv/wdac/ sul server OVH
+
+if ([string]::IsNullOrWhiteSpace($PolicyUrl)) {
+    Write-Output "ERRORE: PolicyUrl vuoto. Vedi commento nello script per come costruirlo."
+    exit 1
+}
+
 $dest = "C:\WDAC"
-$cipFile = Join-Path $dest "{966d1f08-bcea-48c4-bc3a-6651c21e4090}.cip"
+$fileName = ($PolicyUrl -split "/")[-1] -replace "%7B", "{" -replace "%7D", "}"
+$cipFile = Join-Path $dest $fileName
 
 if (-not (Test-Path $dest)) {
     New-Item -Path $dest -ItemType Directory -Force | Out-Null
@@ -683,7 +822,7 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-Write-Output "OK: policy applicata ($size byte)"
+Write-Output "OK: policy applicata da $fileName ($size byte)"
 Write-Output $result
 exit 0
 ```
@@ -1128,17 +1267,6 @@ exit 1
 
 ``` Powershell
 
- 
-# SCRIPT  : Monitor: WDAC Policy Status
-# DESC    : Verifica che la policy WDAC corretta sia deployata:
-#           controlla la presenza del file .cip nella cartella Active
-#           e confronta la versione deployata con quella attesa.
-#           Esce con codice 1 se non conforme — TRMM segnala alert.
-#           Da eseguire via Automation Policy dopo ogni rollout.
-# PARAMS  : ExpectedVersion (obbligatorio) — versione attesa
-#                            es. 10.0.0.14
-# ──────────────────────────────────────────────────────────────────────
-
 param(
     [Parameter(Mandatory=$true)]
     [string]$ExpectedVersion
@@ -1149,21 +1277,15 @@ $activePath = "C:\Windows\System32\CodeIntegrity\CiPolicies\Active"
 $cipFile    = Join-Path $activePath "$policyGuid.cip"
 $stateFile  = "C:\ProgramData\TacticalRMM\wdac_state.json"
 
-# ─────────────────────────────────────────
-# 1. Verifica presenza file .cip
-# ─────────────────────────────────────────
 if (-not (Test-Path $cipFile)) {
     Write-Output "NON CONFORME: policy WDAC non presente (file .cip mancante)."
     exit 1
 }
 Write-Output "File .cip presente: $cipFile"
 
-# ─────────────────────────────────────────
-# 2. Verifica versione dallo stato locale
-# ─────────────────────────────────────────
 if (-not (Test-Path $stateFile)) {
     Write-Output "ATTENZIONE: file di stato non trovato ($stateFile)."
-    Write-Output "Il deploy potrebbe essere stato eseguito senza 'WDAC: Deploy Policy'."
+    Write-Output "Il deploy potrebbe essere stato eseguito senza [WDAC: Deploy Policy]."
     Write-Output "File .cip presente ma versione non verificabile."
     exit 1
 }
@@ -1172,12 +1294,88 @@ $state = Get-Content $stateFile | ConvertFrom-Json
 $deployedVersion = $state.Version
 
 if ($deployedVersion -eq $ExpectedVersion) {
-    Write-Output "OK: policy $policyGuid versione $deployedVersion — deployata il $($state.DeployedAt)."
+    Write-Output "OK: policy $policyGuid versione $deployedVersion - deployata il $($state.DeployedAt)."
     exit 0
 } else {
     Write-Output "NON CONFORME: versione attesa $ExpectedVersion, trovata $deployedVersion."
-    Write-Output "Eseguire 'WDAC: Deploy Policy' con il .p7b aggiornato."
+    Write-Output "Eseguire [WDAC: Deploy Policy] con il .p7b aggiornato."
     exit 1
 }
 
+```
+
+## TOOLS
+
+### Tools: Remove OEM Staging
+
+Rimuove residui di staging OEM (installer di fabbrica lasciati in `ProgramData`).
+Nato dal caso Acer su ILARIA: cartella `OEM\UpgradeTool` da 109 MB con `ListCheck.exe` richiamato dal task ==Software Update Application==, residuo dell'immagine di fabbrica — il software vero (Care Center) era già installato in `Program Files`. 
+Il task viene ==disabilitato, non eliminato==, così è reversibile; 
+valutare `Unregister-ScheduledTask` solo dopo giorni di verifica. 
+==Default dry-run==: serve `-Confirm` per agire. Specifico per hardware Acer, da adattare per altri OEM.
+``` powershell
+param(
+    [Parameter(Mandatory = $true)]
+    [string]$FolderPath,
+
+    [string]$TaskName,
+
+    [string]$TaskPath = "\",
+
+    [switch]$Confirm
+)
+
+$mode = if ($Confirm) { "ESECUZIONE" } else { "DRY-RUN (nessuna modifica)" }
+Write-Output "=== Remove OEM Staging - $mode ==="
+Write-Output ""
+
+# --- Task ---
+if ($TaskName) {
+    $task = Get-ScheduledTask -TaskName $TaskName -TaskPath $TaskPath -ErrorAction SilentlyContinue
+    if ($null -eq $task) {
+        Write-Output "Task '$TaskName' : non trovato (gia' rimosso o nome diverso)"
+    } elseif ($task.State -eq "Disabled") {
+        Write-Output "Task '$TaskName' : gia' disabilitato"
+    } else {
+        if ($Confirm) {
+            try {
+                Disable-ScheduledTask -TaskName $TaskName -TaskPath $TaskPath -ErrorAction Stop | Out-Null
+                Write-Output "Task '$TaskName' : DISABILITATO"
+            } catch {
+                Write-Output "ERRORE disabilitazione task: $($_.Exception.Message)"
+                exit 1
+            }
+        } else {
+            Write-Output "Task '$TaskName' : verrebbe disabilitato (stato attuale: $($task.State))"
+        }
+    }
+}
+
+# --- Cartella ---
+if (-not (Test-Path $FolderPath)) {
+    Write-Output "Cartella '$FolderPath' : non presente, nulla da rimuovere"
+    exit 0
+}
+
+$size = (Get-ChildItem $FolderPath -Recurse -File -ErrorAction SilentlyContinue |
+         Measure-Object -Property Length -Sum).Sum
+$sizeMB = [math]::Round($size / 1MB, 2)
+
+if ($Confirm) {
+    try {
+        Remove-Item $FolderPath -Recurse -Force -ErrorAction Stop
+        Write-Output "Cartella '$FolderPath' : RIMOSSA ($sizeMB MB liberati)"
+    } catch {
+        Write-Output "ERRORE rimozione cartella: $($_.Exception.Message)"
+        exit 1
+    }
+} else {
+    Write-Output "Cartella '$FolderPath' : verrebbe rimossa ($sizeMB MB)"
+}
+
+Write-Output ""
+if (-not $Confirm) {
+    Write-Output "Nessuna modifica effettuata. Rilanciare con -Confirm per eseguire."
+}
+exit 0
 ```

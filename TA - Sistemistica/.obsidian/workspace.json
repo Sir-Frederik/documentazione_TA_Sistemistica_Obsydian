@@ -8,7 +8,7 @@
         "type": "tabs",
         "children": [
           {
-            "id": "da89f8748426a79d",
+            "id": "073201702cab4f4f",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -32,12 +32,12 @@
             }
           },
           {
-            "id": "505da7d53e56876f",
+            "id": "040e4ff6ab8fe847",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Documentazione/Tactical RRM/📘Guida  personale a TRMM.md",
+                "file": "Riunioni/Riunione 20-07-26.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -52,11 +52,35 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "📘Guida  personale a TRMM"
+              "title": "Riunione 20-07-26"
+            }
+          },
+          {
+            "id": "f420627a75d8c1fd",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Documentazione/Tactical RRM/WDAC — Procedura Deploy Policy.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "WDAC — Procedura Deploy Policy"
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -88,7 +112,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "libreria",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -190,13 +214,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Documentazione/Tactical RRM/📘Guida  personale a TRMM.md",
-                "followCursor": false,
+                "file": "Documentazione/Tactical RRM/WDAC — Procedura Deploy Policy.md",
+                "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Struttura di 📘Guida  personale a TRMM"
+              "title": "Struttura di WDAC — Procedura Deploy Policy"
             }
           }
         ],
@@ -204,7 +228,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 295.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -219,25 +243,27 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "505da7d53e56876f",
+  "active": "f420627a75d8c1fd",
   "lastOpenFiles": [
-    "Documentazione/Tactical RRM/Libreria Script TRMM.md",
+    "Riunioni/Riunione 20-07-26.md",
+    "Documentazione/Tactical RRM/WDAC — Procedura Deploy Policy.md",
     "Documentazione/Tactical RRM/📘Guida  personale a TRMM.md",
+    "Documentazione/Tactical RRM/Gestione Sicurezza Endpoint Windows 11 via Tactical RMM.md",
+    "Documentazione/Tactical RRM/Libreria Script TRMM.md",
+    "Documentazione/Tactical RRM/CiTool.md",
+    "Documentazione/Tactical RRM/🧠Tactical RMM.md",
+    "Riunioni/13-04-26 Impostazione obiettivi documentazioni e manutenzione server..md",
+    "Documentazione/Tactical RRM/ISG — Intelligent Security Graph.md",
     "Documentazione/🌐 Nginx.md",
     "agrodata.md",
-    "Senza nome.md",
     "Ngix.md",
-    "Documentazione/Tactical RRM/Gestione Sicurezza Endpoint Windows 11 via Tactical RMM.md",
-    "Documentazione/Tactical RRM/🧠Tactical RMM.md",
     "Pasted image 20260630124050.png",
     "Pasted image 20260630123818.png",
     "Pasted image 20260630123705.png",
     "Pasted image 20260630122709.png",
     "Pasted image 20260630122700.png",
     "Pasted image 20260630122625.png",
-    "Documentazione/ISG — Intelligent Security Graph.md",
     "Documentazione/🔒BitLocker.md",
-    "Documentazione/CiTool.md",
     "Procedure/📘Guida  personale a TRMM.md",
     "Documentazione/Libreria.md",
     "Documentazione/Tactical RRM",
@@ -253,8 +279,6 @@
     "SonarQube.md",
     "Tactical RMM.md",
     "Documentazione/FreeIPA.md",
-    "SAMBA.md",
-    "OSINT.md",
     "26-05-26 Evoluzione infrastrutturale, sicurezza e migrazione CD.pdf",
     "Excalidraw",
     "Procedure/OWASP",

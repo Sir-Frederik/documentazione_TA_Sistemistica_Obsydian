@@ -1,4 +1,4 @@
-
+                       
 Appunti operativi personali sul progetto sicurezza endpoint di Technology Advising. Tutto quello che ho fatto, perché l'ho fatto, e come ripeterlo senza dover ricordare tutto a memoria.
 
 ---
@@ -73,6 +73,7 @@ La policy è stata costruita iterativamente: prima in **audit mode** per raccogl
 > 💡 **Trade-off ISG**: la regola `Enabled:Intelligent Security Graph Authorization` è necessaria per evitare boot failure da driver non coperti. Come effetto collaterale, software firmati molto diffusi (Firefox, Sumatra PDF…) passano anche senza essere in whitelist. 
 > Questa regola è **dentro l'XML della policy WDAC**
 
+> 💡**Trade-off FilePath rule** : una regola FilePath autorizza qualsiasi eseguibile in base alla sua _posizione_, non al suo contenuto — a differenza di una hash o publisher rule. La sicurezza è delegata ai permessi NTFS della cartella: `C:\Windows\Microsoft.NET\`, ad esempio, è scrivibile solo da TrustedInstaller/SYSTEM, quindi un utente standard (o malware nel suo contesto) non può piazzarci un file arbitrario. Accettabile per cartelle di sistema protette, ma resta più permissiva di una hash rule — stesso principio del trade-off ISG sopra.
 ### ASR — Attack Surface Reduction Rules
 
 9 regole di Windows Defender che bloccano vettori di attacco specifici: macro Office, credential stealing (LSASS), script offuscati, eseguibili da USB, processi figlio di Adobe Reader… Attive in modalità `Enable` sulla flotta. 
@@ -231,7 +232,7 @@ Tutti gli script sono salvati e categorizzati in TRMM. Qui sotto trovi per ognun
 
 #### [[Libreria Script TRMM#BitLocker Check Status|BitLocker: Check Status]]
 
-Legge lo stato di BitLocker su `C:` e suggerisce l'azione correttiva. Non salva nulla su TRMM — è solo lettura locale.
+Diagnostica di sola lettura dello stato BitLocker su C:, inclusa presenza e stato dei KeyProtector e del TPM. Non modifica nulla. Suggerisce l'azione correttiva appropriata
 
 **Quando**: primo controllo su una macchina nuova, o verifica rapida prima di un intervento.
 
@@ -239,18 +240,21 @@ Legge lo stato di BitLocker su `C:` e suggerisce l'azione correttiva. Non salva 
 
 #### [[Libreria Script TRMM#BitLocker Enable|BitLocker: Enable]]
 
-Attiva BitLocker con TPM + Recovery Password e ==salva/aggiorna automaticamente la chiave nel Custom Field TRMM==. 
-Gestisce ==**quattro scenari**==: ==già **attivo**== (sincronizza comunque la chiave), ==cifratura in corso== (nessuna nuova azione di abilitazione), ==protezione sospesa== (resume), ==non attivo== (**attivazione completa**).
+Gestisce quattro scenari: già attivo (sincronizza comunque la chiave e verifica il TPM protector), cifratura in corso (nessuna nuova azione di abilitazione), protezione sospesa (garantisce il TPM protector _prima_ del resume, poi riprende), non attivo (attivazione completa con verifica dello stato reale prima di dichiarare successo).
 
-Garantisce inoltre un solo protector RecoveryPassword attivo, rimuovendo automaticamente eventuali duplicati residui da tentativi precedenti.  
+Una funzione dedicata (`Ensure-TpmProtector`) verifica il TPM fisico (`Get-Tpm`: presente e pronto) e aggiunge il protector mancante prima di qualunque `Resume`. Una sezione di sicurezza aggiuntiva (1b) applica lo stesso controllo anche sui volumi già `FullyEncrypted`/`EncryptionInProgress`, per coprire i casi in cui il TPM protector manca senza che la protezione risulti sospesa.
 
-**Quando**: primo setup su un endpoint nuovo, per riattivare dopo una sospensione, o per risincronizzare la chiave su TRMM se sospetti che sia disallineata. 
-**Parametri**: `ApiKey` (obbligatorio)
-ex: 
-```
--ApiKey YNV################
-```
+Se il TPM fisico non è presente o non è pronto (chip disabilitato da BIOS/UEFI), lo script segnala l'anomalia e esce con errore — quel caso richiede intervento manuale in BIOS, non è scriptabile.
 
+Garantisce inoltre un solo protector RecoveryPassword attivo, rimuovendo automaticamente eventuali duplicati residui da tentativi precedenti.
+
+**Robustezza**: ogni operazione critica è protetta da try/catch con exit code dedicato (0=OK, 1=enable/resume fallito, 2=agent non trovato, 3=key non disponibile, 4=protector TPM/RecoveryPassword fallito, 5=upload API fallito). Se il salvataggio su TRMM fallisce, la chiave viene comunque stampata nell'output dello script per recupero manuale — mai cifratura avviata con chiave persa.
+
+**Quando**: primo setup su un endpoint nuovo, per riattivare dopo una sospensione (anche se manca il TPM protector), o per risincronizzare la chiave su TRMM se sospetti che sia disallineata.
+
+**Parametri**: 
+- `-ApiKey` (obbligatorio)  
+- `-SkipHardwareTest`: la cifratura parte subito, senza attendere il test hardware al riavvio successivo (prassi in contesto RMM; il protector viene creato e salvato nello stesso run).
 
 ---
 
@@ -330,22 +334,19 @@ in caso di problemi.
 
 ---
 
-#### [[Libreria Script TRMM#WDAC Export Audit Log|WDAC: Export Audit Log]]
+#### [[Libreria Script TRMM#WDAC Export Audit Log Details|WDAC: Export Audit Log Details]]
 
-Quando WDAC è in **audit mode**, non blocca i file sconosciuti — li lascia
-passare ma registra l'evento nel log di sistema con **Event ID 3076**. Questo
-script legge quegli eventi e li salva in un file di testo leggibile:
-`C:\WDAC\audit_newapps.txt`.
+Quando WDAC è in **audit mode**, non blocca i file sconosciuti — li lascia passare ma registra l'evento nel log di sistema con Event ID 3076. Questo script legge quegli eventi (di default le ultime 24h, personalizzabile con `-HoursBack`) e li **raggruppa per file unico** (una singola app può generare decine di eventi per le sue DLL — il raggruppamento riduce il rumore), estraendo per ciascuno: numero di occorrenze, processo che lo ha lanciato, hash SHA256 e publisher.
 
-È il modo per scoprire **cosa la policy attuale non copre ancora** — ogni
-eseguibile, DLL o script che è stato eseguito sulla macchina ma non è
-esplicitamente autorizzato. È il primo passo da fare prima di costruire una
-nuova versione della policy.
+Publisher "N/D" segnala file **non firmati** — sono i candidati più probabili per una regola basata su hash invece che su publisher nella prossima versione della policy.
 
-**È il passo 2 del workflow.**
+Il riepilogo viene mostrato a schermo e salvato anche in *TXT* in `C:\WDAC\audit_analysis_<hostname>_<data>.txt`, per tracciabilità storica su più esecuzioni e più macchine.
 
-**Quando usarlo**: prima di raccogliere file per una nuova versione della
-policy, per sapere esattamente cosa manca invece di indovinare.
+È il modo per scoprire cosa la policy attuale non copre ancora — ogni eseguibile, DLL o script che è stato eseguito sulla macchina ma non è esplicitamente autorizzato. È il primo passo da fare prima di costruire una nuova versione della policy.
+
+È il ==passo 2 del workflow==.
+
+**Quando usarlo**: prima di raccogliere file per una nuova versione della policy, per sapere esattamente cosa manca invece di indovinare. Su più agent pilota, lanciarlo su ciascuno e confrontare i CSV per un quadro completo prima di aggiornare il GUID condiviso.
 
 ---
 
@@ -406,7 +407,16 @@ macchina target via MeshCentral.
 #### [[Libreria Script TRMM#WDAC Deploy Policy from URL|WDAC: Deploy Policy from Url]]
 Deploy WDAC via download HTTPS da nginx sul server OVH (`/srv/wdac/`) — sostituisce il trasferimento manuale via Mesh. 
 Aggiornare la flotta = sostituire il `.cip` sul server + rilanciare lo script (stesso GUID, versione incrementata). Il check sulla dimensione (>1000 byte) evita di applicare per errore una pagina HTML di errore. 
-==Nessun reboot richiesto== per l'aggiornamento di policy esistente.
+l'URL della policy corrente  è ==default nel parametro==. Se in futuro nasce un nuovo GUID di policy, compila l'argomento PolicyUrl così:
+1. Prendi il GUID della policy, es: `{AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE`}
+2. Sostituisci `{` con `%7B` e` }` con `%7D` (sono caratteri speciali nell'URL che convertono le parentesi graffe.)
+3. URL finale: `https://ta-tactical-rmm.duckdns.org/wdac/%7BAAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE%7D.cip`
+4. Il file .cip con quel nome deve gia' esistere in /srv/wdac/ sul server OVH
+```
+-PolicyUrl `https://ta-tactical-rmm.duckdns.org/wdac/%7BAAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE%7D.cip`
+```
+
+
 
 
 #### [[Libreria Script TRMM#WDAC Remove Active Policy|WDAC: Remove Active Policy]]
