@@ -24,7 +24,7 @@ Il vincolo più rilevante è la presenza di **Windows 11 Home** su parte della f
 
 Concretamente, TRMM permette di eseguire script da remoto su tutti gli endpoint, monitorarne lo stato, gestire gli aggiornamenti e accedere ai desktop. È il punto di controllo centrale da cui passa tutto il progetto.
 
-_Dashboard TRMM con due Agenti_ ![[Pasted image 20260630122709.png]]
+_Dashboard TRMM con sei Agenti_ ![[Pasted image 20260723125645.png]]
 
 > **Perché non un dominio Active Directory?** Sarebbe la scelta naturale in un ambiente Windows, ma richiede Windows Pro su tutti i client. Con macchine Home in flotta non è praticabile. TRMM lavora tramite un ==agente installato su ogni macchina==, indipendentemente dall'edizione, e non richiede join a dominio.
 
@@ -32,21 +32,23 @@ _Dashboard TRMM con due Agenti_ ![[Pasted image 20260630122709.png]]
 
 TRMM è un insieme di componenti che girano su un'unica VM server:
 
-|Componente|Ruolo|
-|---|---|
-|**Django**|Backend — espone le API per frontend e agenti|
-|**Vue.js**|Frontend — la dashboard web|
-|**PostgreSQL**|Database principale|
-|**Redis**|Cache e broker di messaggi|
-|**Celery**|Esecuzione task asincroni (check, alert, patch)|
-|**NATS**|Canale di comunicazione in tempo reale server ↔ agenti|
-|**MeshCentral**|Accesso remoto: desktop, shell, file browser|
-|**Nginx**|Reverse proxy e terminazione TLS|
-|_Esempi schermata di Mesh Central:_||
-|![[Pasted image 20260630123705.png]]||
-|![[Pasted image 20260630123818.png]]||
+| Componente      | Ruolo                                                  |
+| --------------- | ------------------------------------------------------ |
+| **Django**      | Backend — espone le API per frontend e agenti          |
+| **Vue.js**      | Frontend — la dashboard web                            |
+| **PostgreSQL**  | Database principale                                    |
+| **Redis**       | Cache e broker di messaggi                             |
+| **Celery**      | Esecuzione task asincroni (check, alert, patch)        |
+| **NATS**        | Canale di comunicazione in tempo reale server ↔ agenti |
+| **MeshCentral** | Accesso remoto: desktop, shell, file browser           |
+| **Nginx**       | Reverse proxy e terminazione TLS                       |
 
 La comunicazione **server ↔ agente** avviene tramite ==**NATS**==, un sistema di messaggistica a bassa latenza. Gli agenti online ricevono i comandi immediatamente; quelli offline li eseguono alla successiva riconnessione. Questo significa che un comando inviato a una macchina spenta non va perso — viene accodato.
+
+| Esempi schermata di Mesh Central:    |
+| ------------------------------------ |
+| ![[Pasted image 20260630123705.png]] |
+| ![[Pasted image 20260630123818.png]] |
 
 ### L'agente
 
