@@ -1,4 +1,3 @@
-                       
 Appunti operativi personali sul progetto sicurezza endpoint di Technology Advising. Tutto quello che ho fatto, perché l'ho fatto, e come ripeterlo senza dover ricordare tutto a memoria.
 
 ---
@@ -9,13 +8,13 @@ Appunti operativi personali sul progetto sicurezza endpoint di Technology Advisi
 
 Le strade esplorate e scartate:
 
-| Opzione                           | Perché no                                               |
-| --------------------------------- | ------------------------------------------------------- |
-| Samba AD DC + domain join         | Windows 11 Home non supporta l'aggiunta a un dominio AD |
-| Upgrade a Windows 11 Pro          | Costo per ~46 licenze                                   |
-| AppLocker su Home                 | Le regole non vengono applicate su Home — è inerte      |
-| SRP (Software Restriction Policy) | Tecnologia superata, incompatibile con WDAC attivo      |
-|                                   |                                                         |
+|Opzione|Perché no|
+|---|---|
+|Samba AD DC + domain join|Windows 11 Home non supporta l'aggiunta a un dominio AD|
+|Upgrade a Windows 11 Pro|Costo per ~46 licenze|
+|AppLocker su Home|Le regole non vengono applicate su Home — è inerte|
+|SRP (Software Restriction Policy)|Tecnologia superata, incompatibile con WDAC attivo|
+|||
 
 **La soluzione**: ==WDAC (Windows Defender Application Control) via [[CiTool]]== , disponibile su tutte le edizioni di Windows 11. Si compila la policy sul PC Pro con il modulo `ConfigCI`, e si deploya su qualsiasi macchina — Home inclusa — tramite CiTool. Elegante.
 
@@ -26,41 +25,32 @@ Le strade esplorate e scartate:
 |Componente|Dettaglio|
 |---|---|
 |TRMM Server|OVH Frankfurt — Ubuntu 22.04 LTS — `213.32.30.52`|
-|Pannello|`https://ta-tactical-rmm.duckdns.org`|
-|API|`https://ta-tactical-api.duckdns.org`|
-|MeshCentral|`https://ta-tactical-mesh.duckdns.org`|
-|PC Home (cavia)|Lenovo V15 G4 AMN — Windows 11 Home — utente `testf`|
-|PC Pro (compilazione)|`TA-TEST` — Windows 11 Pro — utente `testf`|
-|Cartella policy|`C:\WDAC\` su entrambe le macchine|
+|Pannello|`https://rmm.tactical.talabservices.it`|
+|API|`https://api.tactical.talabservices.it`|
+|MeshCentral|`https://mesh.tactical.talabservices.it`|
+
+> ℹ️ Fino a luglio 2026 l'infrastruttura girava su DuckDNS (`ta-tactical-*.duckdns.org`). Migrata al dominio aziendale — storia completa e lezioni in [[📘Guida personale a TRMM#🌐 Migrazione DNS — da DuckDNS al dominio aziendale|Migrazione DNS]]. I vecchi domini muoiono definitivamente il ==6 agosto 2026== (certificati + pannello DuckDNS + file bridge in `sites-available`). |PC Home (cavia)|Lenovo V15 G4 AMN — Windows 11 Home — utente `testf`| |PC Pro (compilazione)|`TA-TEST` — Windows 11 Pro — utente `testf`| |Cartella policy|`C:\WDAC\` su entrambe le macchine|
 
 ### Riferimenti WDAC:
 
-| Campo            | Valore                                                                   |
-| ---------------- | ------------------------------------------------------------------------ |
-| Policy GUID      | `{966d1f08-bcea-48c4-bc3a-6651c21e4090}`                                 |
-| Versione attuale | `10.0.0.14` (v14)                                                        |
-| File .cip attivo | `C:\Windows\System32\CodeIntegrity\CiPolicies\Active\{966d1f08-...}.cip` |
-| Stato attuale    | ==Enforcement mode ✅==                                                   |
+|Campo| Valore                                                                   |
+|---|---|
+|Policy GUID| `{966d1f08-bcea-48c4-bc3a-6651c21e4090}`                                 |
+|Versione attuale| `10.0.0.17 (v17)                                                         |
+|File .cip attivo| `C:\Windows\System32\CodeIntegrity\CiPolicies\Active\{966d1f08-...}.cip` |
+|Stato attuale| ==Enforcement mode ✅==                                                   |
 
 ### Riferimenti TRMM:
 
-| Campo                  | Valore                             |
-| ---------------------- | ---------------------------------- |
-| Custom Field BitLocker | `bitlocker_recovery_key` — ID: `1` |
+|Campo|Valore|
+|---|---|
+|Custom Field BitLocker|`bitlocker_recovery_key` — ID: `1`|
 
 #### 🔑 API Key
 
-Alcuni script (`BitLocker: Enable`, `BitLocker: Store Recovery Key`) devono
-comunicare con l'API di TRMM per salvare dati nei Custom Field — ad esempio
-la recovery key di BitLocker. Per farlo serve una **API Key** generata da
-TRMM, passata come parametro obbligatorio `ApiKey` allo script.
+Alcuni script (`BitLocker: Enable`, `BitLocker: Store Recovery Key`) devono comunicare con l'API di TRMM per salvare dati nei Custom Field — ad esempio la recovery key di BitLocker. Per farlo serve una **API Key** generata da TRMM, passata come parametro obbligatorio `ApiKey` allo script.
 
-==Non va mai scritta dentro lo script== — si passa come parametro al momento
-dell'esecuzione, così resta fuori dal codice salvato e non finisce per
-sbaglio in una versione condivisa o esportata.
-La trovi nelle **impostazioni** di TRMM
-La chiave si genera da: **TRMM → Settings → API Keys**.
----
+## ==Non va mai scritta dentro lo script== — si passa come parametro al momento dell'esecuzione, così resta fuori dal codice salvato e non finisce per sbaglio in una versione condivisa o esportata. La trovi nelle **impostazioni** di TRMM La chiave si genera da: **TRMM → Settings → API Keys**.
 
 ## 🛡️ Stack di sicurezza attivo
 
@@ -70,23 +60,21 @@ Il layer principale. Blocca tutto ciò che non è esplicitamente autorizzato dal
 
 La policy è stata costruita iterativamente: prima in **audit mode** per raccogliere i file legittimi presenti sulle macchine, poi ==compilata in enforcement== sul PC Pro e deployata con [[CiTool]].
 
-> 💡 **Trade-off ISG**: la regola `Enabled:Intelligent Security Graph Authorization` è necessaria per evitare boot failure da driver non coperti. Come effetto collaterale, software firmati molto diffusi (Firefox, Sumatra PDF…) passano anche senza essere in whitelist. 
-> Questa regola è **dentro l'XML della policy WDAC**
+> 💡 **Trade-off ISG**: la regola `Enabled:Intelligent Security Graph Authorization` è necessaria per evitare boot failure da driver non coperti. Come effetto collaterale, software firmati molto diffusi (Firefox, Sumatra PDF…) passano anche senza essere in whitelist. Questa regola è **dentro l'XML della policy WDAC**
 
 > 💡**Trade-off FilePath rule** : una regola FilePath autorizza qualsiasi eseguibile in base alla sua _posizione_, non al suo contenuto — a differenza di una hash o publisher rule. La sicurezza è delegata ai permessi NTFS della cartella: `C:\Windows\Microsoft.NET\`, ad esempio, è scrivibile solo da TrustedInstaller/SYSTEM, quindi un utente standard (o malware nel suo contesto) non può piazzarci un file arbitrario. Accettabile per cartelle di sistema protette, ma resta più permissiva di una hash rule — stesso principio del trade-off ISG sopra.
+
 ### ASR — Attack Surface Reduction Rules
 
-9 regole di Windows Defender che bloccano vettori di attacco specifici: macro Office, credential stealing (LSASS), script offuscati, eseguibili da USB, processi figlio di Adobe Reader… Attive in modalità `Enable` sulla flotta. 
-Impostata dallo script [[Libreria Script TRMM#Defender Deploy ASR Rules|Defender: Deploy ASR Rules]] via `Add-MpPreference.`
+9 regole di Windows Defender che bloccano vettori di attacco specifici: macro Office, credential stealing (LSASS), script offuscati, eseguibili da USB, processi figlio di Adobe Reader… Attive in modalità `Enable` sulla flotta. Impostata dallo script [[Libreria Script TRMM#Defender Deploy ASR Rules|Defender: Deploy ASR Rules]] via `Add-MpPreference.`
 
 ### Controlled Folder Access
 
-Protegge le cartelle di sistema e documenti da modifiche non autorizzate. Le app legittime vanno aggiunte alla whitelist con il ==path eseguibile specifico== — no wildcard di directory.
-Impostata dallo script [[Libreria Script TRMM#Defender Enable Controlled Folder Access|Defender: Enable Controlled Folder Access]] via `Set-MpPreferenc`
+Protegge le cartelle di sistema e documenti da modifiche non autorizzate. Le app legittime vanno aggiunte alla whitelist con il ==path eseguibile specifico== — no wildcard di directory. Impostata dallo script [[Libreria Script TRMM#Defender Enable Controlled Folder Access|Defender: Enable Controlled Folder Access]] via `Set-MpPreferenc`
+
 ### BitLocker / Device Encryption
 
-Cifratura disco attiva sugli endpoint. Su Windows 11 Home non c'è BitLocker nell'UI ma i cmdlet PowerShell funzionano e Device Encryption è disponibile. Le ==recovery key sono archiviate nel Custom Field TRMM== di ogni agente.
-Attivata  dallo script [[Libreria Script TRMM#BitLocker Enable| BitLocker: Enable]] 
+Cifratura disco attiva sugli endpoint. Su Windows 11 Home non c'è BitLocker nell'UI ma i cmdlet PowerShell funzionano e Device Encryption è disponibile. Le ==recovery key sono archiviate nel Custom Field TRMM== di ogni agente. Attivata dallo script [[Libreria Script TRMM#BitLocker Enable| BitLocker: Enable]]
 
 ### AppLocker (solo TA-TEST)
 
@@ -100,23 +88,17 @@ Questo è il processo ogni volta che si aggiorna la policy. Nuove app da aggiung
 
 ### Fase 0 — Ricerca file app Store 🔍 (PC Home)
 
-Se l'app da aggiungere è un'app Microsoft Store, i suoi file si trovano in
-`C:\Program Files\WindowsApps\` — ma la cartella giusta va cercata
-esplicitamente, altrimenti `Get-Item` restituisce le varianti `neutral_split`
-che non contengono DLL effettive.
+Se l'app da aggiungere è un'app Microsoft Store, i suoi file si trovano in `C:\Program Files\WindowsApps\` — ma la cartella giusta va cercata esplicitamente, altrimenti `Get-Item` restituisce le varianti `neutral_split` che non contengono DLL effettive.
 
 ```powershell
 # Trovare la cartella corretta — filtrare su *x64*
 Get-Item "C:\Program Files\WindowsApps\*NomeApp*x64*"
 ```
 
-Una volta trovata, copiare il contenuto in `C:\WDAC\AppxScan\` e procedere
-con la Fase 1.
+Una volta trovata, copiare il contenuto in `C:\WDAC\AppxScan\` e procedere con la Fase 1.
 
-> ⚠️ Senza il filtro `*x64*` il wildcard restituisce prima i pacchetti
-> `neutral_split` — file parziali che WDAC non incontrerà mai durante
-> l'esecuzione. La scansione produrrebbe regole inutili e l'app rimarrebbe
-> bloccata.
+> ⚠️ Senza il filtro `*x64*` il wildcard restituisce prima i pacchetti `neutral_split` — file parziali che WDAC non incontrerà mai durante l'esecuzione. La scansione produrrebbe regole inutili e l'app rimarrebbe bloccata.
+
 ### Fase 1 — Raccolta file 📂 (PC Home)
 
 Raccogliere i file da aggiungere in `C:\WDAC\AppxScan\` sul PC Home — eseguibili, DLL, package Store.
@@ -126,6 +108,7 @@ Raccogliere i file da aggiungere in `C:\WDAC\AppxScan\` sul PC Home — eseguibi
 Prima di raccogliere file, leggere i log WDAC per capire cosa è stato bloccato:
 
 Eseguire: [[Libreria Script TRMM#WDAC Export Audit Log|WDAC:Export Audit Log]]
+
 ```
 Output: C:\WDAC\audit_newapps.txt
 Event ID rilevante: 3076
@@ -133,7 +116,7 @@ Event ID rilevante: 3076
 
 ### Fase 3 — Trasferimento al Pro 📤 (MeshCentral)
 
-Spostare i file da aggiungere dal PC Home a `C:\WDAC\` su TA-TEST via **MeshCentral**.  MeshCentral non vuole cartelle, ma file compressi.
+Spostare i file da aggiungere dal PC Home a `C:\WDAC\` su TA-TEST via **MeshCentral**. MeshCentral non vuole cartelle, ma file compressi.
 
 ### Fase 4 — Compilazione policy ⚙️ (TA-TEST)
 
@@ -149,8 +132,7 @@ New-CIPolicy -Level Publisher -Fallback Hash -ScanPath C:\WDAC\AppxScan\ -FilePa
 
 ##### Passaggio 2 — Merge con la policy esistente _(PowerShell manuale)_
 
-Unisce le nuove regole con la policy corrente e produce un nuovo XML.
-==La versione precedente non viene mai sovrascritta — si crea sempre un file nuovo==:
+Unisce le nuove regole con la policy corrente e produce un nuovo XML. ==La versione precedente non viene mai sovrascritta — si crea sempre un file nuovo==:
 
 ```powershell
 Merge-CIPolicy -PolicyPaths C:\WDAC\policy_final_v14.xml, C:\WDAC\new_rules.xml -OutputFilePath C:\WDAC\policy_final_v15.xml
@@ -160,12 +142,12 @@ Merge-CIPolicy -PolicyPaths C:\WDAC\policy_final_v14.xml, C:\WDAC\new_rules.xml 
 
 Su TRMM, eseguire lo script `WDAC: Compile Enforcement Policy` con questi parametri:
 
-| Parametro | Valore |
+|Parametro|Valore|
 |---|---|
-| SourceXml | `C:\WDAC\policy_final_v15.xml` |
-| OutputXml | `C:\WDAC\policy_final_v15_enforced.xml` |
-| OutputP7b | `C:\WDAC\policy_final_v15.p7b` |
-| NewVersion | `10.0.0.15` |
+|SourceXml|`C:\WDAC\policy_final_v15.xml`|
+|OutputXml|`C:\WDAC\policy_final_v15_enforced.xml`|
+|OutputP7b|`C:\WDAC\policy_final_v15.p7b`|
+|NewVersion|`10.0.0.15`|
 
 Lo script rimuove la regola `Enabled:Audit Mode` dall'XML, aggiorna la versione e compila il `.p7b` pronto per il deploy.
 
@@ -173,13 +155,12 @@ Lo script rimuove la regola `Enabled:Audit Mode` dall'XML, aggiorna la versione 
 
 ### Fase 5 — Trasferimento al Home 📥 (MeshCentral)
 
-Trasferire solo il file `.p7b` compilato da TA-TEST al PC Home in `C:\WDAC\`. 
+Trasferire solo il file `.p7b` compilato da TA-TEST al PC Home in `C:\WDAC\`.
 
 ### Fase 6 — Deploy 🚀 (PC Home, via TRMM)
 
+Eseguire: [[Libreria Script TRMM#WDAC Deploy Policy|WDAC: Deploy Policy]]
 
-Eseguire: 
-[[Libreria Script TRMM#WDAC Deploy Policy|WDAC: Deploy Policy]]
 ```
   PolicyPath    = C:\WDAC\policy_final_v15.p7b
   PolicyVersion = 10.0.0.15
@@ -206,7 +187,7 @@ Se dopo un deploy la macchina non si avvia, WDAC ha bloccato qualcosa di critico
 
 **4. Eliminare il file .cip**
 
-``` cmd
+```cmd
 del "C:\Windows\System32\CodeIntegrity\CiPolicies\Active\{966d1f08-bcea-48c4-bc3a-6651c21e4090}.cip"
 ```
 
@@ -252,8 +233,9 @@ Garantisce inoltre un solo protector RecoveryPassword attivo, rimuovendo automat
 
 **Quando**: primo setup su un endpoint nuovo, per riattivare dopo una sospensione (anche se manca il TPM protector), o per risincronizzare la chiave su TRMM se sospetti che sia disallineata.
 
-**Parametri**: 
-- `-ApiKey` (obbligatorio)  
+**Parametri**:
+
+- `-ApiKey` (obbligatorio)
 - `-SkipHardwareTest`: la cifratura parte subito, senza attendere il test hardware al riavvio successivo (prassi in contesto RMM; il protector viene creato e salvato nello stesso run).
 
 ---
@@ -280,15 +262,17 @@ Estrae la Recovery Key già esistente e la sincronizza nel Custom Field TRMM, se
 
 #### [[Libreria Script TRMM#Defender Enable Controlled Folder Access|Defender: Enable Controlled Folder Access]]
 
-Abilita *CFA* su Windows Defender. ==Non aggiunge app alla whitelist== — manualmente tramite   `Add-MpPreference` `-ControlledFolderAccessAllowedApplications`   con path eseguibile specifico, senza *wildcard* (Cioè gli i caratteri jolly come gli asterischi.)
-ex:
-``` powershell
+Abilita _CFA_ su Windows Defender. ==Non aggiunge app alla whitelist== — manualmente tramite `Add-MpPreference` `-ControlledFolderAccessAllowedApplications` con path eseguibile specifico, senza _wildcard_ (Cioè gli i caratteri jolly come gli asterischi.) ex:
+
+```powershell
 Add-MpPreference -ControlledFolderAccessAllowedApplications "C:\Program Files\Mozilla Firefox\firefox.exe"
 ```
+
 Questo comando dice a Windows Defender: "Firefox può scrivere nelle cartelle protette da Controlled Folder Access (Documenti, Desktop, ecc.) anche se normalmente non gliel'avresti permesso."
 
 Controllo:
-``` powershell
+
+```powershell
 (Get-MpPreference).ControlledFolderAccessAllowedApplications
 ```
 
@@ -298,39 +282,29 @@ Controllo:
 
 #### [[Libreria Script TRMM#Defender Deploy ASR Rules|Defender: Deploy ASR Rules]]
 
-Configura le **9 ASR rules** (Attack Surface Reduction) di Windows Defender —
-regole che bloccano vettori di attacco specifici, come macro Office
-malevole, credential stealing o esecuzione di script offuscati.
+Configura le **9 ASR rules** (Attack Surface Reduction) di Windows Defender — regole che bloccano vettori di attacco specifici, come macro Office malevole, credential stealing o esecuzione di script offuscati.
 
 Lo script supporta tre modalità, da passare nel parametro `Mode`:
 
-| Modalità    | Effetto                                  | Quando usarla                                            |
-| ----------- | ---------------------------------------- | -------------------------------------------------------- |
-| `Enable`    | Blocca attivamente — modalità produzione | Default, uso normale                                     |
-| `AuditMode` | Registra ma non blocca                   | Per testare nuove regole senza rischio di falsi positivi |
-| `Disable`   | Rimuove le regole                        | Solo se serve disattivare ASR su una macchina specifica  |
+|Modalità|Effetto|Quando usarla|
+|---|---|---|
+|`Enable`|Blocca attivamente — modalità produzione|Default, uso normale|
+|`AuditMode`|Registra ma non blocca|Per testare nuove regole senza rischio di falsi positivi|
+|`Disable`|Rimuove le regole|Solo se serve disattivare ASR su una macchina specifica|
 
-Dopo l'esecuzione, lo stato configurato viene salvato in
-`C:\ProgramData\TacticalRMM\asr_status.json` — utile per verificare
-rapidamente quale modalità è attiva senza dover rileggere tutte le regole.
+Dopo l'esecuzione, lo stato configurato viene salvato in `C:\ProgramData\TacticalRMM\asr_status.json` — utile per verificare rapidamente quale modalità è attiva senza dover rileggere tutte le regole.
 
-**Quando usarlo**: al setup iniziale di un endpoint, oppure per cambiare
-modalità su una macchina specifica (es. passare in `AuditMode` per
-diagnosticare un falso positivo).
+**Quando usarlo**: al setup iniziale di un endpoint, oppure per cambiare modalità su una macchina specifica (es. passare in `AuditMode` per diagnosticare un falso positivo).
 
 **Parametri**: `Mode` _(facoltativo, default `Enable`)_
 
-> ⚠️ Il GUID `01443614-...-2ECDE92B5EBE` (regola che blocca eseguibili da
-> USB) aveva un carattere extra nella versione originale dello script —
-> la regola non veniva mai applicata. Corretta nella libreria attuale.
+> ⚠️ Il GUID `01443614-...-2ECDE92B5EBE` (regola che blocca eseguibili da USB) aveva un carattere extra nella versione originale dello script — la regola non veniva mai applicata. Corretta nella libreria attuale.
 
 ---
 
 ### 🔒 WDAC
 
-Quattro script che coprono l'intero ciclo di vita della policy: dalla
-diagnosi di cosa manca, alla compilazione, al deploy, fino al recovery
-in caso di problemi.
+Quattro script che coprono l'intero ciclo di vita della policy: dalla diagnosi di cosa manca, alla compilazione, al deploy, fino al recovery in caso di problemi.
 
 ---
 
@@ -340,7 +314,7 @@ Quando WDAC è in **audit mode**, non blocca i file sconosciuti — li lascia pa
 
 Publisher "N/D" segnala file **non firmati** — sono i candidati più probabili per una regola basata su hash invece che su publisher nella prossima versione della policy.
 
-Il riepilogo viene mostrato a schermo e salvato anche in *TXT* in `C:\WDAC\audit_analysis_<hostname>_<data>.txt`, per tracciabilità storica su più esecuzioni e più macchine.
+Il riepilogo viene mostrato a schermo e salvato anche in _TXT_ in `C:\WDAC\audit_analysis_<hostname>_<data>.txt`, per tracciabilità storica su più esecuzioni e più macchine.
 
 È il modo per scoprire cosa la policy attuale non copre ancora — ogni eseguibile, DLL o script che è stato eseguito sulla macchina ma non è esplicitamente autorizzato. È il primo passo da fare prima di costruire una nuova versione della policy.
 
@@ -352,91 +326,61 @@ Il riepilogo viene mostrato a schermo e salvato anche in *TXT* in `C:\WDAC\audit
 
 #### [[Libreria Script TRMM#WDAC Compile Enforcement Policy|WDAC: Compile Enforcement Policy]]
 
-Una volta che l'XML della nuova policy è pronto (dopo `New-CIPolicy` e
-`Merge-CIPolicy`, eseguiti manualmente — vedi [[📘Guida personale a TRMM#Fase 4 — Compilazione policy ⚙️ (TA-TEST)|Fase 4]]),
-questo script fa l'ultimo miglio: rimuove la regola `Enabled:Audit Mode`
-dall'XML — trasformando la policy da "registra soltanto" a "blocca
-attivamente" — aggiorna il numero di versione e compila il file binario
-`.p7b`, l'unico formato che `CiTool` sa effettivamente deployare.
+Una volta che l'XML della nuova policy è pronto (dopo `New-CIPolicy` e `Merge-CIPolicy`, eseguiti manualmente — vedi [[📘Guida personale a TRMM#Fase 4 — Compilazione policy ⚙️ (TA-TEST)|Fase 4]]), questo script fa l'ultimo miglio: rimuove la regola `Enabled:Audit Mode` dall'XML — trasformando la policy da "registra soltanto" a "blocca attivamente" — aggiorna il numero di versione e compila il file binario `.p7b`, l'unico formato che `CiTool` sa effettivamente deployare.
 
 **È il passo 4 del workflow.**
 
-**Quando usarlo**: ogni volta che si rilascia una nuova versione della
-policy, dopo aver già preparato l'XML mergiato.
+**Quando usarlo**: ogni volta che si rilascia una nuova versione della policy, dopo aver già preparato l'XML mergiato.
 
-**Parametri**: `SourceXml`, `OutputXml`, `OutputP7b`, `NewVersion`
-_(tutti obbligatori)_
+**Parametri**: `SourceXml`, `OutputXml`, `OutputP7b`, `NewVersion` _(tutti obbligatori)_
 
-> ⚠️ ==Eseguibile solo su TA-TEST== — il modulo `ConfigCI`, da cui dipende
-> la compilazione, non è disponibile su Windows Home.
+> ⚠️ ==Eseguibile solo su TA-TEST== — il modulo `ConfigCI`, da cui dipende la compilazione, non è disponibile su Windows Home.
 
 ---
-
-
 
 #### [[Libreria Script TRMM#WDAC Check Policy Version|WDAC Check Policy Version]]
+
 Script diagnostico ==da lanciare on-demand== (non come check periodico) per verificare rapidamente quale versione della policy WDAC è attiva su un agent. La versione viene decodificata dal formato interno di CiTool (numero a 64 bit compresso) al formato ==leggibile== `a.b.c.d`. Include l'hostname nell'output per identificare subito la macchina quando lo si lancia su più agent in sequenza. `IsEnforced: True` significa "policy applicata al sistema", non necessariamente "modalità enforcement" — quel dubbio va confermato con [[Anomalie e Test#Verifica audit vs enforcement|test evento 3076/3077]].
 
-
 ---
+
 #### [[Libreria Script TRMM#WDAC Deploy Policy|WDAC: Deploy Policy]]
 
-Il binario `.p7b` compilato su TA-TEST non serve a nulla finché non viene
-installato sulla macchina di destinazione. Questo script fa esattamente
-questo: chiama `CiTool --update-policy` per caricare la policy, poi verifica
-che il file `.cip` risultante sia effettivamente comparso nella cartella
-`CiPolicies\Active` — non si fida solo del codice di uscita di CiTool.
+Il binario `.p7b` compilato su TA-TEST non serve a nulla finché non viene installato sulla macchina di destinazione. Questo script fa esattamente questo: chiama `CiTool --update-policy` per caricare la policy, poi verifica che il file `.cip` risultante sia effettivamente comparso nella cartella `CiPolicies\Active` — non si fida solo del codice di uscita di CiTool.
 
-Se la verifica va a buon fine, scrive un piccolo file di stato in
-`C:\ProgramData\TacticalRMM\wdac_state.json` con versione e data di deploy.
-Questo file è quello che [[Libreria Script TRMM#Monitor WDAC Policy Status|Monitor: WDAC Policy Status]]
-legge per sapere se la macchina è aggiornata.
+Se la verifica va a buon fine, scrive un piccolo file di stato in `C:\ProgramData\TacticalRMM\wdac_state.json` con versione e data di deploy. Questo file è quello che [[Libreria Script TRMM#Monitor WDAC Policy Status|Monitor: WDAC Policy Status]] legge per sapere se la macchina è aggiornata.
 
 **È il passo 6 del workflow.**
 
-**Quando usarlo**: subito dopo aver trasferito il `.p7b` compilato sulla
-macchina target via MeshCentral.
+**Quando usarlo**: subito dopo aver trasferito il `.p7b` compilato sulla macchina target via MeshCentral.
 
-**Parametri**: `PolicyPath`, `PolicyVersion` _(obbligatori)_ —
-`Reboot` _(switch facoltativo, per riavviare automaticamente a fine deploy)_
+**Parametri**: `PolicyPath`, `PolicyVersion` _(obbligatori)_ — `Reboot` _(switch facoltativo, per riavviare automaticamente a fine deploy)_
 
-> ⚠️ Lo script non trasferisce file — il `.p7b` deve essere ==già presente==
-> sulla macchina (via MeshCentral) prima di lanciarlo.
-
+> ⚠️ Lo script non trasferisce file — il `.p7b` deve essere ==già presente== sulla macchina (via MeshCentral) prima di lanciarlo.
 
 #### [[Libreria Script TRMM#WDAC Deploy Policy from URL|WDAC: Deploy Policy from Url]]
-Deploy WDAC via download HTTPS da nginx sul server OVH (`/srv/wdac/`) — sostituisce il trasferimento manuale via Mesh. 
-Aggiornare la flotta = sostituire il `.cip` sul server + rilanciare lo script (stesso GUID, versione incrementata). Il check sulla dimensione (>1000 byte) evita di applicare per errore una pagina HTML di errore. 
-l'URL della policy corrente  è ==default nel parametro==. Se in futuro nasce un nuovo GUID di policy, compila l'argomento PolicyUrl così:
+
+Deploy WDAC via download HTTPS da nginx sul server OVH (`/srv/wdac/`) — sostituisce il trasferimento manuale via Mesh. Aggiornare la flotta = sostituire il `.cip` sul server + rilanciare lo script (stesso GUID, versione incrementata). Il check sulla dimensione (>1000 byte) evita di applicare per errore una pagina HTML di errore. l'URL della policy corrente è ==default nel parametro==. Se in futuro nasce un nuovo GUID di policy, compila l'argomento PolicyUrl così:
+
 1. Prendi il GUID della policy, es: `{AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE`}
-2. Sostituisci `{` con `%7B` e` }` con `%7D` (sono caratteri speciali nell'URL che convertono le parentesi graffe.)
-3. URL finale: `https://ta-tactical-rmm.duckdns.org/wdac/%7BAAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE%7D.cip`
+2. Sostituisci `{` con `%7B` e `}` con `%7D` (sono caratteri speciali nell'URL che convertono le parentesi graffe.)
+3. URL finale: `https://rmm.tactical.talabservices.it/wdac/%7BAAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE%7D.cip`
 4. Il file .cip con quel nome deve gia' esistere in /srv/wdac/ sul server OVH
+
 ```
--PolicyUrl `https://ta-tactical-rmm.duckdns.org/wdac/%7BAAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE%7D.cip`
+-PolicyUrl `https://rmm.tactical.talabservices.it/wdac/%7BAAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE%7D.cip`
 ```
 
-
-
+> ⚠️ Post-migrazione DNS (lug 2026): il ==default nel parametro dello script va aggiornato== al nuovo hostname, altrimenti punta ancora a DuckDNS che dal 6 agosto è morto. Da fare al primo utilizzo.
 
 #### [[Libreria Script TRMM#WDAC Remove Active Policy|WDAC: Remove Active Policy]]
 
-La via di emergenza quando una policy deployata causa problemi ma la
-macchina è ancora accesa e raggiungibile da TRMM. Rimuove il file `.cip`
-dalla cartella Active — la rimozione diventa effettiva solo al riavvio
-successivo, quindi c'è tempo per valutare prima di riavviare.
+La via di emergenza quando una policy deployata causa problemi ma la macchina è ancora accesa e raggiungibile da TRMM. Rimuove il file `.cip` dalla cartella Active — la rimozione diventa effettiva solo al riavvio successivo, quindi c'è tempo per valutare prima di riavviare.
 
-**Quando usarlo**: la macchina è accesa, ma qualcosa nella policy sta
-causando malfunzionamenti (app legittime bloccate, comportamenti anomali) e
-serve toglierla rapidamente da remoto. Se invece la macchina **non si avvia
-più**, questo script non è raggiungibile — serve la procedura manuale via
-WinRE (vedi [[📘Guida personale a TRMM#🚨 Recovery WDAC — boot failure|Recovery WDAC]]).
+**Quando usarlo**: la macchina è accesa, ma qualcosa nella policy sta causando malfunzionamenti (app legittime bloccate, comportamenti anomali) e serve toglierla rapidamente da remoto. Se invece la macchina **non si avvia più**, questo script non è raggiungibile — serve la procedura manuale via WinRE (vedi [[📘Guida personale a TRMM#🚨 Recovery WDAC — boot failure|Recovery WDAC]]).
 
-> ⚠️ Il file da rimuovere è ==`.cip`==, non `.p7b`. La versione originale
-> dello script cercava il file sbagliato (`.p7b`) ed era completamente
-> inerte — non rimuoveva mai nulla. La versione attuale punta al GUID
-> esplicito della policy e funziona correttamente.
-> ---
+> ## ⚠️ Il file da rimuovere è ==`.cip`==, non `.p7b`. La versione originale dello script cercava il file sbagliato (`.p7b`) ed era completamente inerte — non rimuoveva mai nulla. La versione attuale punta al GUID esplicito della policy e funziona correttamente.
+
 ### 🔐 AppLocker
 
 > ℹ️ Questi script si applicano solo a TA-TEST (Windows Pro). Su Home AppLocker è inerte anche se il servizio gira. Con WDAC attivo è comunque superfluo ovunque.
@@ -491,17 +435,16 @@ Rimuove un utente dagli Administrators e applica restrizioni aggiuntive: ==blocc
 
 Questi script girano via **Automation Policy** su tutta la flotta. Escono con `0` se tutto è OK, con `1` se c'è qualcosa che non va — TRMM genera un alert.
 
-
 #### [[Libreria Script TRMM#Monitor Agent Service Status|Monitor: Agent Service Status]]
 
- Controlla lo stato del servizio agente con timeout esplicito via `Start-Job`/`Wait-Job` — evita il freeze osservato con `Get-Service` diretto su servizio hung (==anomalia A02==).
-  Ora gestisce anche il caso servizio inesistente (agente fantasma).
-   Attenzione: sui check di agenti overdue TRMM può mostrare risultati ==cached== fuorvianti.
+Controlla lo stato del servizio agente con timeout esplicito via `Start-Job`/`Wait-Job` — evita il freeze osservato con `Get-Service` diretto su servizio hung (==anomalia A02==). Ora gestisce anche il caso servizio inesistente (agente fantasma). Attenzione: sui check di agenti overdue TRMM può mostrare risultati ==cached== fuorvianti.
+
 #### [[Libreria Script TRMM#Monitor Defender Full Status|Monitor: Defender Full Status]]
 
 Check settimanale ==cumulativo==: non si ferma al primo problema ma li elenca tutti nell'output dell'alert, così un solo giro dice cosa sistemare. Copre Defender (inclusa ==Tamper Protection== via `IsTamperProtected`, che protegge le altre impostazioni da manomissioni) e ingloba i controlli di [[Libreria Script TRMM#Monitor BitLocker Status|Monitor: BitLocker Status]] — se lo assegni, valuta di non duplicare quest'ultimo sulla stessa macchina. Soglia firme: 7 giorni, coerente con l'intervallo del check.
 
 Da assegnare come Script Check con intervallo 7 giorni (o in Automation Policy sul gruppo di test).
+
 #### [[Libreria Script TRMM#Monitor Store Apps|Monitor: Store Apps]]
 
 Confronta le app Microsoft Store installate con la lista autorizzata. Segnala qualsiasi app non in lista.
@@ -525,6 +468,70 @@ Verifica in cascata: prima che il file `.cip` sia presente nella cartella Active
 **Parametri**: `ExpectedVersion` _(obbligatorio — es. `10.0.0.14`)_
 
 > ⚠️ Prima di usare questo monitor sulla flotta, eseguire `WDAC: Deploy Policy` almeno una volta su ogni macchina per creare il file di stato. Le macchine deployate manualmente risulteranno non conformi al primo run — normale.
+
+---
+
+## 🌐 Migrazione DNS — da DuckDNS al dominio aziendale
+
+**Luglio 2026** — passaggio dai tre host DuckDNS ai sottodomini aziendali su Register.it:
+
+|Vecchio (DuckDNS)|Nuovo (talabservices.it)|
+|---|---|
+|`ta-tactical-rmm.duckdns.org`|`rmm.tactical.talabservices.it`|
+|`ta-tactical-api.duckdns.org`|`api.tactical.talabservices.it`|
+|`ta-tactical-mesh.duckdns.org`|`mesh.tactical.talabservices.it`|
+
+**Perché**: `duckdns.org` è un ==public suffix== → i sottodomini sono considerati cross-site tra loro → `SameSite=Lax` blocca i cookie di sessione nell'iframe di Take Control. Con un dominio di proprietà il problema sparisce. Bonus: niente più dipendenza da un servizio DNS gratuito.
+
+### I 6 punti dove vive l'hostname
+
+Ogni volta che si tocca il DNS, questi sono i file da aggiornare sul server. Tutti e sei, non uno di meno:
+
+1. `/etc/nginx/sites-available/frontend.conf` — `server_name` + certificati
+2. `/etc/nginx/sites-available/rmm.conf` — `server_name` + certificati + ==3 header CORS==
+3. `/etc/nginx/sites-available/meshcentral.conf` — `server_name` + certificati
+4. `/rmm/api/tacticalrmm/tacticalrmm/local_settings.py` — `ALLOWED_HOSTS`, `CORS_ORIGIN_WHITELIST`, `MESH_SITE`
+5. `/meshcentral/meshcentral-data/config.json` — `cert`, `certUrl`
+6. `/var/www/rmm/dist/env-config.js` — `PROD_URL`
+
+Poi: `nginx -t` → reload nginx → restart `rmm daphne celery celerybeat meshcentral`.
+
+E i **due punti lato agent** (su ogni endpoint):
+
+- Registro `HKLM:\SOFTWARE\TacticalRMM` → `BaseURL` e `ApiURL`
+- `C:\Program Files\Mesh Agent\meshagent.msh` → riga `MeshServer=` (==MeshID e ServerID non si toccano== — sono l'identità crittografica del server, non l'hostname)
+
+### Repointing agent — script `Migrazione: Repoint Agent DNS`
+
+Non si può modificare la config agent da una sessione remota diretta: fermare il servizio Mesh Agent ==uccide la sessione che lo sta facendo== (segare il ramo su cui si è seduti — provato, con conseguente trasferta fisica 🙃). La soluzione: script TRMM che crea un'==attività pianificata== SYSTEM con partenza a +30s, sganciata dal processo agent. Il worker fa backup → stop servizi → registro → .msh → restart → autopulizia, loggando ogni passo in `C:\WDAC\repoint-log.txt`.
+
+Tre bug trovati a fatica, in ordine di scoperta:
+
+1. **Timeout TRMM (90s default)**: `Test-NetConnection` è lentissimo (DNS + ICMP + traceroute). Lo script moriva ==dopo aver scritto il worker ma prima di registrare il task== — e TRMM mostrava comunque l'output parziale col pre-check OK, sembrava riuscito. Fix: pre-check con socket `TcpClient` diretto (timeout 5s) + timeout script a 300s.
+2. **Task bloccato a batteria**: default di `Register-ScheduledTask` = "non avviare se alimentato a batteria". Sui ==notebook== il task restava "Pronto" per sempre con esito `-2147020576` (`0x800710E0`). Fix: `New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable`.
+3. **Ordine paste dei comandi**: il `ln -sf` del bridge si era perso in un copia-incolla multiplo → reload eseguito senza il file → configurazione apparentemente ok ma inerte. Morale: ==dopo un paste multiplo, verificare che ogni comando sia stato eseguito davvero==.
+
+### Il ponte DuckDNS (rollback plan)
+
+Durante la transizione gli agent non migrati devono poter ancora connettersi ai vecchi nomi. Ponte = file `duckdns-bridge.conf` con i vhost dei vecchi hostname serviti dai ==vecchi certificati== (tenuti apposta, validi fino a settembre). Niente `reuseport` (dichiarabile una sola volta per porta, già in `rmm.conf`) e niente `upstream` ridefinito. A migrazione completata: rimozione symlink + reload + verifica `last_seen` di tutti gli agent prima di cantare vittoria.
+
+Query di verifica lato server (la fonte della verità, altro che dashboard):
+
+```bash
+sudo -u postgres psql -d tacticalrmm -c "SELECT hostname, last_seen FROM agents_agent ORDER BY last_seen DESC;"
+```
+
+### Insidie che ci hanno depistato
+
+- **`/etc/hosts` della VM** mappava i nomi DuckDNS su `127.0.1.1` (residuo installazione) → il `dig` locale rispondeva loopback e sembrava che il DNS pubblico fosse rotto. ==Verificare sempre anche contro resolver esterni== (`dig @1.1.1.1`). Riga ripulita.
+- **Register.it e sottodomini annidati**: il pannello inizialmente sembrava non supportare record a più livelli (`rmm.tactical`), poi si è rivelato possibile. Prima di cambiare architettura, ==far provare materialmente l'inserimento==.
+- **Websocket sopravvivono al reload nginx**: connessioni già stabilite continuano sui vecchi worker → gli agent sembrano ok per ore anche se la config nuova li taglierebbe fuori. Il test vero è la ==riconnessione==, non la connessione in corso.
+- **`certbot renew` post-migrazione**: i `.conf` di rinnovo dei vecchi certificati vanno spostati in `/etc/letsencrypt/renewal-disabled/` (non cancellati) — altrimenti da ~30gg prima della scadenza certbot fallisce le validazioni due volte al giorno riempiendo i log.
+- **`_userConsentFlags` con underscore**: in MeshCentral l'underscore davanti a una chiave del `config.json` la ==disabilita==. Il consent hardening era spento da chissà quando. Riattivato come `"userConsentFlags": 63` durante la riscrittura del file.
+
+### ⚠️ Rischio aperto — nessun admin locale sugli endpoint
+
+Emerso durante la trasferta fisica: sugli endpoint pilota l'account `Administrator` è ==disabilitato== e tutti gli utenti sono standard → se TRMM è giù, ==nessuno può fare nulla sulla macchina==. Ci è costato un riavvio "alla cieca" confidando nell'avvio automatico dei servizi. Da risolvere ==prima del rollout sui 46== (LAPS-style: admin locale con password per-macchina archiviata in TRMM?).
 
 ---
 
@@ -561,3 +568,8 @@ Le cose che ho imparato a mie spese — meglio non doverle riscoprire.
 - **`Get-ComputerInfo` su Home** — può riportare "Windows 10 Home" su alcune build. È un bug del registry noto, non un problema reale di versione OS
 - **Policy GUID fisso** — il GUID `{966d1f08-...}` è scritto nel campo `PolicyID` dell'XML e ==non cambia tra versioni==. Cambierebbe solo ripartendo da zero con `New-CIPolicy` su un XML vuoto — scenario improbabile
 - **BitLocker multiple protector** — se esistono più `RecoveryPassword` protector sullo stesso volume, il cast `[string]($keyRaw | Select-Object -First 1)` è necessario per evitare errori di tipo nella chiamata API TRMM
+- **Task pianificati sui notebook** — ==ogni script TRMM che crea scheduled task deve passare== `New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable`. Il default Windows blocca l'avvio a batteria: fallimento silenzioso con esito `0x800710E0`, task "Pronto" per sempre. La flotta è quasi tutta notebook — vale per tutti i 46
+- **`Test-NetConnection` è lento** — DNS + ICMP + traceroute interno: 15-20s a chiamata. Negli script TRMM (timeout default 90s) usare socket `TcpClient` con timeout esplicito
+- **Formatter PowerShell e output "spariti"** — mischiando più `Select-Object` con colonne diverse in uno script, il primo output tabellare blocca il formatter e i successivi vengono ==inghiottiti in silenzio==. Nei check diagnostici: `Format-List | Out-String`, `schtasks /fo LIST`, o stringhe esplicite `Write-Output "X: $($obj.X)"`
+- **`whoami` non dice se sei elevato** — la prova vera: `([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)`. E il prompt che parte da `C:\WINDOWS\system32` suggerisce shell elevata, ma va confermato
+- **WDAC non c'entra con i permessi** — enforcement blocca _programmi_, non tocca gruppi/privilegi degli account. Se un account "non è più admin", il motivo è altrove
