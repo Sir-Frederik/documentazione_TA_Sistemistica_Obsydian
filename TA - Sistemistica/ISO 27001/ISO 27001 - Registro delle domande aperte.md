@@ -225,7 +225,7 @@ Da aprire con lo stesso metodo (frontespizio sul canovaccio, poi revisione del c
 
 - [x] `SECRA_RiskAssessment_Piano.docx`
 - [ ] `SECDR_Disaster_Recovery.docx`: **di Alessandro**
-- [ ] `SECSD_SDLC.docx`
+- [x] `SECSD_SDLC.docx`
 - [ ] `SECSM_Security_Update_Maintenence.docx`
 - [ ] `SECVA_Vulnerabilty_Assessment.docx`
 - [ ] `SECVM_Version_Management.docx`
