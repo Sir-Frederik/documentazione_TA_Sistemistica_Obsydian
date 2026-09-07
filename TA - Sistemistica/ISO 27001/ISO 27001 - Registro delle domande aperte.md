@@ -1,4 +1,4 @@
-
+# ISO 27001 - Registro delle domande aperte
 
 > Elenco dei punti da chiarire con il team prima dell'audit di sorveglianza (Sorveglianza 1, settembre 2026, auditor Pasquale Mele).
 > Ogni voce nasce dalla revisione dei documenti SGSI e corrisponde a un segnaposto evidenziato in giallo nel documento di riferimento.
@@ -189,6 +189,90 @@ Stato documento: revisionato. Data 01/09/2025, ciclo annuale in scadenza.
 
 ---
 
+## SECSD - SDLC
+
+Stato documento: revisionato per intero. Rev. 2 del 07/09/2026. Riclassificato da SGQPRO06bis a SECSD.
+
+- [ ] **SD-01** · § 3 · **A chi:** Adriano · **collegato a CM-04**
+  La figura "Responsabile Sistema Gestione Qualità (QUA)" è stata riscritta come "Responsabile del SGSI", coerentemente con la natura del documento. Se le due figure restano distinte in azienda, va ripristinata la denominazione originaria.
+  *Esito:*
+
+- [ ] **SD-02** · § 4.5 · **A chi:** team sviluppo
+  Gli standard di riferimento sono datati: ANSI/IEEE 1074 è stato ritirato e SEI/CMM è superato da CMMI. Valutare l'aggiornamento.
+  *Esito:*
+
+- [ ] **SD-03** · § 4.4 · **A chi:** team sviluppo
+  L'elenco degli acronimi non definisce "Deep Dive", citato tre volte al capitolo 8 come strumento di analisi del pacchetto, né le sigle dei ruoli introdotte al capitolo 3.
+  *Esito:*
+
+- [ ] **SD-04** · § 7 · **A chi:** Adriano
+  Il capitolo descrive Scrum come metodologia di sviluppo. Esplicitare come si raccorda con PRINCE2 Agile adottato per la gestione di progetto, così da rendere evidente in audit quale metodologia governa quale ambito.
+  *Esito:*
+
+- [ ] **SD-05** · § 8.3 · **A chi:** team sviluppo
+  Il documento descrive il solo Subversion, mentre SECCM_Capacity_Management cita GitLab, DockerHub e "SVN legacy" e il master associa il controllo documentale a GIT/SVN. Allineare gli strumenti di versionamento tra i documenti.
+  *Esito:*
+
+- [ ] **SD-06** · § 8.3 · **A chi:** Adriano · **stesso punto di TR-03**
+  Nel master il documento copre due voci distinte, "Ciclo di sviluppo" (riga 14) e "Release management" (riga 15), ma il rilascio è trattato solo dentro il § 8.3. Valutare se strutturare un capitolo dedicato o separare i due documenti.
+  *Esito:*
+
+- [ ] **SD-07** · tabella firme · **A chi:** Adriano
+  Le firme sono ferme al 11/01/2021. La revisione 2 non ha redattore, revisore né approvatori.
+  *Esito:*
+
+- [x] **SD-08** · tabella VERSIONI PRECEDENTI · **A chi:** nessuno, attività interna
+  La riga della revisione 0 è attraversata da una linea di bordo. Difetto grafico da correggere a mano in Word (Layout tabella → Proprietà → Riga, oppure rimuovendo il bordo inferiore della riga di intestazione).
+  *Esito:*
+
+- [ ] **SD-09** · frontespizio · **A chi:** nessuno, attività interna
+  La riga "Data di aggiornamento: 07/09/2026" è presente nel file ma non si vede: la casella di testo che contiene il frontespizio è troppo bassa e la taglia. Difetto già presente nell'originale.
+  *Esito:*
+
+---
+
+## SECSM - Security Update Maintenance
+
+Stato documento: revisionato per intero, incluso il passaggio dell'intero testo dal consuntivo al presente. Data 23/01/2025, **fuori ciclo da quattro periodi**.
+
+- [ ] **SM-01** · copertina · **A chi:** Adriano · **priorità alta**
+  Frequenza dichiarata semestrale con ultimo aggiornamento 23/01/2025: sono quattro cicli saltati, ed è il documento più scaduto del set. Va bumpato prima dell'audit.
+  *Esito:*
+
+- [ ] **SM-02** · tabella Revisioni · **A chi:** Adriano
+  La tabella delle revisioni non esisteva ed è stata creata. Manca il motivo della revisione del 23/01/2025 (riga Agg. 1).
+  *Esito:*
+
+- [ ] **SM-03** · tabella firme · **A chi:** Adriano
+  Le firme riportano 18-19/01/2021 mentre il documento è datato 23/01/2025. Stessa situazione di BM-09.
+  *Esito:*
+
+- [ ] **SM-04** · Premessa · **A chi:** team infrastruttura
+  Il perimetro è indicato genericamente come "sistemi in ambiente IaaS". Va sostituito con l'elenco dei sistemi e degli ambienti coperti, coerente con SECBC (OVH primaria, Oracle Cloud per il DR).
+  *Esito:*
+
+- [ ] **SM-05** · § 2 e §§ 3-8 · **A chi:** team infrastruttura · **priorità alta**
+  Manca la procedura di patching per l'ambiente Windows: dal § 3 al § 8 ci sono solo comandi Linux, e l'unico comando Windows del § 2 (`wmic`) è deprecato nelle versioni recenti. SECSE dichiara endpoint Windows 11 gestiti tramite Tactical RMM.
+  *Esito:*
+
+- [ ] **SM-06** · § 9 · **A chi:** team infrastruttura
+  L'elenco degli strumenti è generico ("strumenti di orchestrazione", "servizi di gestione del sistema operativo", "soluzioni di monitoraggio e alerting") e non nomina alcun prodotto, mentre il § 4 cita OpenVAS e il § 8 lynis.
+  *Esito:*
+
+- [ ] **SM-07** · § 10 · **A chi:** team infrastruttura
+  Le tempistiche dichiarate (patch critiche entro 24-48 ore, patch di routine mensili) sono l'impegno più verificabile del documento. Servono le evidenze.
+  *Esito:*
+
+- [ ] **SM-08** · nuovo cap. 11 · **A chi:** Adriano
+  Il capitolo "Ruoli e responsabilità" è stato creato ma è vuoto. Da definire chi esegue il patching, chi autorizza le patch critiche fuori finestra, chi verifica l'esito e chi conserva le evidenze.
+  *Esito:*
+
+- [ ] **SM-09** · nome file · **A chi:** Adriano · **stesso tipo di TR-01**
+  Refuso "Maintenence" invece di "Maintenance", sia nel titolo interno sia nel nome file del master (riga 16).
+  *Esito:*
+
+---
+
 ## Trasversali e master
 
 Riguardano il foglio master (`1ys2dncWVbYua25vPyCl5vbOp7BhdI7K_`) o più documenti insieme.
@@ -214,7 +298,7 @@ Riguardano il foglio master (`1ys2dncWVbYua25vPyCl5vbOp7BhdI7K_`) o più documen
   *Esito:*
 
 - [ ] **TR-06** · controlli ISO nei documenti · **A chi:** nessuno, attività interna
-  I riferimenti ai controlli della 27001:2013 vanno sostituiti con quelli della 27001:2022 in tutti i documenti ancora da revisionare. Corrispondenze già applicate: A.12.1 → A.8.6, A.17.2 → A.5.30, backup → A.8.13, continuità → A.5.29 / A.5.30, crittografia → A.8.24 / A.5.33 / A.8.5 / A.8.12.
+  I riferimenti ai controlli della 27001:2013 vanno sostituiti con quelli della 27001:2022 in tutti i documenti ancora da revisionare. Corrispondenze già applicate: A.12.1 → A.8.6, A.17.2 → A.5.30, backup → A.8.13, continuità → A.5.29 / A.5.30, crittografia → A.8.24 / A.5.33 / A.8.5 / A.8.12, sviluppo → A.8.25 / A.8.26 / A.8.27 / A.8.28 / A.8.29 / A.8.31 / A.8.32 / A.8.33, patching → A.8.8 / A.8.19 / A.8.31 / A.8.32.
   *Esito:*
 
 ---
@@ -225,8 +309,6 @@ Da aprire con lo stesso metodo (frontespizio sul canovaccio, poi revisione del c
 
 - [x] `SECRA_RiskAssessment_Piano.docx`
 - [ ] `SECDR_Disaster_Recovery.docx`: **di Alessandro**
-- [x] `SECSD_SDLC.docx`
-- [ ] `SECSM_Security_Update_Maintenence.docx`
 - [ ] `SECVA_Vulnerabilty_Assessment.docx`
 - [ ] `SECVM_Version_Management.docx`
 - [ ] `SECUS_Gestione_Utenti.docx`
