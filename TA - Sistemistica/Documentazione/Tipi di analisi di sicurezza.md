@@ -3,7 +3,7 @@
 
 ### DAST - Dynamic Application Security Testing
 Al contrario del SAST, costui ==attacca l'applicazione== mentre è in esecuzione, dall'esterno, come farebbe un attaccante reale. Non vede il codice, ==vede quello che vede un client HTTP== o un browser.
-Per le Web App lo fanno [[Nikto]] e [[ZAP]], per le API [[WuppieFuzz]] e [[ASTF]]. [[🛡️OpenVAS]] è lo strumento secondario, ma non gira su Jenkins — viene usato in un ambiente isolato su una replica non produttiva della piattaforma.
+Per le Web App lo fanno [[Nikto]] e [[ZAP]], per le API [[WuppieFuzz]] e [[ASTF]]. [[🕵️‍♀️ OpenVAS]] è lo strumento secondario, ma non gira su Jenkins — viene usato in un ambiente isolato su una replica non produttiva della piattaforma.
 
 ### Container Scan
 ==**Analizza** le immagini **Docker**== prima del deploy, cercando vulnerabilità gravi. Strumento : [[Trivy]].

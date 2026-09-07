@@ -1,4 +1,4 @@
-Come infrastruttura di deploy usiamo [[Kubernetes]], usi un'insieme di macchine. Su [[OVH Cloud]] ci sono le machine più vecchie con sistemi che si devono aggiornare con [[🛡️OpenVAS]].
+Come infrastruttura di deploy usiamo [[Kubernetes]], usi un'insieme di macchine. Su [[OVH Cloud]] ci sono le machine più vecchie con sistemi che si devono aggiornare con [[🕵️‍♀️ OpenVAS]].
 openvass è una piattaforma di monitoraggio che puoi fare una scanzione e fa un report diagnostico accurato del server. conn ovh sono macchine singole.
 
 Prima usavano 107 che è deprecato, dobbiamo aggiornare i SO.

@@ -57,7 +57,7 @@
 - [[🚫Fail2Ban]]
 - [[🛡️ AppArmor]]
 - [[📒Auditd]]
-- [[🛡️OpenVAS]]
+- [[🕵️‍♀️ OpenVAS]]
 - [[🔐 Keycloak]]
 - [[👤 SSSD]]
 - [[🔐StrongSwan]] (Charon)

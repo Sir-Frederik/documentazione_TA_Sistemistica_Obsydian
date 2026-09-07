@@ -8,12 +8,12 @@
         "type": "tabs",
         "children": [
           {
-            "id": "b10bfce02504aecb",
+            "id": "284771e5b04f2524",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Documentazione/Tactical RRM/Gestione Sicurezza Endpoint Windows 11 via Tactical RMM.md",
+                "file": "Documentazione/Tactical RRM/Canovaccio — Riunione chiusura fase di test TRMM.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -28,16 +28,16 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "Gestione Sicurezza Endpoint Windows 11 via Tactical RMM"
+              "title": "Canovaccio — Riunione chiusura fase di test TRMM"
             }
           },
           {
-            "id": "1724167b5359d729",
+            "id": "281491db93021dfe",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Documentazione/TTL.md",
+                "file": "Documentazione/📜ISO 27001.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -52,10 +52,59 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "TTL"
+              "title": "📜ISO 27001"
+            }
+          },
+          {
+            "id": "500f59c131877c37",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Documentazione/CiTool.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "CiTool"
+            }
+          },
+          {
+            "id": "bf2017deb89f1181",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ISO 27001/ISO 27001 - Registro delle domande aperte.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "ISO 27001 - Registro delle domande aperte"
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -75,10 +124,12 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "byCreatedTime",
-                "autoReveal": false
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
-              "title": "Esplora risorse"
+              "title": "Esplora file"
             }
           },
           {
@@ -112,7 +163,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 276.5110321044922
+    "width": 247.5
   },
   "right": {
     "id": "b1590987d5b3c016",
@@ -207,10 +258,10 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Apri selezione rapida": false,
+      "switcher:Apri selettore rapido": false,
+      "daily-notes:Apri nota giornaliera": false,
       "graph:Apri vista grafo": false,
       "canvas:Crea nuova lavagna": false,
-      "daily-notes:Apri nota del giorno": false,
       "templates:Inserisci modello": false,
       "command-palette:Apri riquadro comandi": false,
       "bases:Crea nuova Base": false,
@@ -218,49 +269,51 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "19bea1141c5aa54f",
+  "active": "bf2017deb89f1181",
   "lastOpenFiles": [
-    "Documentazione/Tactical RRM/📘Guida  personale a TRMM.md",
-    "Documentazione/Tactical RRM/Gestione Sicurezza Endpoint Windows 11 via Tactical RMM.md",
-    "Documentazione/TTL.md",
-    "Documentazione/Tactical RRM/Libreria Script TRMM.md",
-    "Documentazione/Tactical RRM/WDAC — Procedura Deploy Policy.md",
-    "agrodata.md",
-    "Riunioni/20-07-26 Gestione rischi e ISO 27001.md",
-    "Documentazione/Tactical RRM/CiTool.md",
-    "Documentazione/Tactical RRM/🧠Tactical RMM.md",
-    "Riunioni/13-04-26 Impostazione obiettivi documentazioni e manutenzione server..md",
+    "ISO 27001/ISO 27001 - Registro delle domande aperte (1).md",
+    "ISO 27001/Non Conformità ISO 27001 — A.8.20 e A.8.10.md",
     "Documentazione/Tactical RRM/ISG — Intelligent Security Graph.md",
-    "Documentazione/🌐 Nginx.md",
-    "Ngix.md",
+    "Documentazione/CiTool.md",
+    "Dropdown jira per i rischi.md",
+    "ISO 27001/Dropdown jira per i rischi.md",
+    "ISO 27001/ISO 27001 - Registro delle domande aperte.md",
+    "ISO 27001",
+    "Riunioni/31-08-2026  Aggiornamento ISO 27001.md",
+    "Riunioni/ISO27001_Domande_Aperte.md",
+    "Documentazione/🕵️‍♀️ OpenVAS.md",
+    "Excalidraw/Drawing 2026-08-31 16.27.12.excalidraw.md",
+    "Excalidraw",
+    "Riunioni/28-04-26 Aggiornamento – Catena di sicurezza applicativa.md",
+    "Documentazione/☎️RPC Bind.md",
+    "Documentazione/📜ISO 27001.md",
+    "Riunioni/29-07-26  Gestione rischi su Jira e documentazione ISO 27001.md",
+    "Documentazione/Tactical RRM/Ricostruzione degli accessi remoti — Fase di test Tactical RMM.md",
+    "Documentazione/Tactical RRM/Bozza - VERBALE DI CHIUSURA — FASE DI TEST DELLA PIATTAFORMA TACTICAL RMM.md",
+    "Riunioni/20-07-26 Gestione rischi e ISO 27001.md",
+    "Appunti.md",
+    "Pasted image 20260729171444.png",
+    "Appunti riunione 27001 28-07-26.md",
+    "Excalidraw/Drawing 2026-07-28 11.54.47.excalidraw.md",
+    "Documentazione/Tactical RRM/Canovaccio — Riunione chiusura fase di test TRMM.md",
+    "Documentazione/Tactical RRM/Gestione Sicurezza Endpoint Windows 11 via Tactical RMM.md",
+    "Documentazione/Tactical RRM/Appunti di ripristino dei pc e fine fase di test.md",
+    "Procedure/Installazione del FAIL2BAN.md",
+    "Documentazione/TTL.md",
+    "Pasted image 20260723125645.png",
     "Pasted image 20260630124050.png",
     "Pasted image 20260630123818.png",
     "Pasted image 20260630123705.png",
     "Pasted image 20260630122709.png",
     "Pasted image 20260630122700.png",
     "Pasted image 20260630122625.png",
-    "Documentazione/🔒BitLocker.md",
-    "Procedure/📘Guida  personale a TRMM.md",
-    "Documentazione/Libreria.md",
     "Documentazione/Tactical RRM",
     "Documentazione/Nuova cartella",
-    "Documentazione/Libreria Script TRMM.md",
-    "Documentazione/🧠Tactical RMM.md",
-    "Procedure/Installazione del FAIL2BAN.md",
-    "📘Guida personale a TRMM.md",
-    "Documentazione/TA_TRMM_Scripts_Obsidian.md",
-    "Procedure/Analisi comparativa Samba vs alternative.md",
-    "Appunti.md",
-    "Procedure/Vedere i  Servizi del server.md",
-    "SonarQube.md",
-    "Tactical RMM.md",
     "26-05-26 Evoluzione infrastrutturale, sicurezza e migrazione CD.pdf",
-    "Excalidraw",
     "Procedure/OWASP",
     "Documentazione/Da Alessandro/cluster-Kubernetes-pen-test.pdf",
     "Documentazione/Da Alessandro/mso364A.tmp",
     "Documentazione/Da Alessandro/cluster-pen-test.docx",
-    "Documentazione/Da Alessandro/owasp_vps_ta.pdf",
-    "Documentazione/Da Alessandro/mso9FD6.tmp"
+    "Documentazione/Da Alessandro/owasp_vps_ta.pdf"
   ]
 }
