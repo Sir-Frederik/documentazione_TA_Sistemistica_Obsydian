@@ -3,7 +3,7 @@
 > Elenco dei punti da chiarire con il team prima dell'audit di sorveglianza (Sorveglianza 1, settembre 2026, auditor Pasquale Mele).
 > Ogni voce nasce dalla revisione dei documenti SGSI e corrisponde a un segnaposto evidenziato in giallo nel documento di riferimento.
 
-**Ultimo aggiornamento:** 07/09/2026
+**Ultimo aggiornamento:** 08/09/2026
 **Legenda stato:** `[ ]` da chiedere · `[~]` chiesto, in attesa · `[x]` risolto
 
 ---
@@ -209,8 +209,8 @@ Stato documento: revisionato per intero. Rev. 2 del 07/09/2026. Riclassificato d
   Il capitolo descrive Scrum come metodologia di sviluppo. Esplicitare come si raccorda con PRINCE2 Agile adottato per la gestione di progetto, così da rendere evidente in audit quale metodologia governa quale ambito.
   *Esito:*
 
-- [ ] **SD-05** · § 8.3 · **A chi:** team sviluppo
-  Il documento descrive il solo Subversion, mentre SECCM_Capacity_Management cita GitLab, DockerHub e "SVN legacy" e il master associa il controllo documentale a GIT/SVN. Allineare gli strumenti di versionamento tra i documenti.
+- [ ] **SD-05** · § 8.3 · **A chi:** nessuno, attività interna
+  Il documento descrive il solo Subversion, mentre SECCM_Capacity_Management cita GitLab, DockerHub e "SVN legacy". **Risolto da SECVM_Version_Management**, che stabilisce GitLab come piattaforma di riferimento e SVN come legacy residuale: resta da allineare il testo di SECSD di conseguenza.
   *Esito:*
 
 - [ ] **SD-06** · § 8.3 · **A chi:** Adriano · **stesso punto di TR-03**
@@ -273,6 +273,112 @@ Stato documento: revisionato per intero, incluso il passaggio dell'intero testo 
 
 ---
 
+## SECVA - Vulnerability Assessment
+
+Stato documento: revisionato per intero. Da guida operativa a OpenVAS a procedura strutturata: aggiunti sei capitoli (ambito, frequenza, classificazione e tempi di risoluzione, ruoli, evidenze, conformità e integrazione). Data 08/08/2025, ciclo annuale scaduto.
+
+- [ ] **VA-01** · § Classificazione e tempi di risoluzione · **A chi:** Adriano + team infrastruttura · **priorità alta**
+  I tempi massimi di risoluzione per gravità Critica, Alta, Media e Bassa sono da definire. È la prima domanda che un auditor pone su un documento di vulnerability management: prima della revisione il documento non ci rispondeva affatto.
+  *Esito:*
+
+- [ ] **VA-02** · § Frequenza delle scansioni · **A chi:** team infrastruttura · **priorità alta**
+  Da fissare la periodicità della scansione completa e di quella sui servizi esposti. La scansione straordinaria è già definita come "su evento".
+  *Esito:*
+
+- [ ] **VA-03** · § Procedura creazione report · **A chi:** team infrastruttura
+  Il documento si chiudeva sul caso WildFly 20.0.0. Chiarire se è un esempio didattico o una vulnerabilità reale ancora aperta: nel secondo caso va aperta l'azione correttiva, come per BM-05.
+  *Esito:*
+
+- [ ] **VA-04** · § Ambito di applicazione · **A chi:** team infrastruttura
+  Precisare gli ambienti coperti, coerentemente con SECBC (OVH primaria, Oracle Cloud per il DR) e con gli endpoint gestiti tramite Tactical RMM dichiarati in SECSE.
+  *Esito:*
+
+- [ ] **VA-05** · § Ruoli e responsabilità · **A chi:** Adriano
+  Il capitolo è stato creato ma è vuoto. Da definire chi esegue le scansioni, chi valuta i risultati, chi autorizza le eccezioni e chi verifica la chiusura.
+  *Esito:*
+
+- [ ] **VA-06** · § Gestione delle evidenze · **A chi:** team infrastruttura
+  Indicare dove sono archiviati i report OpenVAS e per quanto tempo, in coerenza con SECLM.
+  *Esito:*
+
+- [ ] **VA-07** · tabella Revisioni · **A chi:** Adriano
+  La tabella non esisteva ed è stata creata. Manca il motivo della revisione del 08/08/2025.
+  *Esito:*
+
+- [ ] **VA-08** · tabella firme · **A chi:** Adriano
+  Le firme riportano 15/01/2021 mentre il documento è datato 08/08/2025. Stessa situazione di BM-09 e SM-03.
+  *Esito:*
+
+- [ ] **VA-09** · copertina · **A chi:** Adriano
+  Frequenza annuale con ultimo aggiornamento 08/08/2025: stessa data del SECBM, revisione fatta in blocco. Va bumpato prima dell'audit.
+  *Esito:*
+
+---
+
+## SECVM - Version Management
+
+Stato documento: revisionato per intero. Rev. 2 del 08/09/2026. È il documento meglio strutturato del set.
+
+- [ ] **VM-01** · § 2.1 · **A chi:** Adriano · **collegato a CM-04 e SD-01**
+  La figura "Responsabile del Sistema di Gestione Qualità (QUA)" è stata riscritta come "Responsabile del SGSI (RSGSI)". Terza occorrenza della stessa questione: se le due figure restano distinte, va ripristinata in tutti e tre i documenti.
+  *Esito:*
+
+- [ ] **VM-02** · capitolo 8 · **A chi:** Adriano
+  Il capitolo delle procedure di dettaglio occupa circa cento pagine su centoventitré. Con frequenza annuale dichiarata, ogni revisione impone di rileggere tutto. Valutare lo scorporo in allegati separati.
+  *Esito:*
+
+- [ ] **VM-03** · § 5.5 · **A chi:** Adriano
+  Opportunità di riportare in chiaro i nomi dei progetti e dei repository aziendali (`protciv-helm-release`, `techdemo-document-ai-ingestion`). Stessa valutazione di BM-06 e SE-08. Le credenziali sono invece già mascherate correttamente.
+  *Esito:*
+
+- [ ] **VM-04** · tabella Revisioni · **A chi:** Adriano
+  La tabella non esisteva ed è stata creata. Manca il motivo della revisione del 23/01/2025.
+  *Esito:*
+
+- [ ] **VM-05** · tabella firme · **A chi:** Adriano
+  Le righe "Redatto da" e "Revisionato da" non riportano alcun nominativo, solo la data 15/01/2021, mentre il documento è datato 23/01/2025.
+  *Esito:*
+
+- [ ] **VM-06** · copertina · **A chi:** Adriano
+  Frequenza annuale con ultimo aggiornamento 23/01/2025: stessa data del SECSM, documento fuori ciclo.
+  *Esito:*
+
+---
+
+## SECUS - Gestione Utenti
+
+Stato documento: revisionato per intero. Rev. 6 del 08/09/2026. La tabella delle revisioni era già completa e ben tenuta.
+
+- [ ] **US-01** · § 4.2 Fase 3 · **A chi:** team infrastruttura · **priorità alta**
+  La procedura di dismissione passava dalla rimozione dal dominio direttamente allo smaltimento RAEE, senza mai prevedere la cancellazione dei dati. È stato inserito il passaggio di cancellazione sicura o distruzione fisica dei supporti: resta da definire il metodo per ciascuna tipologia (HDD, SSD, supporti cifrati) e lo strumento impiegato. Controllo A.7.14.
+  *Esito:*
+
+- [ ] **US-02** · § 3.1 · **A chi:** Adriano + team infrastruttura
+  La procedura copre le sole utenze di dominio Active Directory, ma SECVM descrive una gestione utenti autonoma su GitLab e SECSE cita gli endpoint gestiti tramite Tactical RMM. Chiarire se esistono sistemi di identità non coperti dal documento.
+  *Esito:*
+
+- [ ] **US-03** · moduli richiamati · **A chi:** Adriano
+  I moduli citati (Richiesta Hardware, Assegnazione Hardware, scheda di dismissione, registro inventariale IT, registro delle dismissioni) non sono allegati né codificati nel master. Sono le evidenze che vengono chieste in audit.
+  *Esito:*
+
+- [ ] **US-04** · § 3.3 · **A chi:** Adriano
+  Il backup dei dati dell'utente cessato è conservato 90 giorni. Verificare la coerenza con SECBM e con eventuali obblighi contrattuali o di legge.
+  *Esito:*
+
+- [ ] **US-05** · § 3.1 · **A chi:** Adriano
+  Indicare dove sono definite le policy di password e autenticazione richiamate genericamente dal documento: lunghezza, complessità, scadenza, autenticazione a più fattori.
+  *Esito:*
+
+- [ ] **US-06** · tabella firme · **A chi:** Adriano
+  Le firme riportano 15/01/2021 mentre il documento è datato 08/08/2025.
+  *Esito:*
+
+- [ ] **US-07** · copertina · **A chi:** Adriano
+  Frequenza annuale con ultimo aggiornamento 08/08/2025: ciclo in scadenza.
+  *Esito:*
+
+---
+
 ## Trasversali e master
 
 Riguardano il foglio master (`1ys2dncWVbYua25vPyCl5vbOp7BhdI7K_`) o più documenti insieme.
@@ -298,7 +404,7 @@ Riguardano il foglio master (`1ys2dncWVbYua25vPyCl5vbOp7BhdI7K_`) o più documen
   *Esito:*
 
 - [ ] **TR-06** · controlli ISO nei documenti · **A chi:** nessuno, attività interna
-  I riferimenti ai controlli della 27001:2013 vanno sostituiti con quelli della 27001:2022 in tutti i documenti ancora da revisionare. Corrispondenze già applicate: A.12.1 → A.8.6, A.17.2 → A.5.30, backup → A.8.13, continuità → A.5.29 / A.5.30, crittografia → A.8.24 / A.5.33 / A.8.5 / A.8.12, sviluppo → A.8.25 / A.8.26 / A.8.27 / A.8.28 / A.8.29 / A.8.31 / A.8.32 / A.8.33, patching → A.8.8 / A.8.19 / A.8.31 / A.8.32.
+  I riferimenti ai controlli della 27001:2013 vanno sostituiti con quelli della 27001:2022 in tutti i documenti ancora da revisionare. Corrispondenze già applicate: A.12.1 → A.8.6, A.17.2 → A.5.30, backup → A.8.13, continuità → A.5.29 / A.5.30, crittografia → A.8.24 / A.5.33 / A.8.5 / A.8.12, sviluppo → A.8.25 / A.8.26 / A.8.27 / A.8.28 / A.8.29 / A.8.31 / A.8.32 / A.8.33, patching → A.8.8 / A.8.19 / A.8.31 / A.8.32, vulnerabilità → A.8.8 / A.8.9 / A.5.7 / A.8.16, versionamento → A.5.37 / A.8.32 / A.5.15 / A.8.2 / A.8.3 / A.8.15 / A.5.31 / A.5.36 / A.5.35 / A.8.34, gestione utenti e asset → A.5.16 / A.5.17 / A.5.18 / A.5.9 / A.5.11 / A.7.14 / A.8.2 / A.8.10.
   *Esito:*
 
 ---
@@ -309,8 +415,5 @@ Da aprire con lo stesso metodo (frontespizio sul canovaccio, poi revisione del c
 
 - [x] `SECRA_RiskAssessment_Piano.docx`
 - [ ] `SECDR_Disaster_Recovery.docx`: **di Alessandro**
-- [ ] `SECVA_Vulnerabilty_Assessment.docx`
-- [ ] `SECVM_Version_Management.docx`
-- [ ] `SECUS_Gestione_Utenti.docx`
 - [ ] `SECLM_Log_Management.docx`
 - [ ] `SECVS_Violazioni_Sicurezza.docx`
