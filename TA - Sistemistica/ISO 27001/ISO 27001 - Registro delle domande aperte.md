@@ -3,7 +3,7 @@
 > Elenco dei punti da chiarire con il team prima dell'audit di sorveglianza (Sorveglianza 1, settembre 2026, auditor Pasquale Mele).
 > Ogni voce nasce dalla revisione dei documenti SGSI e corrisponde a un segnaposto evidenziato in giallo nel documento di riferimento.
 
-**Ultimo aggiornamento:** 08/09/2026
+**Ultimo aggiornamento:** 09/09/2026
 **Legenda stato:** `[ ]` da chiedere · `[~]` chiesto, in attesa · `[x]` risolto
 
 ---
@@ -379,6 +379,82 @@ Stato documento: revisionato per intero. Rev. 6 del 08/09/2026. La tabella delle
 
 ---
 
+## SECLM - Log Management
+
+Stato documento: revisionato per intero. Rev. 2 del 08/09/2026. Rilevante per l'audit: il logging centralizzato è una delle tre osservazioni dello Stage 2.
+
+- [ ] **LM-01** · § 3 Principi Generali · **A chi:** team infrastruttura · **priorità alta**
+  Il documento non prevedeva alcuna sincronizzazione degli orologi. È stato inserito il requisito: resta da indicare la sorgente NTP, la tolleranza massima ammessa e il meccanismo di verifica. Controllo A.8.17: senza orologi allineati l'audit trail distribuito non è correlabile.
+  *Esito:*
+
+- [ ] **LM-02** · § 5 Conservazione e Retention · **A chi:** Adriano + team infrastruttura
+  È indicato il solo periodo per i log critici (12 mesi). Definire la retention per le altre tipologie classificate al capitolo 4 e allineare il master (riga 41), che la mail dell'auditor aggiorna al periodo 01/09/2026 - 15/09/2026.
+  *Esito:*
+
+- [ ] **LM-03** · § 6.1 · **A chi:** Adriano
+  Opportunità di riportare in chiaro gli URL del SIEM (`elk.talabservicescollaudo.it`, `beats.talabservicescollaudo.it`) e l'IP pubblico 135.125.245.110. Valutazione più delicata di BM-06 e SE-08, trattandosi del punto di raccolta centralizzato dei log.
+  *Esito:*
+
+- [ ] **LM-04** · § 5 · **A chi:** team infrastruttura
+  Il documento dichiara che i log sono archiviati in forma cifrata. Confermare che lo stack ELK sia effettivamente configurato con cifratura dei dati a riposo.
+  *Esito:*
+
+- [ ] **LM-05** · § 6.1, 6.3 · **A chi:** team infrastruttura
+  Il documento riporta tre versioni diverse dei componenti: filebeat 8.5.1 negli indici, filebeat 8.15.0 nei comandi di installazione, Elasticsearch 8.13.4 nel test di output. Allineare o spiegare la convivenza.
+  *Esito:*
+
+- [ ] **LM-06** · § 8 · **A chi:** Adriano
+  Il capitolo rimanda genericamente a "un sistema di gestione degli incidenti" senza nominarlo. Da esplicitare e collegare a SECVS_Violazioni_Sicurezza.
+  *Esito:*
+
+- [ ] **LM-07** · Appendice I · **A chi:** Adriano
+  L'appendice è il verbale di un intervento del 15/07/2025 sul cluster Elasticsearch, non materia di procedura. Valutare lo spostamento tra le evidenze o nel registro incidenti.
+  *Esito:*
+
+- [ ] **LM-08** · tabella Revisioni · **A chi:** Adriano
+  La tabella esisteva ma era completamente vuota ed è stata compilata. Manca il motivo della revisione del 08/08/2025.
+  *Esito:*
+
+- [ ] **LM-09** · tabella firme · **A chi:** Adriano
+  Le tre firme sono coerenti tra loro (15, 25 e 31 gennaio 2025) ma non con la data del documento (08/08/2025).
+  *Esito:*
+
+---
+
+## SECVS - Violazioni di Sicurezza
+
+Stato documento: revisionato per intero. Rev. 2 del 08/09/2026. Era il documento messo peggio dal lato formale: frontespizio quasi vuoto, header e footer di altri documenti, nessuna tabella firme.
+
+- [ ] **VS-01** · § 5 · **A chi:** Adriano · **priorità alta**
+  Manca la classificazione di gravità degli incidenti e il tempo massimo di presa in carico per ciascun livello. Senza questi elementi il processo non è verificabile. Stessa lacuna colmata in SECVA con VA-01.
+  *Esito:*
+
+- [ ] **VS-02** · § 5 · **A chi:** Adriano · **priorità alta**
+  Si dichiara la notifica al Garante entro 72 ore, ma non è indicato chi effettua la valutazione del data breach né chi dispone la notifica. Va chiarito il ruolo del DPO, la cui nomina è ancora una voce aperta del piano di evidenze.
+  *Esito:*
+
+- [ ] **VS-03** · § 5 · **A chi:** Adriano
+  Il registro degli incidenti corrisponde alla voce "Registro incidenti / attività DR" del master ed è una delle evidenze richieste dall'auditor. Indicarne collocazione e formato.
+  *Esito:*
+
+- [ ] **VS-04** · § 4 · **A chi:** Adriano
+  Le etichette di classificazione ("Segreto", "Confidenziale", "Ristretto", "Pubblico") sono richiamate come aziendali, ma nel master non esiste un documento che le definisca. Controlli A.5.12 e A.5.13: serve uno schema formalizzato.
+  *Esito:*
+
+- [ ] **VS-05** · § 4 · **A chi:** team infrastruttura
+  Confermare che 7-Zip sia lo strumento approvato per la cifratura dei file e allineare la previsione con SECSE, che disciplina algoritmi e gestione delle chiavi.
+  *Esito:*
+
+- [ ] **VS-06** · § 6 · **A chi:** Adriano
+  Corsi annuali obbligatori e simulazioni di incidenti sono impegni verificabili e rientrano tra le evidenze richieste nella mail dell'auditor del 28/07/2026. Confermare che esistano attestati e verbali.
+  *Esito:*
+
+- [ ] **VS-07** · tabella firme · **A chi:** Adriano
+  La tabella delle firme non era presente nel documento ed è stata creata. Da compilare con redattore, revisore e approvatore della revisione 2.
+  *Esito:*
+
+---
+
 ## Trasversali e master
 
 Riguardano il foglio master (`1ys2dncWVbYua25vPyCl5vbOp7BhdI7K_`) o più documenti insieme.
@@ -404,7 +480,7 @@ Riguardano il foglio master (`1ys2dncWVbYua25vPyCl5vbOp7BhdI7K_`) o più documen
   *Esito:*
 
 - [ ] **TR-06** · controlli ISO nei documenti · **A chi:** nessuno, attività interna
-  I riferimenti ai controlli della 27001:2013 vanno sostituiti con quelli della 27001:2022 in tutti i documenti ancora da revisionare. Corrispondenze già applicate: A.12.1 → A.8.6, A.17.2 → A.5.30, backup → A.8.13, continuità → A.5.29 / A.5.30, crittografia → A.8.24 / A.5.33 / A.8.5 / A.8.12, sviluppo → A.8.25 / A.8.26 / A.8.27 / A.8.28 / A.8.29 / A.8.31 / A.8.32 / A.8.33, patching → A.8.8 / A.8.19 / A.8.31 / A.8.32, vulnerabilità → A.8.8 / A.8.9 / A.5.7 / A.8.16, versionamento → A.5.37 / A.8.32 / A.5.15 / A.8.2 / A.8.3 / A.8.15 / A.5.31 / A.5.36 / A.5.35 / A.8.34, gestione utenti e asset → A.5.16 / A.5.17 / A.5.18 / A.5.9 / A.5.11 / A.7.14 / A.8.2 / A.8.10.
+  I riferimenti ai controlli della 27001:2013 vanno sostituiti con quelli della 27001:2022 in tutti i documenti ancora da revisionare. Corrispondenze già applicate: A.12.1 → A.8.6, A.17.2 → A.5.30, backup → A.8.13, continuità → A.5.29 / A.5.30, crittografia → A.8.24 / A.5.33 / A.8.5 / A.8.12, sviluppo → A.8.25 / A.8.26 / A.8.27 / A.8.28 / A.8.29 / A.8.31 / A.8.32 / A.8.33, patching → A.8.8 / A.8.19 / A.8.31 / A.8.32, vulnerabilità → A.8.8 / A.8.9 / A.5.7 / A.8.16, versionamento → A.5.37 / A.8.32 / A.5.15 / A.8.2 / A.8.3 / A.8.15 / A.5.31 / A.5.36 / A.5.35 / A.8.34, gestione utenti e asset → A.5.16 / A.5.17 / A.5.18 / A.5.9 / A.5.11 / A.7.14 / A.8.2 / A.8.10, logging → A.8.15 / A.8.16 / A.8.17 / A.5.28 / A.8.11 / A.5.33, incidenti e uso accettabile → A.5.10 / A.5.24 / A.5.25 / A.5.26 / A.5.27 / A.6.3 / A.6.8 / A.5.34 / A.5.12 / A.5.13 / A.7.7 / A.8.7.
   *Esito:*
 
 ---
@@ -415,5 +491,3 @@ Da aprire con lo stesso metodo (frontespizio sul canovaccio, poi revisione del c
 
 - [x] `SECRA_RiskAssessment_Piano.docx`
 - [ ] `SECDR_Disaster_Recovery.docx`: **di Alessandro**
-- [ ] `SECLM_Log_Management.docx`
-- [ ] `SECVS_Violazioni_Sicurezza.docx`
