@@ -1,4 +1,4 @@
-# ISO 27001 - Registro delle domande aperte
+
 
 > Elenco dei punti da chiarire con il team prima dell'audit di sorveglianza (Sorveglianza 1, settembre 2026, auditor Pasquale Mele).
 > Ogni voce nasce dalla revisione dei documenti SGSI e corrisponde a un segnaposto evidenziato in giallo nel documento di riferimento.
@@ -7,6 +7,66 @@
 **Legenda stato:** `[ ]` da chiedere · `[~]` chiesto, in attesa · `[x]` risolto
 
 ---
+
+### 1. Tre decisioni 
+
+Sono domande singole che si applicano a più documenti. .
+
+- **La figura del Responsabile Qualità (QUA)**: compare in Capacity Management, SDLC e Version Management come chi verifica la conformità ISO 27001. Io l'ho riscritta ovunque come **Responsabile del SGSI**. Serve solo la conferma che sia la stessa persona, o si ripristina.
+- **Le date delle firme**: dieci documenti hanno firme del 2021 su testi aggiornati nel 2025. Va deciso una volta se si rifirma tutto con la data di revisione o si tiene lo storico. da mettere docume
+- **Il formato della tabella revisioni**: alcuni documenti hanno le colonne del canovaccio, altri hanno una colonna "Autore". Si uniforma o si tiene?
+
+### 2. Due cose che non sono questioni documentali
+
+Queste due esistono a prescindere dall'audit, il documento le ha solo rese visibili.
+
+- **Credenziali FTP hardcoded e FTP in chiaro** (==Backup Management)==: i paragrafi 7.2 e 7.3 sono scritti come attività da compiere. Se non sono state fatte, il documento dichiara una non conformità da solo.
+- **Cancellazione dei dischi prima dello smaltimento RAEE** (==Gestione Utent==i): la procedura non la prevedeva. Ho scritto il passaggio, ma se oggi i PC vanno alla ditta senza wipe, è un problema reale.
+
+### 3. I numeri mancanti
+
+Sette documenti dichiarano di fare qualcosa "periodicamente" senza dire ogni quanto, oppure descrivono un processo senza tempi. Sono le domande che l'auditor fa per prime.
+
+| Cosa manca                                           | Dove                     |
+| ---------------------------------------------------- | ------------------------ |
+| Tempi di risoluzione per gravità                     | ==Vulnerability Assessment== |
+| Frequenza delle scansioni                            | ==Vulnerability Assessment== |
+| Sorgente NTP e tolleranza                            | ==Log Management==           |
+| Retention dei log non critici                        | ==Log Management==           |
+| Retention di backup completi, differenziali, mensili | ==Backup Management==        |
+| Ogni quanto si ruotano le chiavi                     | ==Security Encryption==      |
+| Gravità e tempi di presa in carico degli incidenti   | ==Violazioni di Sicurezza==  |
+| Elenco servizi per livello Tier                      | ==Business Continuity==      |
+
+L'ultima è quella che blocca anche il Capacity Management.
+
+### 4. Perimetri da definire
+
+Diversi documenti dicono *"i sistemi aziendali"* senza dire quali.
+
+- Il **Backup Management** copre solo SVN, ma il Capacity gli rimanda per database, Elasticsearch e storage. Tu pensavi di integrarli: è la decisione da formalizzare.
+- Il **Security Update Maintenance** dice "sistemi in ambiente IaaS", e non ha nessuna procedura per Windows pur avendo 39 endpoint gestiti via Tactical RMM.
+- La **Gestione Utenti** copre solo Active Directory, mentre GitLab ha una gestione utenti sua.
+- Il **Business Continuity** limita lo scope ai progetti ASL Napoli 3: va confermato che corrisponda al certificato.
+
+### 5. Documenti fuori ciclo
+
+Sette documenti sono scaduti o in scadenza. Il caso limite è il **Security Update Maintenance**: frequenza semestrale, ultimo aggiornamento gennaio 2025, quattro periodi saltati, e lo dichiara in copertina. Vanno bumpati prima di settembre.
+
+### 6. Evidenze da produrre
+
+I documenti promettono molte scadenze: test settimanali, controlli mensili, audit trimestrali, esercitazioni annuali. Per ciascuna l'auditor chiede la prova. La domanda da porre è al contrario: **quali producete davvero?** Dove non c'è evidenza, conviene ridurre la frequenza dichiarata invece di lasciare un buco.
+
+Casi specifici: le esercitazioni DR/BCP (che sono già un'osservazione dello Stage 2), i corsi di formazione annuali, e il rollout dei controlli crittografici dichiarato "entro settembre 2026", cioè il mese dell'audit.
+
+### 7. Il master e le informazioni sensibili
+
+Due gruppi minori ma veloci da chiudere:
+
+- **Master**: il refuso `SECVA_Vulnerabilty`, la riga del registro non conformità che dice ancora "non certificati", i periodi vecchi per log e incidenti, e la questione dello SDLC che copre due voci.
+- **Dati in chiaro**: IP del NAS, dominio e virtual host, nomi dei repository, URL e IP pubblico del SIEM. È una scelta di policy sulla distribuibilità dei documenti, non un errore.
+
+
 
 ## Come si usa
 
@@ -19,47 +79,130 @@
 
 ## SECBC - Business Continuity
 
-Stato documento: revisionato il 03/09/2026 (rev. 6). Frequenza annuale.
+Ecco tutte le domande aperte sul Business Continuity, numerate. Rispondi come ti viene, anche solo con una riga per punto, e alla fine revisiono il documento.
 
-- [ ] **BC-01** · § 1 Scopo · **A chi:** Adriano
-  Il perimetro è limitato ai progetti del cliente ASL Napoli 3. Corrisponde ancora allo scope del certificato ISO/IEC 27001:2022 in vigore?
-  *Esito:*
+Il file che mi hai caricato è già la revisione 6, quella con i quattro segnaposto gialli e il capitolo 11 vuoto.
 
-- [ ] **BC-02** · § 8 · **A chi:** team infrastruttura
-  Manca l'elenco dei software e servizi coperti dalla fornitura DR. La frase si interrompe a metà.
-  *Esito:*
+---
 
-- [ ] **BC-03** · § 8.3 · **A chi:** Adriano + team infrastruttura
-  I tre livelli di priorità (Tier 3, Tier 1, sola protezione dati) non elencano alcun servizio. È una lacuna sostanziale: un BCP senza classificazione dei servizi non è verificabile. Blocca anche CM-02.
-  *Esito:*
+#### Perimetro e scope
 
-- [ ] **BC-04** · § 9.2 · **A chi:** Adriano
-  Il documento rimanda all'Allegato 1 "Struttura decisionale" con nomi e contatti, ma l'allegato non esiste.
-  *Esito:*
+**BC-01** · § 1 Scopo  
+Il documento limita tutto ai progetti del cliente ASL Napoli 3, ma il certificato copre consulenza e assistenza informatica più progettazione e sviluppo software, su tre siti (Isola G1, Isola C2, San Teodoro SS).  
+👉 _Come riscrivo lo scopo? Includo tutti e tre i siti o il piano copre solo la sede principale?
+**Non si può far sì che il documento riguardi ogni progetto di ogni cliente? bisogna per forza scrivere perogni progetto di ogni sede operativa?**
 
-- [ ] **BC-05** · nuovo cap. 11 · **A chi:** Adriano
-  Il § 7 annuncia un capitolo su manutenzione, archiviazione e verifica del piano che non era presente. Il titolo è stato inserito, il contenuto è da scrivere. Collegato alle osservazioni dello Stage 2 sulle esercitazioni DR/BCP e alle task CER-27 / CER-28.
-  *Esito:*
+**BC-11** · nuovo, dal report di audit  
+Il sito di **San Teodoro (SS)** non compare da nessuna parte nel documento.  
+👉 _Che ruolo ha rispetto alla continuità operativa? Ha infrastruttura propria, è solo postazioni di lavoro, o è fuori dal piano?
+**il sito di san teodoro è stato dismesso**
 
-- [ ] **BC-06** · tabella firme · **A chi:** Adriano
-  Data del redattore da confermare (proposta 03/09/2026). Mancano revisore e approvatori.
-  *Esito:*
+---
 
-- [ ] **BC-07** · Appendice II · **A chi:** team infrastruttura
-  La gestione patch descrive solo Oracle Cloud, mentre il § 8.2 indica OVH come infrastruttura primaria. Manca tutta la parte OVH.
-  *Esito:*
+### Classificazione dei servizi
 
-- [ ] **BC-08** · Appendice III · **A chi:** team infrastruttura
-  Le policy di backup citano strumenti a titolo di esempio (Veeam, Acronis, Commvault, AWS S3, Azure Blob) che non sono la configurazione reale. Vanno sostituiti con quelli effettivamente in uso.
-  *Esito:*
+**BC-03** · § 8.3 · **il punto più importante**  
+I tre livelli (Tier 3 = essenziali con RTO 3 giorni, Tier 1 = importanti con RTO 20 giorni, sola protezione dati) non elencano nessun servizio.  
+👉 _Quali servizi stanno in ciascun livello? Anche un elenco grezzo va bene, poi lo formatto io.
+**Priorità uno: protezione civile, priorità due Asl napoli 3 e priorità tre tutto il resto**
 
-- [ ] **BC-09** · Appendice IV · **A chi:** Adriano
-  L'appendice contiene la configurazione Disaster Recovery su Oracle, materia di `SECDR_Disaster_Recovery.docx`. Valutare lo spostamento per evitare due documenti che dicono cose diverse.
-  *Esito:*
 
-- [ ] **BC-10** · Appendice V · **A chi:** team infrastruttura
-  L'analisi settimanale dei log non nomina ELK Stack, che nel master è lo strumento dichiarato. Da collegare, anche perché il logging centralizzato è un'osservazione dello Stage 2.
-  *Esito:*
+**BC-02** · § 8  
+La frase "per quanto riguarda tutti i servizi con fornitura DR ed in particolare per i software:" si interrompe.  
+👉 _Quali software e servizi sono coperti dalla fornitura DR?_
+**non fare menzione ai software.**
+
+---
+
+### Infrastruttura
+
+**BC-07** · Appendice II  
+La gestione patch descrive solo Oracle Cloud, ma il § 8.2 dice che la primaria è OVH.  
+👉 _Come funziona il patching su OVH? Posso riusare quanto scritto nel SECSM, oppure è diverso?_
+**Parla solo di oracle cloud e non parlare di Ovh**
+
+**BC-08** · Appendice III  
+Le policy di backup citano Veeam, Acronis, Commvault, AWS S3, Azure Blob come esempi generici.  
+👉 _Cosa usate davvero? Se il backup è quello descritto nel SECBM, rimando lì invece di riscriverlo._
+**rimuovi i riferimenti ai programmi**
+
+**BC-09** · Appendice IV  
+L'appendice contiene tutta la configurazione Disaster Recovery su Oracle, che è materia del SECDR di Alessandro.  
+👉 _La sposto nel SECDR e qui lascio un rimando, oppure resta?_
+**Rimanda al documento di alessandro, penso non ci sia bisogno nemmeno di avereuna appendice,ma diretamente un punto del documento che riporta al documento**
+
+**BC-10** · Appendice V  
+L'analisi settimanale dei log non nomina ELK Stack, che è lo strumento dichiarato nel master e descritto nel SECLM.  
+👉 _Sostituisco la descrizione con un rimando al SECLM?
+**eLK STACK è IMPLICITO**
+
+
+---
+
+### Struttura decisionale
+
+**BC-04** · § 9.2  
+Il documento rimanda all'"Allegato 1 - Struttura decisionale" con nomi e contatti, ma l'allegato non esiste.  
+👉 _Chi compone la struttura decisionale? Mi servono i ruoli, i nominativi e come si raggiungono in emergenza. In alternativa rimando a SECRU_Ruoli.xlsx e lascio solo i ruoli._
+
+Crisis manager è Genny Scognamiglio
+
+Disaster recovery Alessandro
+
+Resp comunicazione marco Giorgino
+
+referentte sicureffa fisica Marco Caligiuri
+
+responsabile del personale Laura del Pezzo
+
+Responsabile finanziario Nunzia Cappabianca
+
+---
+
+### Il capitolo 11, quello vuoto
+
+**BC-05** · nuovo capitolo 11 "Manutenzione, archiviazione e verifica del piano"  
+Il § 7 lo annunciava ma non c'era. Ho messo il titolo, il contenuto è da scrivere. È anche l'**osservazione 5 del report di Aiello** (punto norma 8.1, esercitazioni DR/BCP e registrazione evidenze).
+
+Mi servono quattro cose:
+
+- 👉 _Ogni quanto si riesamina il piano?_
+- 👉 _Ogni quanto si fanno le esercitazioni, e di che tipo (table-top, prova di ripristino reale, entrambe)?_
+- 👉 _Chi redige il verbale e dove si archivia?_
+- 👉 _Dove si conserva il piano e chi ne detiene le copie, anche offline?_
+Rimuovi il riferimento a Manutenzione, archiviazione e verifica del piano"   e rimuovi il capitolo 11
+---
+
+### Firme e formalità
+
+**BC-06** · tabella firme  
+Ho proposto 03/09/2026 come data del redattore, evidenziata in giallo.  
+👉 _Confermi la data? E chi mette come revisore e approvatori?_
+|   |   |   |   |
+|---|---|---|---|
+|Redatto da:|Adriano Caligiuri|03/08/2026||
+|Revisionato da:|Federico Brunetti|1/09/2026||
+
+**BC-12** · nuovo  
+Nella copertina manca la riga "Procedura:" che c'è negli altri documenti. Questo lo correggo comunque, non serve risposta.
+
+---
+
+### Due punti che emergono dal confronto con gli altri documenti
+
+**BC-13** · § 10.1  
+Avevo sostituito il riferimento ad A2A con "il personale reperibile di Technology Advising".  
+👉 _Esiste davvero una reperibilità? Se sì, come è organizzata? Se no, riscrivo diversamente._
+**E' ok**
+
+**BC-14** · terminologia  
+Il documento alterna "CED primario" e "Hosting Primario" per la stessa cosa.  
+👉 _Quale dei due uso?_
+**Hosting Primario*
+
+---
+
+Se su qualcuna non hai la risposta e serve chiedere al team infrastruttura, dimmelo e la lascio evidenziata invece di inventare.
 
 ---
 
