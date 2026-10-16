@@ -8,30 +8,6 @@
         "type": "tabs",
         "children": [
           {
-            "id": "284771e5b04f2524",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Documentazione/Tactical RRM/Canovaccio — Riunione chiusura fase di test TRMM.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "Canovaccio — Riunione chiusura fase di test TRMM"
-            }
-          },
-          {
             "id": "281491db93021dfe",
             "type": "leaf",
             "state": {
@@ -56,12 +32,13 @@
             }
           },
           {
-            "id": "500f59c131877c37",
+            "id": "bf2017deb89f1181",
             "type": "leaf",
+            "pinned": true,
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Documentazione/CiTool.md",
+                "file": "Riunioni/10-09-2026 GDPR, ISO 27001 e Dlgs 231-2001 con Elios e Synertech.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -75,17 +52,18 @@
                   "unlinkedCollapsed": true
                 }
               },
+              "pinned": true,
               "icon": "lucide-file",
-              "title": "CiTool"
+              "title": "10-09-2026 GDPR, ISO 27001 e Dlgs 231-2001 con Elios e Synertech"
             }
           },
           {
-            "id": "bf2017deb89f1181",
+            "id": "84ac8b0a40ed4ef9",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "ISO 27001/ISO 27001 - Registro delle domande aperte.md",
+                "file": "Documentazione/👥ELK STACK - Elastic Stack.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -100,11 +78,59 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "ISO 27001 - Registro delle domande aperte"
+              "title": "👥ELK STACK - Elastic Stack"
+            }
+          },
+          {
+            "id": "ae6a520a3631c4dc",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Documentazione/🎣GoPhish.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "🎣GoPhish"
+            }
+          },
+          {
+            "id": "1166ec985ef9b370",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ISO 27001/Vademecum - Come valutare e censire un rischio 💣🤔.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "Vademecum - Come valutare e censire un rischio 💣🤔"
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 4
       }
     ],
     "direction": "vertical"
@@ -138,7 +164,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "vademe",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -240,6 +266,7 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "Risoluzione non conformità Stage 2 (CER-123).md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -253,7 +280,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 219.5,
+    "width": 200,
     "collapsed": true
   },
   "left-ribbon": {
@@ -269,51 +296,53 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "bf2017deb89f1181",
+  "active": "1166ec985ef9b370",
   "lastOpenFiles": [
-    "ISO 27001/ISO 27001 - Registro delle domande aperte (1).md",
-    "ISO 27001/Non Conformità ISO 27001 — A.8.20 e A.8.10.md",
-    "Documentazione/Tactical RRM/ISG — Intelligent Security Graph.md",
-    "Documentazione/CiTool.md",
-    "Dropdown jira per i rischi.md",
-    "ISO 27001/Dropdown jira per i rischi.md",
-    "ISO 27001/ISO 27001 - Registro delle domande aperte.md",
-    "ISO 27001",
-    "Riunioni/31-08-2026  Aggiornamento ISO 27001.md",
-    "Riunioni/ISO27001_Domande_Aperte.md",
-    "Documentazione/🕵️‍♀️ OpenVAS.md",
-    "Excalidraw/Drawing 2026-08-31 16.27.12.excalidraw.md",
-    "Excalidraw",
-    "Riunioni/28-04-26 Aggiornamento – Catena di sicurezza applicativa.md",
-    "Documentazione/☎️RPC Bind.md",
-    "Documentazione/📜ISO 27001.md",
-    "Riunioni/29-07-26  Gestione rischi su Jira e documentazione ISO 27001.md",
-    "Documentazione/Tactical RRM/Ricostruzione degli accessi remoti — Fase di test Tactical RMM.md",
-    "Documentazione/Tactical RRM/Bozza - VERBALE DI CHIUSURA — FASE DI TEST DELLA PIATTAFORMA TACTICAL RMM.md",
-    "Riunioni/20-07-26 Gestione rischi e ISO 27001.md",
-    "Appunti.md",
-    "Pasted image 20260729171444.png",
-    "Appunti riunione 27001 28-07-26.md",
-    "Excalidraw/Drawing 2026-07-28 11.54.47.excalidraw.md",
-    "Documentazione/Tactical RRM/Canovaccio — Riunione chiusura fase di test TRMM.md",
-    "Documentazione/Tactical RRM/Gestione Sicurezza Endpoint Windows 11 via Tactical RMM.md",
-    "Documentazione/Tactical RRM/Appunti di ripristino dei pc e fine fase di test.md",
+    "Documentazione/🎣GoPhish.md",
     "Procedure/Installazione del FAIL2BAN.md",
-    "Documentazione/TTL.md",
+    "Documentazione/Putty.md",
+    "ISO 27001/Vademecum - Come valutare e censire un rischio 💣🤔.md",
+    "Documentazione/🕵️‍♀️ OpenVAS.md",
+    "Documentazione/👥ELK STACK - Elastic Stack.md",
+    "Procedure/OWASP/config.env — Guida alle Variabili.md",
+    "Procedure/OWASP/📎OWASP — Troubleshooting.md",
+    "ISO 27001/Dropdown jira per i rischi.md",
+    "Documentazione/🛠️SERVIZI Presenti nei server.md",
+    "[👥ELK STACK - Elastic Stack.md",
+    "Procedure/Integrazione in ELK Stack di Zabbix, Prometheus e Falco.md",
+    "Documentazione/📜ISO 27001.md",
+    "Riunioni/10-09-2026 GDPR, ISO 27001 e Dlgs 231-2001 con Elios e Synertech.md",
+    "[ELK STACK - Elastic Stack.md",
+    "Pasted image 20261001130640.png",
+    "Pasted image 20261001125854.png",
+    "Pasted image 20261001124930.png",
+    "Pasted image 20261001124912.png",
+    "Pasted image 20261001124528.png",
+    "ISO 27001/ISO 27001 - Registro delle domande aperte.md",
+    "ISO 27001/Come valutare e censire un rischio (1).md",
+    "ISO 27001/Risoluzione non conformità Stage 2 (CER-123).md",
+    "Senza nome.md",
+    "SECBC - Business Continuity.md",
+    "Senza nome.base",
+    "Documentazione/☎️RPC Bind.md",
+    "Disaster Recovery.md",
+    "GDPR.md",
+    "ISO 27001/Non Conformità ISO 27001 — A.8.20 e A.8.10.md",
+    "Riunioni/28-04-26 Aggiornamento – Catena di sicurezza applicativa.md",
+    "Riunioni/13-04-26 Impostazione obiettivi documentazioni e manutenzione server..md",
+    "ISO 27001",
+    "Excalidraw",
+    "Pasted image 20260729171444.png",
     "Pasted image 20260723125645.png",
     "Pasted image 20260630124050.png",
     "Pasted image 20260630123818.png",
     "Pasted image 20260630123705.png",
-    "Pasted image 20260630122709.png",
-    "Pasted image 20260630122700.png",
-    "Pasted image 20260630122625.png",
     "Documentazione/Tactical RRM",
     "Documentazione/Nuova cartella",
     "26-05-26 Evoluzione infrastrutturale, sicurezza e migrazione CD.pdf",
     "Procedure/OWASP",
     "Documentazione/Da Alessandro/cluster-Kubernetes-pen-test.pdf",
     "Documentazione/Da Alessandro/mso364A.tmp",
-    "Documentazione/Da Alessandro/cluster-pen-test.docx",
-    "Documentazione/Da Alessandro/owasp_vps_ta.pdf"
+    "Documentazione/Da Alessandro/cluster-pen-test.docx"
   ]
 }

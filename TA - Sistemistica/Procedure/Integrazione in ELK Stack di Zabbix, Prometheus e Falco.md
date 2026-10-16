@@ -1,11 +1,11 @@
-Qui vedremo come integrare i dati di [[👀Zabbix]] e [[👀 Prometheus]] in [[ELK STACK - Elastic Stack]].
+Qui vedremo come integrare i dati di [[👀Zabbix]] e [[👀 Prometheus]] in [[👥ELK STACK - Elastic Stack]].
 Vedremo anche il confronto tra due approcci di monitoraggio in tempo reale:  [[🚨Falco]] e "Wazuh + Tetragon".
 ```
 Prometheus   ──→ ┐
 Zabbix Agent ──→ ├──→  Filebeat  ──→  Elasticsearch  ──→  Kibana (alert)
 Falco        ──→ ┘
 ```
-Il punto centrale è **Logstash** o ancora meglio [[ELK STACK - Elastic Stack#📤Filebeat| Filebeat]] che fa da collettore e normalizzatore prioma di inviare tutto ad [[ELK STACK - Elastic Stack#🤓Elasticsearch| Elasticsearch]] 
+Il punto centrale è **Logstash** o ancora meglio [[👥ELK STACK - Elastic Stack#📤Filebeat| Filebeat]] che fa da collettore e normalizzatore prioma di inviare tutto ad [[👥ELK STACK - Elastic Stack#🤓Elasticsearch| Elasticsearch]] 
 ## [[👀 Prometheus]]
 
 
@@ -90,7 +90,7 @@ In questo modo Alertmanager manda una *POST* JSON direttamente a Elasticsearch o
 Abbiamo due approcci:
 
 ### Tramite Filebeat
-Come detto prima, Zabbix deve inviare le informazioni a [[ELK STACK - Elastic Stack#📤Filebeat |Filebeat]]. Quest'ultimo, a differenza di Logstash non può ricevere dei Webhook, quindi bisogna passare per un **file intermedio**.
+Come detto prima, Zabbix deve inviare le informazioni a [[👥ELK STACK - Elastic Stack#📤Filebeat|Filebeat]]. Quest'ultimo, a differenza di Logstash non può ricevere dei Webhook, quindi bisogna passare per un **file intermedio**.
 
 Sul Zabbix Server ==si configura un **Media Type**== di tipo **"script"** che ad ==ogni alert==, ==scrive una riga JSON su un file di log== dedicato.
 

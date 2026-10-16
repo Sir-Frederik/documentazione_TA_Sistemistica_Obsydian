@@ -48,8 +48,8 @@
 - [[👀Zabbix#Zabbix Proxy|Zabbix Proxy]]
 - [[👀Zabbix#Zabbix Agent|👀Zabbix Agent]]
 - [[👀 NRPE - (Nagios Remote Plugin Executor)| NRPE]]
-- [[[ELK STACK - Elastic Stack| FileBeat]]
-- [[ELK STACK - Elastic Stack| Logstash]]
+- [[👥ELK STACK - Elastic Stack#📤Filebeat |Filebeat]]
+- [[👥ELK STACK - Elastic Stack| Logstash]]
 
 ##### **🛡️ Sicurezza, Identità e Firewall**
 
