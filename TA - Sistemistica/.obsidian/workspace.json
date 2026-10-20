@@ -111,7 +111,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "ISO 27001/Vademecum - Come valutare e censire un rischio 💣🤔.md",
+                "file": "NewsLetters/TA Security Newsletter 01 - Calendar Phishing.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -126,7 +126,7 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "Vademecum - Come valutare e censire un rischio 💣🤔"
+              "title": "TA Security Newsletter 01 - Calendar Phishing"
             }
           }
         ],
@@ -164,7 +164,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "vademe",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -189,7 +189,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 247.5
+    "width": 220.5
   },
   "right": {
     "id": "b1590987d5b3c016",
@@ -298,10 +298,22 @@
   },
   "active": "1166ec985ef9b370",
   "lastOpenFiles": [
+    "NewsLetters/Pillola 1 - Appuntamento al buio (versione brillante).md",
+    "NewsLetters/TA Security Newsletter 01 - Calendar Phishing.md",
+    "NewsLetters/sedSD8h3N",
+    "Pasted image 20261016165245.png",
+    "NewsLetters/Schema NewsLetter.md",
+    "ISO 27001/Vademecum - Come valutare e censire un rischio 💣🤔.md",
+    "NewsLetters/Schema NewsLetter.base",
+    "NewsLetters/Pappa.md",
+    "Senza nome.base",
+    "NewsLetters",
+    "Schema News Letter.base",
+    "schema n.base",
+    "Schema NewsLetter.md",
     "Documentazione/🎣GoPhish.md",
     "Procedure/Installazione del FAIL2BAN.md",
     "Documentazione/Putty.md",
-    "ISO 27001/Vademecum - Come valutare e censire un rischio 💣🤔.md",
     "Documentazione/🕵️‍♀️ OpenVAS.md",
     "Documentazione/👥ELK STACK - Elastic Stack.md",
     "Procedure/OWASP/config.env — Guida alle Variabili.md",
@@ -323,26 +335,13 @@
     "ISO 27001/Risoluzione non conformità Stage 2 (CER-123).md",
     "Senza nome.md",
     "SECBC - Business Continuity.md",
-    "Senza nome.base",
-    "Documentazione/☎️RPC Bind.md",
-    "Disaster Recovery.md",
-    "GDPR.md",
-    "ISO 27001/Non Conformità ISO 27001 — A.8.20 e A.8.10.md",
-    "Riunioni/28-04-26 Aggiornamento – Catena di sicurezza applicativa.md",
-    "Riunioni/13-04-26 Impostazione obiettivi documentazioni e manutenzione server..md",
     "ISO 27001",
     "Excalidraw",
     "Pasted image 20260729171444.png",
     "Pasted image 20260723125645.png",
     "Pasted image 20260630124050.png",
     "Pasted image 20260630123818.png",
-    "Pasted image 20260630123705.png",
     "Documentazione/Tactical RRM",
-    "Documentazione/Nuova cartella",
-    "26-05-26 Evoluzione infrastrutturale, sicurezza e migrazione CD.pdf",
-    "Procedure/OWASP",
-    "Documentazione/Da Alessandro/cluster-Kubernetes-pen-test.pdf",
-    "Documentazione/Da Alessandro/mso364A.tmp",
-    "Documentazione/Da Alessandro/cluster-pen-test.docx"
+    "Documentazione/Nuova cartella"
   ]
 }

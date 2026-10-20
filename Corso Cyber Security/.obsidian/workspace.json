@@ -78,9 +78,33 @@
               "icon": "lucide-file",
               "title": "Penetration Testing"
             }
+          },
+          {
+            "id": "b545295242ac73bc",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Corso SOC junior/SOC - Security Operations Center.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": true,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "SOC - Security Operations Center"
+            }
           }
         ],
-        "currentTab": 2
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -100,10 +124,12 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "byCreatedTime",
-                "autoReveal": true
+                "autoReveal": true,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
-              "title": "Esplora risorse"
+              "title": "Esplora file"
             }
           },
           {
@@ -112,7 +138,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "Mac spoofing",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -133,12 +159,12 @@
               "title": "Segnalibri"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 261.5072784423828
+    "width": 261.5072784423828,
+    "collapsed": true
   },
   "right": {
     "id": "af563a677bf873c8",
@@ -216,13 +242,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Penetration Testing.md",
+                "file": "Corso SOC junior/SOC - Security Operations Center.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Struttura di Penetration Testing"
+              "title": "Struttura"
             }
           }
         ],
@@ -230,27 +256,31 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Apri selezione rapida": false,
+      "switcher:Apri selettore rapido": false,
+      "daily-notes:Apri nota giornaliera": false,
       "graph:Apri vista grafo": false,
       "canvas:Crea nuova lavagna": false,
-      "daily-notes:Apri nota del giorno": false,
       "templates:Inserisci modello": false,
       "command-palette:Apri riquadro comandi": false,
       "bases:Crea nuova Base": false
     }
   },
-  "active": "1e14f8b9c08879f9",
+  "active": "b545295242ac73bc",
   "lastOpenFiles": [
-    "Senza nome 1.md",
+    "Pasted image 20261020164826.png",
+    "Pasted image 20261020162814.png",
+    "Corso SOC junior",
+    "Corso SOC junior/SOC - Security Operations Center.md",
+    "Penetration Testing.md",
     "Technitium MAC Address Changer.md",
     "Spoofing.md",
     "Scapy 🐍.md",
     "3) Exploitation.md",
-    "Penetration Testing.md",
     "OSINT.md",
     "Exploitation.md",
     "External Pentest.md",
@@ -279,8 +309,6 @@
     "Immagini/Pasted image 20260525151447.png",
     "Immagini/Pasted image 20260525151733.png",
     "Protocollo.md",
-    "Immagini",
-    "Immagini/Pasted image 20260521165853.png",
-    "Ingegneria sociale.md"
+    "Immagini"
   ]
 }
